@@ -76,7 +76,8 @@
 <main id="main">
 
   <!-- ────────────────────────────  hero  ──────────────────────────── -->
-  <section class="hero" id="hero">
+  <section class="hero" id="hero" data-hero>
+   <div class="hero__sticky">
     <canvas class="hero__canvas" data-hero-canvas aria-hidden="true"></canvas>
     <div class="hero__wash" aria-hidden="true"></div>
 
@@ -106,8 +107,12 @@
       </dl>
     </div>
 
-    <p class="hero__rail" aria-hidden="true">25 KG &nbsp;·&nbsp; 50 KG &nbsp;·&nbsp; MILL DIRECT</p>
+    <p class="hero__stage" data-hero-stage aria-hidden="true">
+      <b>01</b><span>Paddy standing in the field</span>
+    </p>
+
     <a class="hero__cue" href="#range" aria-label="Scroll to the range"><span></span></a>
+   </div>
   </section>
 
   <!-- ───────────────────────────  marquee  ─────────────────────────── -->
@@ -318,6 +323,7 @@
 
   <!-- ───────────────────────────  process  ────────────────────────── -->
   <section class="section" id="process">
+    <canvas class="process-canvas" data-process-canvas aria-hidden="true"></canvas>
     <div class="shell process__grid">
 
       <div class="process__aside" data-reveal>
@@ -333,6 +339,7 @@
       <ol class="process__list">
         <li class="step" data-reveal>
           <span class="step__num">01</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Procurement</h3>
           <p>
             Paddy lifted from Sheikhupura and Hafizabad mandis through buyers we
@@ -341,6 +348,7 @@
         </li>
         <li class="step" data-reveal>
           <span class="step__num">02</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Drying</h3>
           <p>
             Brought down to 13% in an LSU dryer, slowly. Rush the drying and the
@@ -350,6 +358,7 @@
         </li>
         <li class="step" data-reveal>
           <span class="step__num">03</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Ageing</h3>
           <p>
             Twelve to twenty-four months in ventilated bins, still in the husk.
@@ -358,6 +367,7 @@
         </li>
         <li class="step" data-reveal>
           <span class="step__num">04</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Shelling &amp; polish</h3>
           <p>
             Rubber-roll shellers rather than disc — gentler on a long grain. Two
@@ -366,6 +376,7 @@
         </li>
         <li class="step" data-reveal>
           <span class="step__num">05</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Grading &amp; sortex</h3>
           <p>
             Length grader pulls the brokens, then a colour sorter takes out chalky,
@@ -374,6 +385,7 @@
         </li>
         <li class="step" data-reveal>
           <span class="step__num">06</span>
+          <span class="step__grain" data-grain-slot aria-hidden="true"></span>
           <h3>Sacking</h3>
           <p>
             Weighed to net 25 or 50 kg, chain-stitched, lot-stamped and stacked.

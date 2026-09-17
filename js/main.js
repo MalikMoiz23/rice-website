@@ -304,13 +304,66 @@ if (form) {
 const year = $('[data-year]');
 if (year) year.textContent = String(new Date().getFullYear());
 
-/* ---------------------------------------------------------- 3d hero */
+/* ------------------------------------------------ hero choreography */
 
-// Loaded on the side: if WebGL is missing or the CDN is blocked the hero
-// just keeps its gradient background.
-import('./scene-hero.js')
-  .then((m) => m.initHero())
-  .catch((err) => console.warn('hero scene skipped:', err.message));
+const heroEl = $('[data-hero]');
+
+if (heroEl) {
+  const sticky = $('.hero__sticky', heroEl);
+  const stage = $('[data-hero-stage]');
+
+  const STAGES = [
+    { at: 0, n: '01', text: 'Paddy standing in the field' },
+    { at: 0.34, n: '02', text: 'Threshed, hull coming off' },
+    { at: 0.68, n: '03', text: 'Milled, polished, white' },
+  ];
+
+  let hero = null;
+  let shown = -1;
+
+  const progress = () => {
+    const span = heroEl.offsetHeight - window.innerHeight;
+    return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+  };
+
+  function paint() {
+    const p = progress();
+    sticky.classList.toggle('is-moving', p > 0.05);
+
+    let i = 0;
+    for (let s = 0; s < STAGES.length; s++) if (p >= STAGES[s].at) i = s;
+
+    if (i !== shown) {
+      shown = i;
+      stage.innerHTML = `<b>${STAGES[i].n}</b><span>${STAGES[i].text}</span>`;
+      stage.classList.remove('is-swap');
+      void stage.offsetWidth; // restart the swap animation
+      stage.classList.add('is-swap');
+    }
+
+    hero?.setProgress(p);
+  }
+
+  // WebGL is optional here — the copy and the gradient stand on their own
+  import('./scene-hero.js')
+    .then((m) => {
+      hero = m.initHero();
+      paint();
+    })
+    .catch((err) => console.warn('hero scene skipped:', err.message));
+
+  window.addEventListener('scroll', paint, { passive: true });
+  window.addEventListener('resize', paint);
+  paint();
+}
+
+/* -------------------------------------------- grain per process step */
+
+if ($('[data-process-canvas]')) {
+  import('./scene-process.js')
+    .then((m) => m.initProcess())
+    .catch((err) => console.warn('process grains skipped:', err.message));
+}
 
 /* --------------------------------------------------- 3d sack viewer */
 

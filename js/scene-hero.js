@@ -1,24 +1,32 @@
 /* ============================================================
-   scene-hero.js — the grain field behind the hero
-   A few thousand instanced grains drifting down through a slow
-   swirl, lit warm from above and green from below so it reads as
-   paddy rather than snow.
+   scene-hero.js — paddy field to white rice
+   Scroll drives one continuous scene. At the top the camera sits
+   down among standing paddy; as the page moves the grain lifts
+   off the field, sheds its hull and comes out milled white while
+   the camera climbs away from the crop.
    ============================================================ */
 
 import * as THREE from 'three';
+import { riceGeometry } from './rice-geometry.js';
+import { ricePlant } from './rice-plant.js';
 
-const COLUMN_H = 18;   // half-height of the volume grains fall through
-const R_INNER = 5;
-const R_OUTER = 26;
+/* the three states the grain passes through */
+const PADDY = new THREE.Color('#c9a24a'); // in the hull, off the field
+const BROWN = new THREE.Color('#b3865a'); // shelled, not yet polished
+const WHITE = new THREE.Color('#faf6ec'); // milled
 
-const TINTS = [0xf4e8cb, 0xe9d7a6, 0xd9be7c, 0xfffaf0];
+const CAM_NEAR = { pos: [0, 2.05, 7], look: [0, 1.1, -3] };
+const CAM_FAR = { pos: [0, 7.0, 13], look: [0, 4.6, -3] };
 
 export function initHero(canvas) {
   const el = canvas || document.querySelector('[data-hero-canvas]');
   if (!el || !supportsWebGL()) return null;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const count = window.innerWidth < 760 ? 1300 : 2800;
+  const small = window.innerWidth < 760;
+
+  const PLANTS = small ? 230 : 520;
+  const GRAINS = small ? 700 : 1500;
 
   const renderer = new THREE.WebGLRenderer({
     canvas: el,
@@ -27,69 +35,108 @@ export function initHero(canvas) {
     powerPreference: 'high-performance',
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 1.12;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x14230f, 0.021);
+  // a painted sky, so the fogged ground melts into it instead of ending on a
+  // hard line where the canvas goes transparent
+  scene.background = skyTexture();
+  scene.fog = new THREE.FogExp2(0x1e3415, 0.03);
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 120);
-  camera.position.set(0, 0, 28);
+  const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 90);
 
-  /* ---- grain geometry: a sphere squeezed into a rice shape ---- */
-  const grain = new THREE.SphereGeometry(1, 10, 7);
-  grain.scale(0.23, 0.23, 0.86);
+  /* ------------------------------------------------------------ ground */
 
-  const material = new THREE.MeshStandardMaterial({
-    roughness: 0.52,
-    metalness: 0.04,
-    flatShading: false,
-  });
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(140, 140),
+    new THREE.MeshStandardMaterial({ color: 0x2c4420, roughness: 0.95, metalness: 0 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -0.05;
+  scene.add(ground);
 
-  const mesh = new THREE.InstancedMesh(grain, material, count);
-  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-  mesh.position.z = -14;   // sit the whole column back so nothing clips the camera
-  scene.add(mesh);
+  /* -------------------------------------------------------- the crop */
 
-  /* ---- per-grain state, kept outside the matrix so the loop is cheap ---- */
-  const grains = new Array(count);
+  const plantGeo = ricePlant({ height: 1.7, grains: 10 });
+  const field = new THREE.InstancedMesh(
+    plantGeo,
+    new THREE.MeshStandardMaterial({
+      vertexColors: true,
+      roughness: 0.72,
+      metalness: 0.02,
+      side: THREE.DoubleSide,
+    }),
+    PLANTS
+  );
+  field.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  scene.add(field);
+
+  const stalks = new Array(PLANTS);
   const dummy = new THREE.Object3D();
+
+  for (let i = 0; i < PLANTS; i++) {
+    // nothing directly in front of the camera, and the field widens with depth
+    const z = 1 - Math.pow(Math.random(), 0.55) * 30;
+    const spread = 6 + (1 - z) * 0.95;
+
+    stalks[i] = {
+      x: (Math.random() * 2 - 1) * spread,
+      z,
+      turn: Math.random() * Math.PI * 2,
+      lean: (Math.random() - 0.5) * 0.16,
+      scale: 0.9 + Math.random() * 0.7,
+      speed: 0.55 + Math.random() * 0.75,
+      phase: Math.random() * Math.PI * 2,
+    };
+  }
+
+  /* ------------------------------------------------- grain in the air */
+
+  const grainGeo = riceGeometry({ segments: 12, radial: 8, length: 0.5, radius: 0.145 });
+  const air = new THREE.InstancedMesh(
+    grainGeo,
+    new THREE.MeshStandardMaterial({ roughness: 0.38, metalness: 0.03 }),
+    GRAINS
+  );
+  air.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  scene.add(air);
+
+  const motes = new Array(GRAINS);
   const tint = new THREE.Color();
 
-  for (let i = 0; i < count; i++) {
-    const depth = Math.random();
-    grains[i] = {
-      r: R_INNER + Math.pow(depth, 0.7) * (R_OUTER - R_INNER),
-      theta: Math.random() * Math.PI * 2,
-      y: (Math.random() * 2 - 1) * COLUMN_H,
-      fall: 0.5 + Math.random() * 1.7,
-      swirl: (0.06 + Math.random() * 0.13) * (Math.random() < 0.12 ? -1 : 1),
-      spin: (Math.random() - 0.5) * 1.6,
+  for (let i = 0; i < GRAINS; i++) {
+    motes[i] = {
+      x: (Math.random() * 2 - 1) * 15,
+      y: 0.7 + Math.random() * 9,
+      z: -1 - Math.random() * 26,
+      rise: 0.22 + Math.random() * 0.62,
+      drift: (Math.random() - 0.5) * 0.35,
+      spin: (Math.random() - 0.5) * 1.5,
       phase: Math.random() * Math.PI * 2,
-      scale: 0.3 + Math.random() * 0.5,
+      seed: Math.random(),
+      scale: 0.2 + Math.random() * 0.2,
+      white: 0,
     };
-
-    tint.setHex(TINTS[(Math.random() * TINTS.length) | 0]);
-    mesh.setColorAt(i, tint);
+    air.setColorAt(i, PADDY);
   }
-  mesh.instanceColor.needsUpdate = true;
+  air.instanceColor.needsUpdate = true;
 
-  /* ---- light: warm sun above, green bounce off the crop below ---- */
-  scene.add(new THREE.HemisphereLight(0xfff2cf, 0x2b4020, 0.85));
+  /* ------------------------------------------------------------ light */
 
-  const sun = new THREE.DirectionalLight(0xffd68a, 2.1);
-  sun.position.set(7, 13, 9);
+  scene.add(new THREE.HemisphereLight(0xfff8e6, 0x4c5c32, 1.35));
+
+  // low sun behind the crop, so the stalks catch a rim
+  const sun = new THREE.DirectionalLight(0xffd68a, 2.4);
+  sun.position.set(-9, 6, -12);
   scene.add(sun);
 
-  const bounce = new THREE.PointLight(0x9ed076, 260, 60, 2);
-  bounce.position.set(-11, -6, 7);
-  scene.add(bounce);
+  const fill = new THREE.DirectionalLight(0xfffaf0, 2.7);
+  fill.position.set(6, 9, 8);
+  scene.add(fill);
 
-  const rim = new THREE.PointLight(0xffc45c, 190, 50, 2);
-  rim.position.set(12, 4, -6);
-  scene.add(rim);
+  /* ---------------------------------------------------------- pointer */
 
-  /* ---- pointer parallax ---- */
   const pointer = { x: 0, y: 0 };
   const aim = { x: 0, y: 0 };
 
@@ -102,7 +149,8 @@ export function initHero(canvas) {
     { passive: true }
   );
 
-  /* ---- sizing ---- */
+  /* ----------------------------------------------------------- sizing */
+
   function resize() {
     const w = el.clientWidth || 1;
     const h = el.clientHeight || 1;
@@ -113,54 +161,92 @@ export function initHero(canvas) {
   resize();
   new ResizeObserver(resize).observe(el);
 
-  /* ---- loop ---- */
+  /* --------------------------------------------------------- progress */
+
+  let progress = 0;
+  let painted = -1;
+
+  /** 0 = standing in the field, 1 = milled white */
+  function setProgress(p) {
+    progress = clamp(p, 0, 1);
+
+    // recolouring walks every instance, so only do it when it would show
+    if (Math.abs(progress - painted) < 0.004) return;
+    painted = progress;
+
+    for (let i = 0; i < GRAINS; i++) {
+      const m = motes[i];
+      // each grain turns at a slightly different point, so the change sweeps
+      const local = clamp((progress - m.seed * 0.26) * 1.7, 0, 1);
+
+      if (local < 0.5) tint.lerpColors(PADDY, BROWN, local * 2);
+      else tint.lerpColors(BROWN, WHITE, (local - 0.5) * 2);
+
+      air.setColorAt(i, tint);
+      m.white = local;
+    }
+    air.instanceColor.needsUpdate = true;
+  }
+
+  /* ------------------------------------------------------------- loop */
+
   const clock = new THREE.Clock();
   let running = true;
   let visible = true;
   let frame = 0;
 
   function step(dt, t) {
-    for (let i = 0; i < count; i++) {
-      const g = grains[i];
-
-      g.y -= g.fall * dt;
-      if (g.y < -COLUMN_H) g.y = COLUMN_H;
-      g.theta += g.swirl * dt;
-
-      // a little lateral sway so the fall is not a straight line
-      const sway = Math.sin(t * 0.6 + g.phase) * 0.5;
-
-      dummy.position.set(
-        Math.cos(g.theta) * g.r + sway,
-        g.y,
-        Math.sin(g.theta) * g.r
-      );
+    /* crop sways, and sinks as the camera climbs out of it */
+    for (let i = 0; i < PLANTS; i++) {
+      const s = stalks[i];
+      dummy.position.set(s.x, -progress * 2.2, s.z);
       dummy.rotation.set(
-        g.phase + t * g.spin,
-        g.theta * 1.4,
-        g.phase * 0.5 + t * g.spin * 0.6
+        Math.sin(t * s.speed * 0.7 + s.phase) * 0.05,
+        s.turn,
+        s.lean + Math.sin(t * s.speed + s.phase) * 0.075
       );
-      dummy.scale.setScalar(g.scale);
+      dummy.scale.setScalar(s.scale);
       dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
+      field.setMatrixAt(i, dummy.matrix);
     }
-    mesh.instanceMatrix.needsUpdate = true;
+    field.instanceMatrix.needsUpdate = true;
 
-    pointer.x += (aim.x - pointer.x) * 0.045;
-    pointer.y += (aim.y - pointer.y) * 0.045;
+    /* grain lifts off the field and tumbles */
+    for (let i = 0; i < GRAINS; i++) {
+      const m = motes[i];
 
-    camera.position.x = pointer.x * 2.6;
-    camera.position.y = -pointer.y * 1.8;
-    camera.lookAt(0, 0, 0);
+      m.y += m.rise * dt * (0.5 + progress);
+      if (m.y > 10.5) m.y = 0.6;
+      m.x += m.drift * dt;
+      if (m.x > 16) m.x = -16;
+      else if (m.x < -16) m.x = 16;
 
-    // ease the whole field back as the hero scrolls away
-    const past = Math.min(window.scrollY / (el.clientHeight || 1), 1);
-    camera.position.z = 28 + past * 10;
-    mesh.rotation.y = past * 0.5;
-  }
+      // the hull is bulkier than the milled grain inside it
+      const shed = 1.16 - 0.16 * m.white;
 
-  function render() {
-    renderer.render(scene, camera);
+      dummy.position.set(m.x + Math.sin(t * 0.5 + m.phase) * 0.3, m.y + progress * 1.6, m.z);
+      dummy.rotation.set(m.phase + t * m.spin, t * m.spin * 0.6, m.phase * 0.7 + t * m.spin * 0.4);
+      dummy.scale.setScalar(m.scale * shed);
+      dummy.updateMatrix();
+      air.setMatrixAt(i, dummy.matrix);
+    }
+    air.instanceMatrix.needsUpdate = true;
+
+    /* camera climbs out of the crop as the grain is milled */
+    const e = progress * progress * (3 - 2 * progress); // smoothstep
+    pointer.x += (aim.x - pointer.x) * 0.05;
+    pointer.y += (aim.y - pointer.y) * 0.05;
+
+    camera.position.set(
+      mix(CAM_NEAR.pos[0], CAM_FAR.pos[0], e) + pointer.x * 0.9,
+      mix(CAM_NEAR.pos[1], CAM_FAR.pos[1], e) - pointer.y * 0.5,
+      mix(CAM_NEAR.pos[2], CAM_FAR.pos[2], e)
+    );
+    camera.lookAt(
+      mix(CAM_NEAR.look[0], CAM_FAR.look[0], e) + pointer.x * 0.5,
+      mix(CAM_NEAR.look[1], CAM_FAR.look[1], e),
+      mix(CAM_NEAR.look[2], CAM_FAR.look[2], e)
+    );
   }
 
   function tick() {
@@ -169,38 +255,60 @@ export function initHero(canvas) {
     if (!visible) return;
     const dt = Math.min(clock.getDelta(), 0.05);
     step(dt, clock.elapsedTime);
-    render();
+    renderer.render(scene, camera);
   }
 
+  setProgress(0);
+
   if (reduced) {
-    step(0, 0);
-    render();
+    // no idle motion, but the scene still follows the scroll
+    const once = () => {
+      step(0, 0);
+      renderer.render(scene, camera);
+    };
+    once();
+    window.addEventListener('scroll', once, { passive: true });
   } else {
     tick();
-
-    // stop burning frames when the hero is off screen or the tab is hidden
-    new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-      },
-      { threshold: 0 }
-    ).observe(el);
-
-    document.addEventListener('visibilitychange', () => {
-      visible = !document.hidden;
-    });
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 }).observe(el);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
   }
 
   return {
+    setProgress,
     destroy() {
       running = false;
       cancelAnimationFrame(frame);
-      grain.dispose();
-      material.dispose();
+      plantGeo.dispose();
+      grainGeo.dispose();
+      field.material.dispose();
+      air.material.dispose();
       renderer.dispose();
     },
   };
 }
+
+/* vertical gradient standing in for a sky; the bottom stop matches the fog */
+function skyTexture() {
+  const c = document.createElement('canvas');
+  c.width = 4;
+  c.height = 256;
+  const g = c.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0, '#15250e');
+  grad.addColorStop(0.55, '#1c3113');
+  grad.addColorStop(1, '#1e3415');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 4, 256);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  return tex;
+}
+
+const mix = (a, b, t) => a + (b - a) * t;
+const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 
 function supportsWebGL() {
   try {

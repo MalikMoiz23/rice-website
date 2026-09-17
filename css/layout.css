@@ -127,15 +127,23 @@
 
 .hero {
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 100svh;
-  padding-block: 9rem 5rem;
+  /* the extra height is the scroll runway the field-to-rice sequence needs */
+  min-height: 178svh;
   background:
     radial-gradient(120% 90% at 78% 8%, #2f4a25 0%, transparent 58%),
     radial-gradient(90% 70% at 10% 95%, #1b2f16 0%, transparent 60%),
     var(--leaf-900);
   color: var(--rice-050);
+}
+
+/* the frame stays put while the scene is milled behind it */
+.hero__sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: flex-end;
+  height: 100svh;
+  padding-block: 9rem 5rem;
   overflow: hidden;
 }
 
@@ -155,7 +163,7 @@
   background:
     radial-gradient(72% 95% at 16% 52%, rgb(20 35 15 / 0.82) 0%, rgb(20 35 15 / 0.38) 46%, transparent 74%),
     linear-gradient(180deg, rgb(20 35 15 / 0.6) 0%, transparent 34%),
-    linear-gradient(0deg, rgb(20 35 15 / 0.88) 4%, rgb(20 35 15 / 0.2) 46%, transparent 72%);
+    linear-gradient(0deg, rgb(20 35 15 / 0.6) 2%, rgb(20 35 15 / 0.12) 42%, transparent 66%);
 }
 
 .hero__inner { position: relative; z-index: 2; }
@@ -224,21 +232,51 @@
   color: rgb(248 243 231 / 0.6);
 }
 
-.hero__rail {
+/* names the stage the grain is currently at, driven from the scroll */
+.hero__stage {
   position: absolute;
-  right: -0.25rem;
-  top: 52%;
+  right: var(--gutter);
+  top: 34%;
   z-index: 2;
-  transform: translateY(-50%) rotate(90deg);
-  transform-origin: right center;
+  display: grid;
+  justify-items: end;
+  gap: 0.3rem;
+  text-align: right;
+}
+.hero__stage b {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--gold-300);
+  font-variant-numeric: tabular-nums;
+}
+.hero__stage span {
+  max-width: 13ch;
   font-size: 0.66rem;
   font-weight: 600;
-  letter-spacing: 0.34em;
-  color: rgb(248 243 231 / 0.42);
-  white-space: nowrap;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(248 243 231 / 0.58);
+}
+.hero__stage::after {
+  content: "";
+  width: 1px;
+  height: 4.5rem;
+  margin-top: 0.6rem;
+  background: linear-gradient(var(--gold-400), transparent);
+}
+.hero__stage.is-swap b,
+.hero__stage.is-swap span { animation: stageIn 420ms var(--ease-out) both; }
+@keyframes stageIn {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
 }
 
 .hero__cue {
+  opacity: 1;
+  transition: opacity var(--t-mid) var(--ease);
   position: absolute;
   left: 50%;
   bottom: 1.6rem;
@@ -567,8 +605,9 @@
   .site-nav a { display: block; padding-block: 0.95rem; font-size: var(--fs-md); }
   .site-nav a::after { display: none; }
 
-  .hero { padding-block: 8rem 6.5rem; min-height: 92svh; }
-  .hero__rail { display: none; }
+  .hero { min-height: 168svh; }
+  .hero__sticky { padding-block: 7.5rem 6rem; }
+  .hero__stage { display: none; }
   .hero__stats { gap: 1.5rem 2.25rem; }
   .hero__stats > div { flex: 1 1 8rem; }
 
@@ -585,3 +624,18 @@
   .product-card:nth-last-child(2),
   .product-card:last-child { grid-column: span 3; }
 }
+
+/* the sequence is running, so stop inviting a scroll */
+.hero__sticky.is-moving .hero__cue { opacity: 0; }
+
+/* one canvas behind the whole viewport; each step is scissored out of it */
+.process-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  visibility: hidden;
+}
+.process-canvas.is-live { visibility: visible; }
