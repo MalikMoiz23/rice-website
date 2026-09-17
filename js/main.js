@@ -311,3 +311,41 @@ if (year) year.textContent = String(new Date().getFullYear());
 import('./scene-hero.js')
   .then((m) => m.initHero())
   .catch((err) => console.warn('hero scene skipped:', err.message));
+
+/* --------------------------------------------------- 3d sack viewer */
+
+const sackSwitch = $('[data-sack-switch]');
+
+if (sackSwitch) {
+  const META = {
+    25: { net: '25 kg', dims: '18 × 30 in', pallet: '40 sacks' },
+    50: { net: '50 kg', dims: '22 × 36 in', pallet: '20 sacks' },
+  };
+
+  const net = $('[data-sack-net]');
+  const dims = $('[data-sack-dims]');
+  const pallet = $('[data-sack-pallet]');
+  const hint = $('[data-sack-hint]');
+  const sackCanvas = $('[data-sack-canvas]');
+
+  let sack = null;
+  import('./scene-sack.js')
+    .then((m) => { sack = m.initSack(); })
+    .catch((err) => console.warn('sack viewer skipped:', err.message));
+
+  sackSwitch.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-sack-weight]');
+    if (!btn) return;
+
+    $$('button', sackSwitch).forEach((b) => b.classList.toggle('is-active', b === btn));
+
+    const kg = btn.dataset.sackWeight;
+    net.textContent = META[kg].net;
+    dims.textContent = META[kg].dims;
+    pallet.textContent = META[kg].pallet;
+    sack?.setWeight(Number(kg));
+  });
+
+  // the drag hint has done its job once someone drags
+  sackCanvas?.addEventListener('pointerdown', () => hint?.classList.add('is-gone'), { once: true });
+}
