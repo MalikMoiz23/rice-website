@@ -1,0 +1,50 @@
+# dependencies
+node_modules/
+jspm_packages/
+.pnp
+.pnp.js
+
+# build artefacts
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# os junk
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# misc
+*.zip
+*.rar
+*.7z
+.tmp/
+coverage/
