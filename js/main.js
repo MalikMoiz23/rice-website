@@ -303,3 +303,11 @@ if (form) {
 
 const year = $('[data-year]');
 if (year) year.textContent = String(new Date().getFullYear());
+
+/* ---------------------------------------------------------- 3d hero */
+
+// Loaded on the side: if WebGL is missing or the CDN is blocked the hero
+// just keeps its gradient background.
+import('./scene-hero.js')
+  .then((m) => m.initHero())
+  .catch((err) => console.warn('hero scene skipped:', err.message));
