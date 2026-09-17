@@ -277,8 +277,8 @@
 .step {
   position: relative;
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
-  gap: 0 1.25rem;
+  grid-template-columns: 2.9rem 3.5rem minmax(0, 1fr);
+  gap: 0 1rem;
   padding-block: 1.9rem;
   border-top: 1px solid var(--line);
   transition: background var(--t-mid) var(--ease);
@@ -287,6 +287,7 @@
 .step:hover { background: rgb(217 174 68 / 0.05); }
 
 .step__num {
+  grid-column: 1;
   grid-row: 1 / span 2;
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -295,8 +296,19 @@
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.step h3 { font-size: var(--fs-lg); }
+/* the scissored viewport the process canvas draws this step's grain into */
+.step__grain {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 3.5rem;
+  height: 3.5rem;
+  align-self: start;
+  margin-top: -0.4rem;
+}
+
+.step h3 { grid-column: 3; font-size: var(--fs-lg); }
 .step p {
+  grid-column: 3;
   margin-top: 0.55rem;
   font-size: var(--fs-sm);
   color: var(--text-soft);
@@ -539,6 +551,7 @@
   .form { grid-template-columns: minmax(0, 1fr); }
   .calc__out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .weight-switch { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-  .step { grid-template-columns: 3rem minmax(0, 1fr); }
+  .step { grid-template-columns: 2.2rem 2.6rem minmax(0, 1fr); gap: 0 0.7rem; }
+  .step__grain { width: 2.6rem; height: 2.6rem; }
   .assure { flex-direction: column; align-items: flex-start; }
 }
