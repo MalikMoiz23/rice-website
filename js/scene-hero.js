@@ -7,9 +7,9 @@
 
 import * as THREE from 'three';
 
-const COLUMN_H = 17;   // half-height of the volume grains fall through
-const R_INNER = 3.2;
-const R_OUTER = 24;
+const COLUMN_H = 18;   // half-height of the volume grains fall through
+const R_INNER = 5;
+const R_OUTER = 26;
 
 const TINTS = [0xf4e8cb, 0xe9d7a6, 0xd9be7c, 0xfffaf0];
 
@@ -18,7 +18,7 @@ export function initHero(canvas) {
   if (!el || !supportsWebGL()) return null;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const count = window.innerWidth < 760 ? 900 : 1800;
+  const count = window.innerWidth < 760 ? 1300 : 2800;
 
   const renderer = new THREE.WebGLRenderer({
     canvas: el,
@@ -31,14 +31,14 @@ export function initHero(canvas) {
   renderer.toneMappingExposure = 1.05;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x14230f, 0.034);
+  scene.fog = new THREE.FogExp2(0x14230f, 0.021);
 
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 120);
-  camera.position.set(0, 0, 19);
+  camera.position.set(0, 0, 28);
 
   /* ---- grain geometry: a sphere squeezed into a rice shape ---- */
   const grain = new THREE.SphereGeometry(1, 10, 7);
-  grain.scale(0.25, 0.25, 0.92);
+  grain.scale(0.23, 0.23, 0.86);
 
   const material = new THREE.MeshStandardMaterial({
     roughness: 0.52,
@@ -48,6 +48,7 @@ export function initHero(canvas) {
 
   const mesh = new THREE.InstancedMesh(grain, material, count);
   mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  mesh.position.z = -14;   // sit the whole column back so nothing clips the camera
   scene.add(mesh);
 
   /* ---- per-grain state, kept outside the matrix so the loop is cheap ---- */
@@ -65,7 +66,7 @@ export function initHero(canvas) {
       swirl: (0.06 + Math.random() * 0.13) * (Math.random() < 0.12 ? -1 : 1),
       spin: (Math.random() - 0.5) * 1.6,
       phase: Math.random() * Math.PI * 2,
-      scale: 0.55 + Math.random() * 0.85,
+      scale: 0.3 + Math.random() * 0.5,
     };
 
     tint.setHex(TINTS[(Math.random() * TINTS.length) | 0]);
@@ -127,7 +128,7 @@ export function initHero(canvas) {
       g.theta += g.swirl * dt;
 
       // a little lateral sway so the fall is not a straight line
-      const sway = Math.sin(t * 0.6 + g.phase) * 0.35;
+      const sway = Math.sin(t * 0.6 + g.phase) * 0.5;
 
       dummy.position.set(
         Math.cos(g.theta) * g.r + sway,
@@ -154,7 +155,7 @@ export function initHero(canvas) {
 
     // ease the whole field back as the hero scrolls away
     const past = Math.min(window.scrollY / (el.clientHeight || 1), 1);
-    camera.position.z = 19 + past * 9;
+    camera.position.z = 28 + past * 10;
     mesh.rotation.y = past * 0.5;
   }
 

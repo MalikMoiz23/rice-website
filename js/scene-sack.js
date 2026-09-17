@@ -9,9 +9,9 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-const W = 1.5;
-const H = 2.1;
-const D = 0.98;
+const W = 1.3;
+const H = 2.55;
+const D = 0.85;
 
 const HALF_W = W / 2;
 const HALF_H = H / 2;
@@ -26,7 +26,7 @@ const SIZES = {
    panel reuses this so it sits on the surface instead of through it */
 function surfaceZ(x, y) {
   const ny = y / HALF_H;
-  const belly = 1 + 0.3 * (1 - ny * ny);
+  const belly = 1 + 0.22 * (1 - ny * ny);
   const seam = 1 - 0.42 * Math.pow(Math.abs(ny), 6);
   const edge = 1 - 0.1 * Math.pow(Math.abs(x) / HALF_W, 3);
   return HALF_D * belly * seam * edge;
@@ -51,7 +51,7 @@ export function initSack(canvas) {
   scene.environmentIntensity = 0.55;
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
-  camera.position.set(0.9, 0.6, 5.1);
+  camera.position.set(0.85, 0.35, 5.4);
 
   const controls = new OrbitControls(camera, el);
   controls.enableZoom = false;
@@ -75,7 +75,7 @@ export function initSack(canvas) {
 
   /* ---------------------------------------------------------- the bag */
 
-  const geo = new RoundedBoxGeometry(W, H, D, 8, 0.3);
+  const geo = new RoundedBoxGeometry(W, H, D, 8, 0.26);
   const pos = geo.attributes.position;
 
   for (let i = 0; i < pos.count; i++) {
@@ -84,7 +84,7 @@ export function initSack(canvas) {
     const z = pos.getZ(i);
 
     const ny = y / HALF_H;
-    const belly = 1 + 0.3 * (1 - ny * ny);
+    const belly = 1 + 0.22 * (1 - ny * ny);
     const seam = 1 - 0.42 * Math.pow(Math.abs(ny), 6);
     const crease = Math.sin(x * 7.1 + y * 4.3) * Math.cos(z * 6.2 - y * 3.1) * 0.016;
 
@@ -121,7 +121,7 @@ export function initSack(canvas) {
   labelTex.colorSpace = THREE.SRGBColorSpace;
   labelTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
-  const panel = new THREE.PlaneGeometry(1.08, 1.52, 24, 24);
+  const panel = new THREE.PlaneGeometry(0.98, 1.39, 24, 24);
   const ppos = panel.attributes.position;
   for (let i = 0; i < ppos.count; i++) {
     ppos.setZ(i, surfaceZ(ppos.getX(i), ppos.getY(i)) + 0.006);
@@ -142,10 +142,10 @@ export function initSack(canvas) {
 
   // chain-stitched mouth
   const stitch = new THREE.Mesh(
-    new THREE.BoxGeometry(W * 0.86, 0.045, D * 0.5),
+    new THREE.BoxGeometry(W * 0.55, 0.05, D * 0.42),
     new THREE.MeshStandardMaterial({ color: 0x3b2f1d, roughness: 0.85 })
   );
-  stitch.position.y = HALF_H - 0.03;
+  stitch.position.y = HALF_H - 0.04;
   stitch.castShadow = true;
   bag.add(stitch);
 

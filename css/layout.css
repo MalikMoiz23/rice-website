@@ -153,7 +153,8 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg, rgb(20 35 15 / 0.62) 0%, transparent 34%),
+    radial-gradient(72% 95% at 16% 52%, rgb(20 35 15 / 0.82) 0%, rgb(20 35 15 / 0.38) 46%, transparent 74%),
+    linear-gradient(180deg, rgb(20 35 15 / 0.6) 0%, transparent 34%),
     linear-gradient(0deg, rgb(20 35 15 / 0.88) 4%, rgb(20 35 15 / 0.2) 46%, transparent 72%);
 }
 
@@ -575,4 +576,12 @@
   .viewer__meta > div + div { border-left: 0; border-top: 1px solid var(--line); }
 
   .site-footer__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* five cards: three across, then two wide ones, so nothing is orphaned */
+@media (min-width: 1040px) {
+  .product-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .product-card { grid-column: span 2; }
+  .product-card:nth-last-child(2),
+  .product-card:last-child { grid-column: span 3; }
 }
