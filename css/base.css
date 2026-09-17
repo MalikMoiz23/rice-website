@@ -1,0 +1,263 @@
+/* ============================================================
+   base.css — tokens, reset, typography, utilities
+   Palette is pulled off a paddy field: husk cream, ripe gold,
+   crop green, wet soil.
+   ============================================================ */
+
+:root {
+  /* --- raw palette --- */
+  --rice-000: #fffdf7;
+  --rice-050: #f8f3e7;
+  --husk-100: #efe5ce;
+  --husk-200: #e2d3b3;
+  --husk-300: #cfba90;
+
+  --gold-300: #e8c974;
+  --gold-400: #d9ae44;
+  --gold-500: #c2912a;
+  --gold-600: #9c7118;
+
+  --leaf-300: #86ab6f;
+  --leaf-400: #5e8b4c;
+  --leaf-600: #3c6234;
+  --leaf-800: #22381f;
+  --leaf-900: #14230f;
+
+  --soil-400: #9a7749;
+  --soil-600: #6b5233;
+  --soil-800: #3d2f1d;
+
+  --ink: #191c14;
+  --ink-soft: #464b3c;
+  --ink-mute: #6d7361;
+
+  /* --- semantic, light sections --- */
+  --bg: var(--rice-050);
+  --surface: var(--rice-000);
+  --text: var(--ink);
+  --text-soft: var(--ink-soft);
+  --text-mute: var(--ink-mute);
+  --line: rgb(25 28 20 / 0.12);
+  --line-soft: rgb(25 28 20 / 0.07);
+  --accent: var(--gold-500);
+  --accent-soft: var(--gold-300);
+  --on-accent: #1b1405;
+
+  /* --- shape --- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 36px;
+  --r-pill: 999px;
+
+  /* --- depth --- */
+  --sh-sm: 0 1px 2px rgb(25 28 20 / 0.06), 0 2px 8px rgb(25 28 20 / 0.04);
+  --sh-md: 0 2px 6px rgb(25 28 20 / 0.06), 0 14px 32px -12px rgb(25 28 20 / 0.16);
+  --sh-lg: 0 4px 10px rgb(25 28 20 / 0.07), 0 30px 60px -20px rgb(25 28 20 / 0.24);
+
+  /* --- rhythm --- */
+  --shell: 1200px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(4.5rem, 10vw, 9rem);
+
+  /* --- motion --- */
+  --ease: cubic-bezier(0.22, 0.75, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 160ms;
+  --t-mid: 320ms;
+  --t-slow: 620ms;
+
+  /* --- type --- */
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: clamp(1.02rem, 0.98rem + 0.2vw, 1.12rem);
+  --fs-lg: clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+  --fs-h3: clamp(1.3rem, 1.15rem + 0.7vw, 1.65rem);
+  --fs-h2: clamp(2rem, 1.5rem + 2.2vw, 3.4rem);
+  --fs-h1: clamp(2.8rem, 1.7rem + 5vw, 6rem);
+}
+
+/* dark sections swap the same tokens rather than overriding rules */
+.section--dark,
+.site-footer {
+  --bg: var(--leaf-900);
+  --surface: rgb(255 255 255 / 0.04);
+  --text: var(--rice-050);
+  --text-soft: rgb(248 243 231 / 0.78);
+  --text-mute: rgb(248 243 231 / 0.56);
+  --line: rgb(248 243 231 / 0.16);
+  --line-soft: rgb(248 243 231 / 0.09);
+  --accent: var(--gold-300);
+  --on-accent: #17200f;
+}
+
+.section--husk {
+  --bg: var(--husk-100);
+  --surface: var(--rice-000);
+}
+
+/* ------------------------------------------------------------ reset */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--rice-050);
+  color: var(--ink);
+  font: 400 var(--fs-base)/1.65 var(--font-body);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, svg, canvas, video { display: block; max-width: 100%; }
+canvas { touch-action: none; }
+
+input, button, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+textarea { resize: vertical; }
+
+ul, ol { list-style: none; padding: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+
+::selection { background: var(--gold-300); color: var(--leaf-900); }
+
+/* ------------------------------------------------------- typography */
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variation-settings: "opsz" 60;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h3 { font-size: var(--fs-h3); line-height: 1.16; }
+
+p { text-wrap: pretty; }
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-600);
+}
+.eyebrow--light { color: var(--gold-300); }
+
+.section-title {
+  font-size: var(--fs-h2);
+  margin-top: 0.7rem;
+  color: var(--text);
+}
+
+.section-lede {
+  max-width: 52ch;
+  margin-top: 1.25rem;
+  font-size: var(--fs-md);
+  color: var(--text-soft);
+}
+.section-lede--light { color: var(--text-soft); }
+
+/* -------------------------------------------------------- utilities */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.u-sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  border-radius: var(--r-sm);
+  background: var(--leaf-800);
+  color: var(--rice-050);
+  transform: translateY(-160%);
+  transition: transform var(--t-mid) var(--ease);
+}
+.skip-link:focus-visible { transform: none; }
+
+/* milled-grain speckle over the whole page — keeps flat fills alive */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scroll-rail {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 130;
+  height: 3px;
+  pointer-events: none;
+}
+.scroll-rail span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--leaf-600), var(--gold-400));
+  transform-origin: left;
+}
+
+/* ----------------------------------------------------- scroll reveal */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity var(--t-slow) var(--ease-out),
+    transform var(--t-slow) var(--ease-out);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
