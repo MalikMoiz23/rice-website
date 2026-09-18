@@ -304,57 +304,51 @@ if (form) {
 const year = $('[data-year]');
 if (year) year.textContent = String(new Date().getFullYear());
 
-/* ------------------------------------------------ hero choreography */
+/* ----------------------------------------------- story choreography */
 
-const heroEl = $('[data-hero]');
+const storyCanvas = $('[data-story-canvas]');
+const actEls = $$('[data-act]');
 
-if (heroEl) {
-  const sticky = $('.hero__sticky', heroEl);
-  const stage = $('[data-hero-stage]');
+if (storyCanvas && actEls.length) {
+  let story = null;
+  let anchors = [];
 
-  const STAGES = [
-    { at: 0, n: '01', text: 'Paddy standing in the field' },
-    { at: 0.34, n: '02', text: 'Threshed, hull coming off' },
-    { at: 0.68, n: '03', text: 'Milled, polished, white' },
-  ];
-
-  let hero = null;
-  let shown = -1;
-
-  const progress = () => {
-    const span = heroEl.offsetHeight - window.innerHeight;
-    return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
-  };
-
-  function paint() {
-    const p = progress();
-    sticky.classList.toggle('is-moving', p > 0.05);
-
-    let i = 0;
-    for (let s = 0; s < STAGES.length; s++) if (p >= STAGES[s].at) i = s;
-
-    if (i !== shown) {
-      shown = i;
-      stage.innerHTML = `<b>${STAGES[i].n}</b><span>${STAGES[i].text}</span>`;
-      stage.classList.remove('is-swap');
-      void stage.offsetWidth; // restart the swap animation
-      stage.classList.add('is-swap');
-    }
-
-    hero?.setProgress(p);
+  // the scroll position at which each act section sits centred in the viewport
+  function measure() {
+    anchors = actEls.map((el) => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      return top + el.offsetHeight / 2 - window.innerHeight / 2;
+    });
   }
 
-  // WebGL is optional here — the copy and the gradient stand on their own
-  import('./scene-hero.js')
+  // a continuous 0–4, hitting a whole number exactly on each act
+  function stage() {
+    const y = window.scrollY;
+    const last = anchors.length - 1;
+    if (y <= anchors[0]) return 0;
+    if (y >= anchors[last]) return last;
+
+    let i = 0;
+    while (i < last && y >= anchors[i + 1]) i++;
+    const span = anchors[i + 1] - anchors[i];
+    return span > 0 ? i + (y - anchors[i]) / span : i;
+  }
+
+  const paint = () => story?.setStage(stage());
+
+  measure();
+
+  // WebGL is optional — the canvas keeps a gradient and the copy still reads
+  import('./scene-story.js')
     .then((m) => {
-      hero = m.initHero();
+      story = m.initStory();
       paint();
     })
-    .catch((err) => console.warn('hero scene skipped:', err.message));
+    .catch((err) => console.warn('story scene skipped:', err.message));
 
   window.addEventListener('scroll', paint, { passive: true });
-  window.addEventListener('resize', paint);
-  paint();
+  window.addEventListener('resize', () => { measure(); paint(); });
+  window.addEventListener('load', () => { measure(); paint(); });
 }
 
 /* -------------------------------------------- grain per process step */

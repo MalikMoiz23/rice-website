@@ -127,32 +127,12 @@
 
 .hero {
   position: relative;
-  /* the extra height is the scroll runway the field-to-rice sequence needs */
-  min-height: 178svh;
-  background:
-    radial-gradient(120% 90% at 78% 8%, #2f4a25 0%, transparent 58%),
-    radial-gradient(90% 70% at 10% 95%, #1b2f16 0%, transparent 60%),
-    var(--leaf-900);
-  color: var(--rice-050);
-}
-
-/* the frame stays put while the scene is milled behind it */
-.hero__sticky {
-  position: sticky;
-  top: 0;
   display: flex;
   align-items: flex-end;
-  height: 100svh;
+  min-height: 100svh;
   padding-block: 9rem 5rem;
+  color: var(--rice-050);
   overflow: hidden;
-}
-
-.hero__canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 
 /* keeps the headline readable over whatever the grain field is doing */
@@ -230,48 +210,6 @@
   font-size: var(--fs-sm);
   font-weight: 500;
   color: rgb(248 243 231 / 0.6);
-}
-
-/* names the stage the grain is currently at, driven from the scroll */
-.hero__stage {
-  position: absolute;
-  right: var(--gutter);
-  top: 34%;
-  z-index: 2;
-  display: grid;
-  justify-items: end;
-  gap: 0.3rem;
-  text-align: right;
-}
-.hero__stage b {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--gold-300);
-  font-variant-numeric: tabular-nums;
-}
-.hero__stage span {
-  max-width: 13ch;
-  font-size: 0.66rem;
-  font-weight: 600;
-  line-height: 1.5;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgb(248 243 231 / 0.58);
-}
-.hero__stage::after {
-  content: "";
-  width: 1px;
-  height: 4.5rem;
-  margin-top: 0.6rem;
-  background: linear-gradient(var(--gold-400), transparent);
-}
-.hero__stage.is-swap b,
-.hero__stage.is-swap span { animation: stageIn 420ms var(--ease-out) both; }
-@keyframes stageIn {
-  from { opacity: 0; transform: translateY(0.5rem); }
-  to   { opacity: 1; transform: none; }
 }
 
 .hero__cue {
@@ -605,9 +543,8 @@
   .site-nav a { display: block; padding-block: 0.95rem; font-size: var(--fs-md); }
   .site-nav a::after { display: none; }
 
-  .hero { min-height: 168svh; }
-  .hero__sticky { padding-block: 7.5rem 6rem; }
-  .hero__stage { display: none; }
+  .hero { padding-block: 8rem 6.5rem; min-height: 94svh; }
+  .act { min-height: 106svh; padding-block: 5rem; }
   .hero__stats { gap: 1.5rem 2.25rem; }
   .hero__stats > div { flex: 1 1 8rem; }
 
@@ -626,7 +563,7 @@
 }
 
 /* the sequence is running, so stop inviting a scroll */
-.hero__sticky.is-moving .hero__cue { opacity: 0; }
+
 
 /* one canvas behind the whole viewport; each step is scissored out of it */
 .process-canvas {
@@ -639,3 +576,93 @@
   visibility: hidden;
 }
 .process-canvas.is-live { visibility: visible; }
+
+/* ------------------------------------------- the scene behind it all */
+
+.story-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* stands in for the scene where WebGL is unavailable */
+  background:
+    radial-gradient(120% 90% at 74% 8%, #2f4a25 0%, transparent 58%),
+    radial-gradient(90% 70% at 8% 96%, #1b2f16 0%, transparent 62%),
+    #14230f;
+}
+
+/* content rides above the canvas; only the act breaks let it through */
+main,
+.site-footer { position: relative; z-index: 1; }
+
+/* ------------------------------------------------------- act breaks */
+
+.act {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 118svh;
+  padding-block: 6rem;
+  color: var(--rice-050);
+  overflow: hidden;
+}
+
+/* darkens the scene under the copy without hiding it — one soft radial,
+   because a gradient with hard stops shows a seam on a section this tall */
+.act::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    96% 130% at 10% 50%,
+    rgb(14 25 9 / 0.93) 0%,
+    rgb(14 25 9 / 0.6) 34%,
+    rgb(14 25 9 / 0.2) 62%,
+    transparent 88%
+  );
+}
+
+/* the shell keeps its own centred width; the copy stays left inside it */
+.act__inner > * { max-width: 36rem; }
+
+.act__tag {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+
+.act__title {
+  margin-top: 0.9rem;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 3rem);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+.act__text {
+  max-width: 44ch;
+  margin-top: 1.25rem;
+  font-size: var(--fs-md);
+  color: rgb(248 243 231 / 0.78);
+}
+
+/* the hero's own marker, set on its side down the right edge */
+.act__tag--hero {
+  position: absolute;
+  right: calc(var(--gutter) - 0.35rem);
+  top: 46%;
+  z-index: 2;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.3em;
+  color: rgb(248 243 231 / 0.5);
+}
+
+@media (max-width: 900px) {
+  .act__tag--hero { display: none; }
+}

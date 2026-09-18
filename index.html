@@ -31,6 +31,8 @@
 </head>
 <body id="top">
 
+<canvas class="story-canvas" data-story-canvas aria-hidden="true"></canvas>
+
 <div class="grain-overlay" aria-hidden="true"></div>
 <div class="scroll-rail" aria-hidden="true"><span data-scroll-progress></span></div>
 
@@ -76,9 +78,7 @@
 <main id="main">
 
   <!-- ────────────────────────────  hero  ──────────────────────────── -->
-  <section class="hero" id="hero" data-hero>
-   <div class="hero__sticky">
-    <canvas class="hero__canvas" data-hero-canvas aria-hidden="true"></canvas>
+  <section class="hero" id="hero" data-act="0">
     <div class="hero__wash" aria-hidden="true"></div>
 
     <div class="shell hero__inner">
@@ -107,12 +107,9 @@
       </dl>
     </div>
 
-    <p class="hero__stage" data-hero-stage aria-hidden="true">
-      <b>01</b><span>Paddy standing in the field</span>
-    </p>
+    <p class="act__tag act__tag--hero" aria-hidden="true">Stage 01 — standing in the field</p>
 
     <a class="hero__cue" href="#range" aria-label="Scroll to the range"><span></span></a>
-   </div>
   </section>
 
   <!-- ───────────────────────────  marquee  ─────────────────────────── -->
@@ -282,6 +279,15 @@
     </div>
   </section>
 
+  <!-- ─────────────────────────────  act  ──────────────────────────── -->
+  <section class="act" id="act-hull" data-act="1">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag">Stage 02</p>
+      <h2 class="act__title">It leaves the field inside a hull</h2>
+      <p class="act__text">Every grain comes off the combine sealed in a tough, ribbed husk. That husk is why paddy keeps for a season in a bin, and it is the first thing the mill has to take off.</p>
+    </div>
+  </section>
+
   <!-- ──────────────────────────  sack viewer  ─────────────────────── -->
   <section class="section section--dark viewer" id="viewer">
     <div class="shell viewer__grid">
@@ -397,6 +403,15 @@
     </div>
   </section>
 
+  <!-- ─────────────────────────────  act  ──────────────────────────── -->
+  <section class="act" id="act-milled" data-act="2">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag">Stage 03</p>
+      <h2 class="act__title">The hull splits away</h2>
+      <p class="act__text">Two rubber rollers turning at different speeds strip the husk without cracking what is inside. What falls through is rice — brown at first, white once the bran is polished off.</p>
+    </div>
+  </section>
+
   <!-- ───────────────────────────  quality  ────────────────────────── -->
   <section class="section section--husk" id="quality">
     <div class="shell">
@@ -427,6 +442,15 @@
         <a class="btn btn--solid" href="#contact">Request a sample</a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────  act  ──────────────────────────── -->
+  <section class="act" id="act-pair" data-act="3">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag">Stage 04</p>
+      <h2 class="act__title">The same grain, both ends of the process</h2>
+      <p class="act__text">Paddy on the left, milled on the right. Roughly a third of the weight is husk and bran, and none of it is thrown away — the husk fires the boiler, the bran goes to oil.</p>
     </div>
   </section>
 
@@ -479,6 +503,15 @@
         <a class="btn btn--solid btn--full" href="#contact" data-calc-cta>Send this to the mill</a>
       </form>
 
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────  act  ──────────────────────────── -->
+  <section class="act" id="act-sack" data-act="4">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag">Stage 05</p>
+      <h2 class="act__title">Into the sack</h2>
+      <p class="act__text">Weighed to net 25 or 50 kg, stitched at the mouth, stamped with the lot and the mill date. From here it is a truck and an address.</p>
     </div>
   </section>
 
