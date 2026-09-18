@@ -299,7 +299,6 @@ export function initStory(canvas) {
 
   const clock = new THREE.Clock();
   let running = true;
-  let onScreen = true;
   let pageVisible = true;
   let frame = 0;
 
@@ -438,7 +437,7 @@ export function initStory(canvas) {
   function tick() {
     if (!running) return;
     frame = requestAnimationFrame(tick);
-    if (!onScreen || !pageVisible) return;
+    if (!pageVisible) return;
     const dt = Math.min(clock.getDelta(), 0.05);
     quality(dt);
     step(dt, clock.elapsedTime);
@@ -450,20 +449,12 @@ export function initStory(canvas) {
     onRestored: () => { if (!reduced) { running = true; tick(); } },
   });
 
-  /* only draw while one of the clear act sections is actually showing */
-  const acts = new Set();
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) acts.add(e.target);
-      else acts.delete(e.target);
-    });
-    onScreen = acts.size > 0;
-    if (onScreen && reduced) {
-      step(0, 0);
-      render();
-    }
-  });
-  document.querySelectorAll('[data-act]').forEach((a) => io.observe(a));
+  /* This used to draw only while one of the clear act breaks was on screen.
+     That made the scene freeze everywhere else — behind the bag section, the
+     process list, the whole lower half of the page. Now that the scrims are
+     light enough to see the scene through every section, it has to keep
+     running the whole way down. The canvas is fixed and full-viewport, so the
+     only thing worth stopping for is a hidden tab. */
 
   setStage(0);
 
@@ -473,7 +464,6 @@ export function initStory(canvas) {
     window.addEventListener(
       'scroll',
       () => {
-        if (!onScreen) return;
         step(0, 0);
         render();
       },
@@ -489,7 +479,6 @@ export function initStory(canvas) {
     destroy() {
       running = false;
       cancelAnimationFrame(frame);
-      io.disconnect();
       plantGeo.dispose();
       cloudGeo.dispose();
       hullA.geometry.dispose();

@@ -134,9 +134,13 @@ Needs WebGL2 and import maps: Chrome/Edge 89+, Firefox 108+, Safari 16.4+. Witho
 WebGL the whole site still works — the canvas keeps a CSS gradient and every scene
 is skipped.
 
-There are four WebGL contexts. Each pauses when its section is off screen, the six
-process grains are skipped below 760px, and every canvas survives a lost context by
-hiding itself rather than going black (see `js/webgl.js`).
+There are four WebGL contexts. The page-long story scene runs continuously, because
+its canvas is fixed behind everything and the scrims are light enough to see it
+through every section — gating it on the act breaks left it frozen behind the bag,
+process and contact sections. The other three pause when their own section is off
+screen, the six process grains are skipped below 760px, and every canvas survives a
+lost context by hiding itself rather than going black (see `js/webgl.js`). A hidden
+tab stops everything.
 
 Three things keep scrolling smooth and are easy to undo by accident:
 
@@ -150,7 +154,7 @@ Three things keep scrolling smooth and are easy to undo by accident:
   was costing more than everything else on the page put together.
 
 Measured on integrated graphics, scrolling the full page: median frame 6.9ms,
-90th percentile 7.0ms, 99th 7.2ms.
+90th percentile 7.0ms, 99th 9.6ms, with the scene drawing the whole way down.
 
 `prefers-reduced-motion` stops every animation loop and all scroll transitions; the
 scenes still follow the scroll, they just do not idle-animate.
