@@ -145,11 +145,12 @@ Three things keep scrolling smooth and are easy to undo by accident:
   is force-lost — a canvas that was working turns black.
 - Scroll handlers only record a value. Per-instance work happens once per frame in
   the render loop, never in the scroll event, which fires far more often.
-- The frosted panels only blur while near the viewport (`.is-near`, set from
-  `main.js`). Blurring a live canvas is the most expensive thing on the page.
+- Nothing blurs the canvas. Panels are dark and near-solid instead, and copy
+  sitting straight on the scene carries a text-shadow. Blurring a live canvas
+  was costing more than everything else on the page put together.
 
 Measured on integrated graphics, scrolling the full page: median frame 6.9ms,
-90th percentile 7.0ms, 99th 21ms.
+90th percentile 7.0ms, 99th 7.2ms.
 
 `prefers-reduced-motion` stops every animation loop and all scroll transitions; the
 scenes still follow the scroll, they just do not idle-animate.

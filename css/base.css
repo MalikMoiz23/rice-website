@@ -35,10 +35,12 @@
      Every panel on the page floats over the live scene, so the palette is
      dark throughout and surfaces are glass rather than fill. --scrim is
      what each section lays over the canvas to keep its copy readable. */
-  --scrim: rgb(13 24 9 / 0.68);
-  --blur: 12px;
-  --surface: rgb(255 255 255 / 0.055);
-  --surface-hi: rgb(255 255 255 / 0.1);
+  /* The scrim only knocks the scene back far enough to read over. Nothing
+     blurs it, so it stays sharp. Panels are dark and near-solid instead,
+     which is what carries the text. */
+  --scrim: rgb(13 24 9 / 0.38);
+  --surface: rgb(9 18 6 / 0.82);
+  --surface-hi: rgb(15 28 11 / 0.9);
   --text: var(--rice-050);
   --text-soft: rgb(248 243 231 / 0.8);
   --text-mute: rgb(248 243 231 / 0.56);
@@ -89,13 +91,11 @@
 
 /* sections differ only by how heavily they sit on the scene */
 .section--dark {
-  --scrim: rgb(8 16 5 / 0.82);
-  --surface: rgb(255 255 255 / 0.05);
+  --scrim: rgb(8 16 5 / 0.52);
 }
 
 .section--husk {
-  --scrim: rgb(26 40 15 / 0.62);
-  --surface: rgb(255 255 255 / 0.07);
+  --scrim: rgb(24 38 14 / 0.36);
 }
 
 /* ------------------------------------------------------------ reset */
@@ -258,4 +258,26 @@ p { text-wrap: pretty; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ------------------------------------------------ copy over the scene */
+
+/* With nothing blurring the canvas, anything sitting straight on it needs
+   its own edge. Panels do not — they have a dark background of their own. */
+.section-head,
+.hero__inner,
+.act__inner,
+.grade__copy,
+.process__aside,
+.assure {
+  text-shadow: 0 1px 2px rgb(6 13 4 / 0.6), 0 2px 16px rgb(6 13 4 / 0.8);
+}
+
+/* buttons and chips carry their own fill, and a shadow only muddies them */
+.btn,
+.chip,
+.lang-toggle,
+.seg button,
+.weight-switch__track button {
+  text-shadow: none;
 }

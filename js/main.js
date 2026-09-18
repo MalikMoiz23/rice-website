@@ -391,23 +391,6 @@ if (storyCanvas && actEls.length) {
   window.addEventListener('load', () => { measure(); paint(); });
 }
 
-/* ------------------------------------------------ blur, but only nearby */
-
-// The frosted panels blur whatever the canvas is drawing behind them, which is
-// the most expensive thing on the page. Only sections about to be seen get the
-// blur; the rest keep the flat scrim, which is invisible off screen anyway.
-const frosted = $$('.section, .act, .site-footer');
-
-if (frosted.length && 'IntersectionObserver' in window) {
-  const nearby = new IntersectionObserver(
-    (entries) => entries.forEach((e) => e.target.classList.toggle('is-near', e.isIntersecting)),
-    { rootMargin: '40% 0px' }
-  );
-  frosted.forEach((el) => nearby.observe(el));
-} else {
-  frosted.forEach((el) => el.classList.add('is-near'));
-}
-
 /* -------------------------------------------------- grade, up close */
 
 const gradeTabs = $('[data-grade-tabs]');
