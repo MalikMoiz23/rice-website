@@ -31,17 +31,22 @@
   --ink-soft: #464b3c;
   --ink-mute: #6d7361;
 
-  /* --- semantic, light sections --- */
-  --bg: var(--rice-050);
-  --surface: var(--rice-000);
-  --text: var(--ink);
-  --text-soft: var(--ink-soft);
-  --text-mute: var(--ink-mute);
-  --line: rgb(25 28 20 / 0.12);
-  --line-soft: rgb(25 28 20 / 0.07);
-  --accent: var(--gold-500);
-  --accent-soft: var(--gold-300);
-  --on-accent: #1b1405;
+  /* --- semantic ---
+     Every panel on the page floats over the live scene, so the palette is
+     dark throughout and surfaces are glass rather than fill. --scrim is
+     what each section lays over the canvas to keep its copy readable. */
+  --scrim: rgb(13 24 9 / 0.68);
+  --blur: 20px;
+  --surface: rgb(255 255 255 / 0.055);
+  --surface-hi: rgb(255 255 255 / 0.1);
+  --text: var(--rice-050);
+  --text-soft: rgb(248 243 231 / 0.8);
+  --text-mute: rgb(248 243 231 / 0.56);
+  --line: rgb(248 243 231 / 0.16);
+  --line-soft: rgb(248 243 231 / 0.09);
+  --accent: var(--gold-300);
+  --accent-soft: var(--gold-400);
+  --on-accent: #17200f;
 
   /* --- shape --- */
   --r-xs: 6px;
@@ -82,23 +87,15 @@
   --fs-h1: clamp(2.8rem, 1.7rem + 5vw, 6rem);
 }
 
-/* dark sections swap the same tokens rather than overriding rules */
-.section--dark,
-.site-footer {
-  --bg: var(--leaf-900);
-  --surface: rgb(255 255 255 / 0.04);
-  --text: var(--rice-050);
-  --text-soft: rgb(248 243 231 / 0.78);
-  --text-mute: rgb(248 243 231 / 0.56);
-  --line: rgb(248 243 231 / 0.16);
-  --line-soft: rgb(248 243 231 / 0.09);
-  --accent: var(--gold-300);
-  --on-accent: #17200f;
+/* sections differ only by how heavily they sit on the scene */
+.section--dark {
+  --scrim: rgb(8 16 5 / 0.82);
+  --surface: rgb(255 255 255 / 0.05);
 }
 
 .section--husk {
-  --bg: var(--husk-100);
-  --surface: var(--rice-000);
+  --scrim: rgb(26 40 15 / 0.62);
+  --surface: rgb(255 255 255 / 0.07);
 }
 
 /* ------------------------------------------------------------ reset */
@@ -114,8 +111,9 @@ html {
 }
 
 body {
-  background: var(--rice-050);
-  color: var(--ink);
+  /* only seen if the scene cannot start */
+  background: #14230f;
+  color: var(--text);
   font: 400 var(--fs-base)/1.65 var(--font-body);
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
@@ -162,7 +160,7 @@ p { text-wrap: pretty; }
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold-600);
+  color: var(--gold-300);
 }
 .eyebrow--light { color: var(--gold-300); }
 
@@ -218,8 +216,8 @@ p { text-wrap: pretty; }
   inset: 0;
   z-index: 120;
   pointer-events: none;
-  opacity: 0.055;
-  mix-blend-mode: multiply;
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 

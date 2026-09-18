@@ -82,7 +82,7 @@
   padding: 4px;
   border-radius: var(--r-pill);
   border: 1px solid var(--line);
-  background: rgb(25 28 20 / 0.04);
+  background: rgb(255 255 255 / 0.06);
 }
 .weight-switch__track button {
   position: relative;
@@ -159,6 +159,9 @@
   border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: var(--surface);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  cursor: pointer;
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
   transform-style: preserve-3d;
   will-change: transform;
@@ -178,8 +181,8 @@
   transition: opacity var(--t-mid) var(--ease);
 }
 .product-card:hover {
-  box-shadow: var(--sh-lg);
-  border-color: transparent;
+  background: var(--surface-hi);
+  border-color: rgb(232 201 116 / 0.42);
 }
 .product-card:hover::before { opacity: 1; }
 
@@ -193,17 +196,17 @@
 .product-card__tag {
   padding: 0.3rem 0.7rem;
   border-radius: var(--r-xs);
-  background: var(--husk-100);
-  color: var(--soil-600);
+  background: rgb(248 243 231 / 0.1);
+  color: var(--husk-200);
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.product-card__tag--gold { background: rgb(217 174 68 / 0.2); color: var(--gold-600); }
-.product-card__tag--amber { background: rgb(232 201 116 / 0.28); color: #8a6412; }
-.product-card__tag--leaf { background: rgb(94 139 76 / 0.16); color: var(--leaf-600); }
-.product-card__tag--soil { background: rgb(154 119 73 / 0.16); color: var(--soil-600); }
+.product-card__tag--gold { background: rgb(232 201 116 / 0.2); color: var(--gold-300); }
+.product-card__tag--amber { background: rgb(217 174 68 / 0.22); color: #f2dda2; }
+.product-card__tag--leaf { background: rgb(134 171 111 / 0.2); color: var(--leaf-300); }
+.product-card__tag--soil { background: rgb(207 186 144 / 0.16); color: var(--husk-300); }
 
 .product-card__len {
   font-family: var(--font-display);
@@ -322,15 +325,17 @@
   gap: 0.35rem;
   padding: 1.8rem 1.4rem;
   background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: background var(--t-mid) var(--ease);
 }
-.spec:hover { background: var(--rice-000); }
+.spec:hover { background: var(--surface-hi); }
 .spec b {
   font-family: var(--font-display);
   font-size: clamp(1.7rem, 1.4rem + 1vw, 2.3rem);
   font-weight: 600;
   line-height: 1;
-  color: var(--leaf-600);
+  color: var(--gold-300);
   font-variant-numeric: tabular-nums;
 }
 .spec span { font-size: var(--fs-xs); color: var(--text-mute); }
@@ -381,7 +386,7 @@
   border-radius: var(--r-md);
   overflow: hidden;
 }
-.calc__out > div { padding: 0.95rem 1rem; background: var(--bg); }
+.calc__out > div { padding: 0.95rem 1rem; background: rgb(10 19 6 / 0.62); }
 .calc__out dt {
   font-size: 0.68rem;
   letter-spacing: 0.12em;
@@ -423,7 +428,7 @@
   padding: 0.8rem 0.95rem;
   border-radius: var(--r-sm);
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: rgb(255 255 255 / 0.07);
   color: var(--text);
   transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
 }
@@ -460,7 +465,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 3px solid var(--bg);
+  border: 3px solid #16240f;
   background: var(--gold-400);
   box-shadow: var(--sh-sm);
 }
@@ -468,7 +473,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 3px solid var(--bg);
+  border: 3px solid #16240f;
   background: var(--gold-400);
 }
 .field__scale {
@@ -492,7 +497,8 @@
   border-radius: var(--r-xl);
   border: 1px solid var(--line);
   background: var(--surface);
-  box-shadow: var(--sh-md);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
 }
 .form .btn { grid-column: 1 / -1; margin-top: 0.4rem; }
 
@@ -501,7 +507,7 @@
   min-height: 1.2em;
   font-size: var(--fs-sm);
 }
-.form__status.is-ok { color: var(--leaf-600); }
+.form__status.is-ok { color: var(--leaf-300); }
 .form__status.is-bad { color: #b4452f; }
 
 /* ------------------------------------------------------------ quote */
@@ -514,9 +520,11 @@
   border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: var(--surface);
-  transition: transform var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--t-mid) var(--ease), background var(--t-mid) var(--ease);
 }
-.quote:hover { transform: translateY(-4px); box-shadow: var(--sh-md); }
+.quote:hover { transform: translateY(-4px); background: var(--surface-hi); }
 .quote::before {
   content: "\201C";
   position: absolute;
@@ -555,3 +563,19 @@
   .step__grain { width: 2.6rem; height: 2.6rem; }
   .assure { flex-direction: column; align-items: flex-start; }
 }
+
+/* the card is a doorway to the grain viewer, so say so */
+.product-card__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  opacity: 0.72;
+  transition: opacity var(--t-fast) var(--ease), gap var(--t-fast) var(--ease);
+}
+.product-card:hover .product-card__hint { opacity: 1; gap: 0.7rem; }
+.product-card__hint::after { content: "→"; }
