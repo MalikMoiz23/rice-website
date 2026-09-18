@@ -1,0 +1,302 @@
+/* ============================================================
+   lang.css — Urdu typography, right-to-left, WhatsApp, and the
+   phone-size polish that goes with them.
+   Loaded last so it can correct the physical left/right values
+   the other sheets set.
+   ============================================================ */
+
+:root {
+  --font-ur-display: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+  --font-ur-body: "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
+  --wa: #25d366;
+  --wa-dark: #1da851;
+}
+
+/* ══════════════════════════════════════════════ language toggle ════ */
+
+.lang-toggle {
+  flex: none;
+  min-width: 3.4rem;
+  padding: 0.42rem 0.8rem;
+  border: 1px solid currentColor;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: inherit;
+  opacity: 0.85;
+  transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.lang-toggle:hover {
+  opacity: 1;
+  background: rgb(248 243 231 / 0.1);
+}
+
+/* ═══════════════════════════════════════════════════ Urdu type ════ */
+
+/* Nastaliq reads as "proper" Urdu for headings, but it is hard work at small
+   sizes and inside buttons, so the body and UI run on Naskh. */
+[lang="ur"] {
+  --font-display: var(--font-ur-display);
+  --font-body: var(--font-ur-body);
+}
+
+[lang="ur"] body,
+[lang="ur"] p,
+[lang="ur"] li,
+[lang="ur"] label,
+[lang="ur"] button,
+[lang="ur"] input,
+[lang="ur"] select,
+[lang="ur"] textarea {
+  font-family: var(--font-ur-body);
+  line-height: 1.95;
+}
+
+[lang="ur"] h1,
+[lang="ur"] h2,
+[lang="ur"] h3,
+[lang="ur"] .hero__title,
+[lang="ur"] .section-title,
+[lang="ur"] .act__title {
+  font-family: var(--font-ur-display);
+  font-variation-settings: normal;
+  letter-spacing: 0;
+  line-height: 1.95;
+}
+
+/* Nastaliq drops a long tail, so headings need the room */
+[lang="ur"] .hero__title { font-size: clamp(2.1rem, 1.3rem + 3.4vw, 4.2rem); line-height: 2; }
+[lang="ur"] .section-title { line-height: 2; }
+[lang="ur"] .act__title { line-height: 2; }
+
+/* numbers, prices and spec values stay on Naskh — Nastaliq has no real
+   Latin digits and falls back mid-string */
+[lang="ur"] .price span,
+[lang="ur"] .price small,
+[lang="ur"] .step__num,
+[lang="ur"] .hero__stats dd,
+[lang="ur"] .spec b,
+[lang="ur"] .calc__out dd,
+[lang="ur"] .grade__specs dd,
+[lang="ur"] .product-card__len,
+[lang="ur"] .viewer__meta dd,
+[lang="ur"] .act__tag,
+[lang="ur"] .eyebrow,
+[lang="ur"] .field__scale {
+  font-family: var(--font-ur-body);
+  letter-spacing: 0;
+}
+
+/* uppercase and wide tracking do nothing for Urdu and hurt it */
+[lang="ur"] .eyebrow,
+[lang="ur"] .act__tag,
+[lang="ur"] .weight-switch__label,
+[lang="ur"] .field label,
+[lang="ur"] .field__label,
+[lang="ur"] .contact__list b,
+[lang="ur"] .grade__specs dt,
+[lang="ur"] .calc__out dt,
+[lang="ur"] .viewer__meta dt,
+[lang="ur"] .hero__stats dt,
+[lang="ur"] .site-footer h2,
+[lang="ur"] .grade__caption,
+[lang="ur"] .viewer__hint {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+[lang="ur"] .quote blockquote { font-style: normal; }
+[lang="ur"] .assure__text { font-style: normal; line-height: 1.9; }
+[lang="ur"] .hero__title-accent { font-style: normal; }
+[lang="ur"] .marquee__track span { font-style: normal; }
+
+/* ════════════════════════════════════════════════ right to left ════ */
+
+[dir="rtl"] .brand { margin-right: 0; margin-inline-end: auto; }
+
+[dir="rtl"] .skip-link { left: auto; right: 0.75rem; }
+
+[dir="rtl"] .act__tag--hero {
+  right: auto;
+  left: calc(var(--gutter) - 0.35rem);
+  writing-mode: vertical-lr;
+}
+
+[dir="rtl"] .grade__caption { left: auto; right: 0; }
+[dir="rtl"] .viewer__hint { left: auto; right: 1.2rem; }
+[dir="rtl"] .quote::before { left: auto; right: 1.4rem; }
+
+/* the sliding thumb has to travel the other way */
+[dir="rtl"] .weight-switch__track.is-second .weight-switch__thumb {
+  transform: translateX(-100%);
+}
+
+/* the reading side moves, so the dark side of every wash moves with it */
+[dir="rtl"] .hero__wash {
+  background:
+    radial-gradient(72% 95% at 84% 52%, rgb(20 35 15 / 0.82) 0%, rgb(20 35 15 / 0.38) 46%, transparent 74%),
+    linear-gradient(180deg, rgb(20 35 15 / 0.6) 0%, transparent 34%),
+    linear-gradient(0deg, rgb(20 35 15 / 0.6) 2%, rgb(20 35 15 / 0.12) 42%, transparent 66%);
+}
+[dir="rtl"] .act::before {
+  background: radial-gradient(
+    96% 130% at 90% 50%,
+    rgb(14 25 9 / 0.93) 0%,
+    rgb(14 25 9 / 0.6) 34%,
+    rgb(14 25 9 / 0.2) 62%,
+    transparent 88%
+  );
+}
+[dir="rtl"] .grade__veil {
+  background: radial-gradient(
+    80% 120% at 92% 50%,
+    rgb(8 16 5 / 0.92) 0%,
+    rgb(8 16 5 / 0.62) 36%,
+    rgb(8 16 5 / 0.15) 66%,
+    transparent 86%
+  );
+}
+
+/* the progress bar should fill from the side the reader starts on */
+[dir="rtl"] .scroll-rail { display: flex; justify-content: flex-end; }
+
+[dir="rtl"] .product-card__hint::after { content: "←"; }
+
+/* ══════════════════════════════════════════════════ WhatsApp ═══════ */
+
+.btn--wa {
+  background: var(--wa);
+  color: #06301a;
+  font-weight: 600;
+  box-shadow: 0 8px 22px -14px rgb(37 211 102 / 0.9);
+}
+.btn--wa:hover { background: var(--wa-dark); color: #f2fff7; }
+
+.product-card__buy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.wa-float {
+  position: fixed;
+  z-index: 110;
+  inset-block-end: max(1.1rem, env(safe-area-inset-bottom, 0px));
+  inset-inline-end: 1.1rem;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--wa);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.35), 0 0 0 0 rgb(37 211 102 / 0.55);
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+  animation: waPulse 3.4s ease-out infinite;
+}
+.wa-float svg { width: 1.9rem; height: 1.9rem; fill: #06301a; }
+.wa-float:hover { transform: scale(1.06); background: var(--wa-dark); }
+.wa-float:hover svg { fill: #f2fff7; }
+
+@keyframes waPulse {
+  0%, 72% { box-shadow: 0 6px 16px rgb(0 0 0 / 0.35), 0 0 0 0 rgb(37 211 102 / 0.5); }
+  86%     { box-shadow: 0 6px 16px rgb(0 0 0 / 0.35), 0 0 0 12px rgb(37 211 102 / 0); }
+  100%    { box-shadow: 0 6px 16px rgb(0 0 0 / 0.35), 0 0 0 0 rgb(37 211 102 / 0); }
+}
+
+/* ═══════════════════════════════════════════════════ on a phone ════ */
+
+@media (max-width: 760px) {
+  /* thumbs, not cursors */
+  .chip,
+  .seg button,
+  .weight-switch__track button,
+  .btn--sm { min-height: 2.75rem; }
+
+  .lang-toggle { min-height: 2.5rem; }
+
+  .product-card__buy { width: 100%; }
+  .product-card__buy > * { flex: 1 1 8rem; justify-content: center; }
+  .product-card__foot { flex-direction: column; align-items: stretch; gap: 0.9rem; }
+  .price { justify-content: flex-start; }
+
+  .grade__tabs { gap: 0.45rem; }
+  .grade__specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* the floating button must not sit on top of the last button on the page */
+  .site-footer__base { padding-bottom: 5rem; }
+}
+
+@media (max-width: 420px) {
+  .wa-float { width: 3.1rem; height: 3.1rem; }
+  .wa-float svg { width: 1.65rem; height: 1.65rem; }
+  .grade__specs { grid-template-columns: minmax(0, 1fr); }
+  .calc__out { grid-template-columns: minmax(0, 1fr); }
+  .viewer__meta { grid-template-columns: minmax(0, 1fr); }
+  .hero__stats { gap: 1.1rem 1.75rem; }
+  .site-header__inner { gap: 0.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float { animation: none; }
+}
+
+/* ═════════════════════════════════ right-to-left, second pass ══════ */
+
+/* the thumb was pinned to the physical left, which is the 50 kg side in RTL */
+[dir="rtl"] .weight-switch__thumb { left: auto; right: 4px; }
+
+/* Latin-only values flip inside an RTL line — "7.2 mm" comes out "mm 7.2".
+   Isolating them keeps the reading order the number was written in. */
+[dir="rtl"] .product-card__len,
+[dir="rtl"] .spec b,
+[dir="rtl"] .field__scale,
+[dir="rtl"] .viewer__meta dd,
+[dir="rtl"] [data-calc-tonnes],
+[dir="rtl"] [data-calc-total],
+[dir="rtl"] [data-calc-discount],
+[dir="rtl"] [data-sack-dims],
+[dir="rtl"] [data-sack-net],
+[dir="rtl"] .step__num {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* a price is read left to right even in Urdu, so run the whole line that way
+   and push it back to the reading edge */
+[dir="rtl"] .price {
+  direction: ltr;
+  justify-content: flex-end;
+}
+
+/* Nastaliq drops a deep tail; the hero needs more room than a Latin face */
+[lang="ur"] .hero__title { line-height: 2.15; }
+[lang="ur"] .hero__lede { line-height: 2; }
+
+/* On a narrow screen the copy spans the full width, so the side-weighted wash
+   in layout.css no longer covers it. Use a flat vertical one instead. */
+@media (max-width: 760px) {
+  .hero__wash,
+  [dir="rtl"] .hero__wash {
+    background: linear-gradient(
+      0deg,
+      rgb(18 32 13 / 0.9) 8%,
+      rgb(18 32 13 / 0.68) 52%,
+      rgb(18 32 13 / 0.42) 100%
+    );
+  }
+  .act::before,
+  [dir="rtl"] .act::before {
+    background: linear-gradient(
+      0deg,
+      rgb(14 25 9 / 0.92) 10%,
+      rgb(14 25 9 / 0.7) 55%,
+      rgb(14 25 9 / 0.45) 100%
+    );
+  }
+}
+
+/* the brand lockup is set tight for Latin; Nastaliq descenders collide in it */
+[lang="ur"] .brand__text { line-height: 1.5; }
+[lang="ur"] .brand__text strong { font-size: 1.12rem; }
+[lang="ur"] .brand__text em { font-size: 0.56rem; letter-spacing: 0.08em; opacity: 0.6; }

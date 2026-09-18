@@ -1,0 +1,720 @@
+/* ============================================================
+   i18n.js — English and Urdu
+   English is written plainly on purpose: short sentences, no
+   trade jargon. Where a technical word is unavoidable it is
+   explained in the same line.
+
+   Urdu is the everyday Urdu a Pakistani trader speaks, so common
+   loanwords stay as loanwords (ریٹ، آرڈر، بوری، مل) rather than
+   being replaced with formal words nobody uses out loud.
+
+   Digits stay Western (1, 2, 3) in both languages — that is what
+   Pakistani price lists and invoices use.
+   ============================================================ */
+
+const NASTALIQ =
+  'https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap';
+
+export const DICT = {
+  en: {
+    /* ---- header ---- */
+    'nav.range': 'Our rice',
+    'nav.grade': 'The grain',
+    'nav.sack': 'The bag',
+    'nav.process': 'How we make it',
+    'nav.quality': 'Quality',
+    'nav.order': 'Bulk order',
+    'nav.cta': "Today's price",
+    'nav.menu': 'Menu',
+    'skip': 'Skip to content',
+    'brand.name': 'Sunehri',
+    'brand.sub': 'Rice Mills',
+    'lang.switch': 'اردو',
+    'lang.label': 'Switch to Urdu',
+
+    /* ---- hero ---- */
+    'hero.eyebrow': 'Sheikhupura, Punjab · making rice since 1974',
+    'hero.title': 'Aged basmati,<br><span class="hero__title-accent">packed at our mill.</span>',
+    'hero.lede':
+      'We buy paddy at the mandi, keep it for a full season, then husk, polish ' +
+      'and clean it in our own mill. It goes out in 25 kg and 50 kg bags — sewn ' +
+      'shut, stamped with the batch, and on a truck the same week.',
+    'hero.cta1': 'See our rice',
+    'hero.cta2': 'Work out a price',
+    'hero.stat1': 'Bags sent each month',
+    'hero.stat1u': 'bags',
+    'hero.stat2': 'Kept at least',
+    'hero.stat2u': 'months',
+    'hero.stat3': 'We sell in',
+    'hero.stat3u': 'countries',
+    'hero.stage': 'Step 01 — growing in the field',
+    'hero.scroll': 'Scroll down to our rice',
+
+    /* ---- marquee ---- */
+    'mq.1': 'Super Basmati',
+    'mq.2': '1121 Sella',
+    'mq.3': '1121 Steam',
+    'mq.4': 'Irri-6 Long Grain',
+    'mq.5': 'Broken Basmati',
+    'mq.6': 'Machine cleaned',
+    'mq.7': 'Delivery all over Pakistan',
+
+    /* ---- range ---- */
+    'range.eyebrow': '01 — Our rice',
+    'range.title': 'Five types, two bag sizes',
+    'range.lede':
+      'These are our prices at the mill in Sheikhupura. Delivery is not included. ' +
+      'Prices move with the mandi, so please call or WhatsApp us for today’s rate.',
+    'range.size': 'Bag size',
+    'range.25': '25 kg',
+    'range.50': '50 kg',
+    'card.hint': 'See this grain close up',
+    'card.order': 'Order',
+    'card.wa': 'WhatsApp',
+    'card.per': 'kg bag',
+    'spec.broken': 'Broken bits',
+    'spec.moisture': 'Water',
+    'spec.aged': 'Kept for',
+    'spec.clean': 'Cleaning',
+    'spec.cleaned': 'Machine cleaned',
+
+    'p0.tag': 'Best',
+    'p0.name': 'Super Basmati',
+    'p0.note':
+      'Kept twelve months before milling. Thin, long, and does not stick. It gets ' +
+      'about twice as long when cooked. This is our biryani rice.',
+    'p1.tag': 'Steamed in husk',
+    'p1.name': '1121 Sella Kainat',
+    'p1.note':
+      'Steamed and dried while still in the husk, so the grain stays whole. Golden ' +
+      'colour, and it grows the most of any rice we sell. Our main export type.',
+    'p2.tag': 'Steamed',
+    'p2.name': '1121 Steam White',
+    'p2.note':
+      'The same long grain, steamed white instead of golden. Cooks loose and clean. ' +
+      'What most hotels and canteens buy.',
+    'p3.tag': 'Everyday',
+    'p3.name': 'Irri-6 Long Grain',
+    'p3.note':
+      'A hard grain that soaks up plenty of water and is hard to spoil. Used where ' +
+      'large amounts are cooked. Machine cleaned like everything else here.',
+    'p4.tag': 'Cheapest',
+    'p4.name': 'Broken Basmati (Tota)',
+    'p4.note':
+      'Broken pieces of basmati. Same smell, about one third of the price. Used for ' +
+      'kheer, khichri and the snack trade.',
+
+    /* ---- grade, up close ---- */
+    'grade.eyebrow': '02 — Quality up close',
+    'grade.title': 'See the grain yourself',
+    'grade.lede':
+      'Pick a type. The grain turning beside it is that rice at about forty times ' +
+      'its real size, next to a sack of the same rice. The length, colour and shape ' +
+      'are the real ones, not a photo.',
+    'grade.len': 'Grain length',
+    'grade.broken': 'Broken bits',
+    'grade.age': 'Kept for',
+    'grade.elong': 'Grows when cooked',
+    'grade.tabs': 'Rice type',
+
+    'g0.name': 'Super Basmati',
+    'g0.cap': 'Super Basmati · 25 kg bag',
+    'g0.len': '7.2 mm',
+    'g0.broken': 'up to 2%',
+    'g0.age': '12 months',
+    'g0.elong': '2.1 times',
+    'g0.note':
+      'Kept twelve months before milling, so the grain hardens and stays separate ' +
+      'when cooked. This is the biryani rice.',
+    'g1.name': '1121 Sella',
+    'g1.cap': '1121 Sella Kainat · 25 kg bag',
+    'g1.len': '8.4 mm',
+    'g1.broken': 'up to 1%',
+    'g1.age': '18 months',
+    'g1.elong': '2.4 times',
+    'g1.note':
+      'Steamed inside the husk before milling. That pushes the colour into the grain ' +
+      'and hardens it. It grows more than any rice we sell.',
+    'g2.name': '1121 Steam',
+    'g2.cap': '1121 Steam White · 25 kg bag',
+    'g2.len': '8.2 mm',
+    'g2.broken': 'up to 2%',
+    'g2.age': '12 months',
+    'g2.elong': '2.2 times',
+    'g2.note':
+      'The same 1121 paddy, steamed white instead of golden. Cooks loose and clean, ' +
+      'which is what most hotel kitchens want.',
+    'g3.name': 'Irri-6',
+    'g3.cap': 'Irri-6 Long Grain · 50 kg bag',
+    'g3.len': '6.4 mm',
+    'g3.broken': 'up to 5%',
+    'g3.age': '3 months',
+    'g3.elong': '1.6 times',
+    'g3.note':
+      'Short, hard and thirsty. It takes a lot of water and forgives a rough boil, ' +
+      'which is why big kitchens run on it.',
+    'g4.name': 'Broken (Tota)',
+    'g4.cap': 'Broken Basmati · 50 kg bag',
+    'g4.len': '2–4 mm',
+    'g4.broken': '—',
+    'g4.age': '—',
+    'g4.elong': '—',
+    'g4.note':
+      'Pieces taken out by the sorting machine. Same smell as whole basmati at about ' +
+      'a third of the price — kheer, khichri and snacks.',
+
+    /* ---- story acts ---- */
+    'a1.tag': 'Step 02',
+    'a1.title': 'It comes out of the field wearing a shell',
+    'a1.text':
+      'Every grain leaves the field inside a hard, lined husk. That husk is why paddy ' +
+      'can be stored for a whole season. It is the first thing we take off at the mill.',
+    'a2.tag': 'Step 03',
+    'a2.title': 'The shell comes off',
+    'a2.text':
+      'Two rubber rollers turn at different speeds and rub the husk off without breaking ' +
+      'the grain inside. What comes out is rice — brown first, then white after polishing.',
+    'a3.tag': 'Step 04',
+    'a3.title': 'The same grain, before and after',
+    'a3.text':
+      'Paddy on one side, milled rice on the other. About one third of the weight is husk ' +
+      'and bran. Nothing is wasted — the husk burns in our boiler and the bran goes for oil.',
+    'a4.tag': 'Step 05',
+    'a4.title': 'Into the bag',
+    'a4.text':
+      'Weighed to exactly 25 or 50 kg, sewn at the top, and stamped with the batch and the ' +
+      'mill date. After that it is a truck and an address.',
+
+    /* ---- sack viewer ---- */
+    'sack.eyebrow': '03 — The bag',
+    'sack.title': 'See what arrives at your shop',
+    'sack.lede':
+      'Coated woven bag, double-sewn top, and the batch number and mill date printed on ' +
+      'every bag. Drag the bag to turn it. Switch the weight to see both sizes.',
+    'sack.p1': 'Coated woven bag',
+    'sack.p1t': '— keeps damp out, hard for rats to chew through.',
+    'sack.p2': 'Double-sewn top',
+    'sack.p2t': '— machine stitched, opens with one cut.',
+    'sack.p3': 'Batch stamp',
+    'sack.p3t': '— mill date, batch number and type printed on the back.',
+    'sack.p4': 'On pallets',
+    'sack.p4t': '— 40 bags of 25 kg or 20 bags of 50 kg, wrapped.',
+    'sack.b25': '25 kg bag',
+    'sack.b50': '50 kg bag',
+    'sack.drag': 'Drag to turn',
+    'sack.net': 'Net weight',
+    'sack.dims': 'Bag size',
+    'sack.pallet': 'Per pallet',
+
+    /* ---- process ---- */
+    'pr.eyebrow': '04 — How we make it',
+    'pr.title': 'Paddy in, bags out',
+    'pr.lede':
+      'Six steps, all done in our own mill. We do not send our rice out to be milled, and ' +
+      'we do not buy finished rice and just put our name on it.',
+    'pr.cta': 'Come and see the mill',
+    'pr.1t': 'Buying',
+    'pr.1d':
+      'We buy paddy at the Sheikhupura and Hafizabad mandis from dealers we have used for ' +
+      'twenty years. Every lot is checked for water when it arrives.',
+    'pr.2t': 'Drying',
+    'pr.2d':
+      'Dried slowly down to 13% water. Dry it too fast and the grain cracks when the husk ' +
+      'comes off — that is where broken rice comes from.',
+    'pr.3t': 'Storing',
+    'pr.3d':
+      'Twelve to twenty-four months in airy bins, still in the husk. The grain hardens, the ' +
+      'water spreads evenly, and the smell gets stronger.',
+    'pr.4t': 'Husking and polishing',
+    'pr.4d':
+      'We use rubber rollers instead of stone discs, because they are gentler on a long ' +
+      'grain. Then two polishing runs, the second one with water.',
+    'pr.5t': 'Sorting',
+    'pr.5d':
+      'One machine pulls out the broken pieces by length. Then a colour machine removes ' +
+      'chalky, off-colour and foreign grain. It runs twice.',
+    'pr.6t': 'Bagging',
+    'pr.6d':
+      'Weighed to exactly 25 or 50 kg, sewn, stamped and stacked. Loaded the same day you ' +
+      'confirm, as long as we have stock.',
+
+    /* ---- quality ---- */
+    'q.eyebrow': '05 — Our limits',
+    'q.title': 'The numbers we promise',
+    'q.lede':
+      'These are our limits for top grade. Every load leaves with a card showing the real ' +
+      'readings for that batch, not just these limits.',
+    'q.1': 'Water when packed',
+    'q.2': 'Broken bits, top grade',
+    'q.3': 'Damaged or off-colour',
+    'q.4': 'Same type throughout',
+    'q.5': 'Dust and stones',
+    'q.6': 'Colour machine runs',
+    'q.assure':
+      'Not sure which type you need? Ask for a one kilo sample. We post it free anywhere in ' +
+      'Pakistan, so you can cook it before you order a truck.',
+    'q.cta': 'Ask for a sample',
+
+    /* ---- bulk order ---- */
+    'o.eyebrow': '06 — Bulk order',
+    'o.title': 'Work out your load',
+    'o.lede':
+      'A guide price at our mill, before delivery and tax. Half a truck is 130 bags of 50 kg ' +
+      'and a full truck is 260. Discounts start at 100 bags.',
+    'o.grade': 'Rice type',
+    'o.size': 'Bag size',
+    'o.qty': 'Bags',
+    'o.tonnes': 'Total weight',
+    'o.discount': 'Discount',
+    'o.truck': 'Truck',
+    'o.total': 'Guide total',
+    'o.cta': 'Send this on WhatsApp',
+    'o.part': 'Part load',
+    'o.half': 'Half truck',
+    'o.full': 'Full truck',
+    'o.none': '—',
+
+    /* ---- buyers ---- */
+    'v.eyebrow': '07 — Our buyers',
+    'v.title': 'Who buys from us',
+    'v.1':
+      'Four years of 50 kg Sella and not once a short weight. The batch cards match what the ' +
+      'lab says.',
+    'v.1n': 'Hamza Traders',
+    'v.1r': 'Wholesale · Lahore',
+    'v.2':
+      'We cook for 300 people a night. The Steam type cooks the same from every bag. That is ' +
+      'all a kitchen wants.',
+    'v.2n': 'Dera Restaurant Group',
+    'v.2r': 'Restaurants · Islamabad',
+    'v.3':
+      'They sent a container of Kainat to Dubai in eleven days with clean papers. That is ' +
+      'rarer than it should be.',
+    'v.3n': 'Gulf Crescent FZE',
+    'v.3r': 'Export · Dubai',
+
+    /* ---- contact ---- */
+    'c.eyebrow': '08 — Contact',
+    'c.title': "Ask for today's price",
+    'c.lede':
+      'Tell us the type, the bag size and roughly how many. We will give you a firm price, a ' +
+      'delivery date, and the freight to your city.',
+    'c.mill': 'Mill and office',
+    'c.phone': 'Phone and WhatsApp',
+    'c.email': 'Email',
+    'c.hours': 'Open hours',
+    'c.hoursv': 'Monday to Saturday, 8:00 am – 6:00 pm',
+    'c.wa': 'Message us on WhatsApp',
+    'f.name': 'Your name',
+    'f.firm': 'Shop or company',
+    'f.phone': 'Phone number',
+    'f.phoneph': '+92 3xx xxxxxxx',
+    'f.city': 'Your city',
+    'f.grade': 'Rice type',
+    'f.unsure': 'Not sure — please advise',
+    'f.qty': 'How many bags',
+    'f.qtyph': '40',
+    'f.msg': 'Anything else',
+    'f.msgph': 'Delivery city, packing, when you need it…',
+    'f.send': 'Send message',
+    'f.errname': 'Please write your name so we know who to call back.',
+    'f.errphone': 'That phone number looks short — please check it.',
+    'f.ok': 'Thank you {name} — we will call you back with today’s price.',
+
+    /* ---- footer ---- */
+    'ft.blurb': 'Paddy bought in Punjab, stored a season, milled and bagged at our own mill.',
+    'ft.site': 'Pages',
+    'ft.mill': 'Mill',
+    'ft.rights': 'Sunehri Rice Mills. All rights reserved.',
+    'ft.note': 'Prices change with the mandi.',
+    'wa.float': 'Order on WhatsApp',
+    'wa.card':
+      'Assalam o alaikum. Please send me today’s price for {name}, {kg} kg bag.',
+    'wa.calc':
+      'Assalam o alaikum. Please quote: {name}, {kg} kg bags × {qty}. ' +
+      'Total weight about {tonnes}. Guide price {total}.',
+  },
+
+  ur: {
+    /* ---- header ---- */
+    'nav.range': 'ہمارے چاول',
+    'nav.grade': 'دانہ',
+    'nav.sack': 'بوری',
+    'nav.process': 'تیاری کا طریقہ',
+    'nav.quality': 'کوالٹی',
+    'nav.order': 'بڑا آرڈر',
+    'nav.cta': 'آج کا ریٹ',
+    'nav.menu': 'مینو',
+    'skip': 'مواد پر جائیں',
+    'brand.name': 'سنہری',
+    'brand.sub': 'رائس ملز',
+    'lang.switch': 'English',
+    'lang.label': 'انگریزی میں دیکھیں',
+
+    /* ---- hero ---- */
+    'hero.eyebrow': 'شیخوپورہ، پنجاب · 1974 سے چاول بنا رہے ہیں',
+    'hero.title': 'پرانا باسمتی،<br><span class="hero__title-accent">ہماری اپنی مل سے۔</span>',
+    'hero.lede':
+      'ہم منڈی سے دھان خریدتے ہیں، اسے پورا ایک سیزن رکھتے ہیں، پھر اپنی مل میں ' +
+      'چھلکا اتار کر، پالش اور صفائی کرتے ہیں۔ چاول 25 کلو اور 50 کلو کی بوریوں میں ' +
+      'جاتا ہے — سلائی شدہ، بیچ نمبر لگا ہوا، اور اسی ہفتے ٹرک پر۔',
+    'hero.cta1': 'ہمارے چاول دیکھیں',
+    'hero.cta2': 'قیمت لگائیں',
+    'hero.stat1': 'ہر ماہ بھیجی جانے والی بوریاں',
+    'hero.stat1u': 'بوریاں',
+    'hero.stat2': 'کم از کم رکھا جاتا ہے',
+    'hero.stat2u': 'مہینے',
+    'hero.stat3': 'ہم بیچتے ہیں',
+    'hero.stat3u': 'ممالک میں',
+    'hero.stage': 'مرحلہ 01 — کھیت میں فصل',
+    'hero.scroll': 'نیچے ہمارے چاول دیکھیں',
+
+    /* ---- marquee ---- */
+    'mq.1': 'سپر باسمتی',
+    'mq.2': '1121 سیلہ',
+    'mq.3': '1121 سٹیم',
+    'mq.4': 'اری-6 لمبا دانہ',
+    'mq.5': 'ٹوٹا باسمتی',
+    'mq.6': 'مشین سے صاف',
+    'mq.7': 'پورے پاکستان میں ڈلیوری',
+
+    /* ---- range ---- */
+    'range.eyebrow': '01 — ہمارے چاول',
+    'range.title': 'پانچ اقسام، دو بوری سائز',
+    'range.lede':
+      'یہ شیخوپورہ میں ہماری مل کے ریٹ ہیں۔ ان میں ڈلیوری شامل نہیں۔ ریٹ منڈی کے ' +
+      'ساتھ بدلتے رہتے ہیں، اس لیے آج کے ریٹ کے لیے فون یا واٹس ایپ کریں۔',
+    'range.size': 'بوری کا سائز',
+    'range.25': '25 کلو',
+    'range.50': '50 کلو',
+    'card.hint': 'یہ دانہ قریب سے دیکھیں',
+    'card.order': 'آرڈر',
+    'card.wa': 'واٹس ایپ',
+    'card.per': 'کلو بوری',
+    'spec.broken': 'ٹوٹے دانے',
+    'spec.moisture': 'نمی',
+    'spec.aged': 'رکھا گیا',
+    'spec.clean': 'صفائی',
+    'spec.cleaned': 'مشین سے صاف',
+
+    'p0.tag': 'بہترین',
+    'p0.name': 'سپر باسمتی',
+    'p0.note':
+      'پیسنے سے پہلے بارہ مہینے رکھا جاتا ہے۔ باریک، لمبا اور آپس میں نہیں چپکتا۔ ' +
+      'پکنے پر تقریباً دوگنا لمبا ہو جاتا ہے۔ یہ ہمارا بریانی والا چاول ہے۔',
+    'p1.tag': 'چھلکے سمیت سٹیم',
+    'p1.name': '1121 سیلہ کائنات',
+    'p1.note':
+      'چھلکے کے اندر ہی سٹیم اور خشک کیا جاتا ہے، اس لیے دانہ ثابت رہتا ہے۔ سنہری ' +
+      'رنگ، اور پکنے پر سب سے زیادہ لمبا ہوتا ہے۔ ہمارا بڑا ایکسپورٹ مال۔',
+    'p2.tag': 'سٹیم',
+    'p2.name': '1121 سٹیم وائٹ',
+    'p2.note':
+      'وہی لمبا دانہ، سنہری کی بجائے سفید سٹیم کیا ہوا۔ کھلا کھلا اور صاف پکتا ہے۔ ' +
+      'زیادہ تر ہوٹل اور کینٹین یہی لیتے ہیں۔',
+    'p3.tag': 'روزمرہ',
+    'p3.name': 'اری-6 لمبا دانہ',
+    'p3.note':
+      'سخت دانہ جو کافی پانی پیتا ہے اور جلدی خراب نہیں ہوتا۔ جہاں زیادہ مقدار میں ' +
+      'پکانا ہو وہاں استعمال ہوتا ہے۔ باقی سب کی طرح مشین سے صاف۔',
+    'p4.tag': 'سب سے سستا',
+    'p4.name': 'ٹوٹا باسمتی',
+    'p4.note':
+      'باسمتی کے ٹوٹے ہوئے دانے۔ خوشبو وہی، قیمت تقریباً ایک تہائی۔ کھیر، کھچڑی اور ' +
+      'سنیکس میں استعمال ہوتا ہے۔',
+
+    /* ---- grade, up close ---- */
+    'grade.eyebrow': '02 — کوالٹی، قریب سے',
+    'grade.title': 'دانہ خود دیکھ لیں',
+    'grade.lede':
+      'کوئی قسم چنیں۔ ساتھ گھومتا ہوا دانہ اسی چاول کا ہے، اصل سے تقریباً چالیس گنا ' +
+      'بڑا، اور ساتھ اسی چاول کی بوری۔ لمبائی، رنگ اور شکل اصلی ہیں، تصویر نہیں۔',
+    'grade.len': 'دانے کی لمبائی',
+    'grade.broken': 'ٹوٹے دانے',
+    'grade.age': 'رکھا گیا',
+    'grade.elong': 'پکنے پر بڑھتا ہے',
+    'grade.tabs': 'چاول کی قسم',
+
+    'g0.name': 'سپر باسمتی',
+    'g0.cap': 'سپر باسمتی · 25 کلو بوری',
+    'g0.len': '7.2 ملی میٹر',
+    'g0.broken': '2% تک',
+    'g0.age': '12 مہینے',
+    'g0.elong': '2.1 گنا',
+    'g0.note':
+      'پیسنے سے پہلے بارہ مہینے رکھا جاتا ہے، جس سے دانہ سخت ہو جاتا ہے اور پکنے پر ' +
+      'کھلا رہتا ہے۔ یہی بریانی والا چاول ہے۔',
+    'g1.name': '1121 سیلہ',
+    'g1.cap': '1121 سیلہ کائنات · 25 کلو بوری',
+    'g1.len': '8.4 ملی میٹر',
+    'g1.broken': '1% تک',
+    'g1.age': '18 مہینے',
+    'g1.elong': '2.4 گنا',
+    'g1.note':
+      'پیسنے سے پہلے چھلکے کے اندر ہی سٹیم کیا جاتا ہے۔ اس سے رنگ دانے کے اندر بیٹھ ' +
+      'جاتا ہے اور دانہ سخت ہو جاتا ہے۔ ہمارے سب چاولوں سے زیادہ بڑھتا ہے۔',
+    'g2.name': '1121 سٹیم',
+    'g2.cap': '1121 سٹیم وائٹ · 25 کلو بوری',
+    'g2.len': '8.2 ملی میٹر',
+    'g2.broken': '2% تک',
+    'g2.age': '12 مہینے',
+    'g2.elong': '2.2 گنا',
+    'g2.note':
+      'وہی 1121 دھان، سنہری کی بجائے سفید سٹیم کیا ہوا۔ کھلا اور صاف پکتا ہے، جو ہوٹل ' +
+      'کے باورچی خانوں کو چاہیے ہوتا ہے۔',
+    'g3.name': 'اری-6',
+    'g3.cap': 'اری-6 لمبا دانہ · 50 کلو بوری',
+    'g3.len': '6.4 ملی میٹر',
+    'g3.broken': '5% تک',
+    'g3.age': '3 مہینے',
+    'g3.elong': '1.6 گنا',
+    'g3.note':
+      'چھوٹا، سخت اور زیادہ پانی پینے والا دانہ۔ تیز پکانے پر بھی خراب نہیں ہوتا، اسی ' +
+      'لیے بڑے باورچی خانے یہی چلاتے ہیں۔',
+    'g4.name': 'ٹوٹا',
+    'g4.cap': 'ٹوٹا باسمتی · 50 کلو بوری',
+    'g4.len': '2–4 ملی میٹر',
+    'g4.broken': '—',
+    'g4.age': '—',
+    'g4.elong': '—',
+    'g4.note':
+      'چھانٹنے والی مشین سے نکلے ہوئے ٹکڑے۔ خوشبو ثابت باسمتی جیسی، قیمت تقریباً ایک ' +
+      'تہائی — کھیر، کھچڑی اور سنیکس کے لیے۔',
+
+    /* ---- story acts ---- */
+    'a1.tag': 'مرحلہ 02',
+    'a1.title': 'کھیت سے دانہ چھلکے کے اندر آتا ہے',
+    'a1.text':
+      'ہر دانہ کھیت سے ایک سخت، دھاری دار چھلکے کے اندر نکلتا ہے۔ اسی چھلکے کی وجہ سے ' +
+      'دھان پورا سیزن سنبھالا جا سکتا ہے۔ مل میں سب سے پہلے یہی اتارا جاتا ہے۔',
+    'a2.tag': 'مرحلہ 03',
+    'a2.title': 'چھلکا الگ ہو جاتا ہے',
+    'a2.text':
+      'دو ربڑ کے رولر مختلف رفتار سے گھومتے ہیں اور اندر کا دانہ توڑے بغیر چھلکا رگڑ ' +
+      'کر اتار دیتے ہیں۔ جو نکلتا ہے وہ چاول ہے — پہلے براؤن، پالش کے بعد سفید۔',
+    'a3.tag': 'مرحلہ 04',
+    'a3.title': 'ایک ہی دانہ، پہلے اور بعد میں',
+    'a3.text':
+      'ایک طرف دھان، دوسری طرف صاف چاول۔ تقریباً ایک تہائی وزن چھلکا اور چوکر ہوتا ہے۔ ' +
+      'کچھ ضائع نہیں ہوتا — چھلکا بوائلر میں جلتا ہے اور چوکر تیل کے لیے جاتا ہے۔',
+    'a4.tag': 'مرحلہ 05',
+    'a4.title': 'بوری میں',
+    'a4.text':
+      'پورے 25 یا 50 کلو تولا جاتا ہے، اوپر سے سلائی، اور بیچ نمبر و مل کی تاریخ کی ' +
+      'مہر۔ اس کے بعد بس ٹرک اور آپ کا پتہ۔',
+
+    /* ---- sack viewer ---- */
+    'sack.eyebrow': '03 — بوری',
+    'sack.title': 'دیکھیں آپ کی دکان پر کیا پہنچے گا',
+    'sack.lede':
+      'لیمینیٹ شدہ بنی ہوئی بوری، اوپر سے ڈبل سلائی، اور ہر بوری پر بیچ نمبر اور مل کی ' +
+      'تاریخ چھپی ہوئی۔ بوری کو گھما کر دیکھیں۔ وزن بدل کر دونوں سائز دیکھیں۔',
+    'sack.p1': 'لیمینیٹ بنی بوری',
+    'sack.p1t': '— نمی اندر نہیں آتی، چوہے آسانی سے نہیں کاٹ سکتے۔',
+    'sack.p2': 'اوپر ڈبل سلائی',
+    'sack.p2t': '— مشین کی سلائی، ایک کٹ سے کھل جاتی ہے۔',
+    'sack.p3': 'بیچ کی مہر',
+    'sack.p3t': '— مل کی تاریخ، بیچ نمبر اور قسم پیچھے چھپی ہوتی ہے۔',
+    'sack.p4': 'پیلٹ پر',
+    'sack.p4t': '— 25 کلو کی 40 بوریاں یا 50 کلو کی 20 بوریاں، ریپ شدہ۔',
+    'sack.b25': '25 کلو بوری',
+    'sack.b50': '50 کلو بوری',
+    'sack.drag': 'گھمانے کے لیے کھینچیں',
+    'sack.net': 'خالص وزن',
+    'sack.dims': 'بوری کا سائز',
+    'sack.pallet': 'فی پیلٹ',
+
+    /* ---- process ---- */
+    'pr.eyebrow': '04 — تیاری کا طریقہ',
+    'pr.title': 'دھان اندر، بوریاں باہر',
+    'pr.lede':
+      'چھ مرحلے، سب ہماری اپنی مل میں۔ ہم اپنا چاول باہر پسوانے نہیں بھیجتے، اور نہ ہی ' +
+      'تیار چاول خرید کر اپنے نام سے بوری میں ڈالتے ہیں۔',
+    'pr.cta': 'مل دیکھنے آئیں',
+    'pr.1t': 'خریداری',
+    'pr.1d':
+      'ہم شیخوپورہ اور حافظ آباد کی منڈیوں سے دھان خریدتے ہیں، انہی آڑھتیوں سے جن کے ' +
+      'ساتھ بیس سال کا کام ہے۔ ہر لاٹ آتے ہی نمی کے لیے چیک ہوتی ہے۔',
+    'pr.2t': 'خشک کرنا',
+    'pr.2d':
+      'آہستہ آہستہ 13% نمی تک خشک کیا جاتا ہے۔ جلدی خشک کریں تو چھلکا اتارتے وقت دانہ ' +
+      'ٹوٹ جاتا ہے — ٹوٹا چاول یہیں سے بنتا ہے۔',
+    'pr.3t': 'رکھنا',
+    'pr.3d':
+      'بارہ سے چوبیس مہینے ہوادار بِنوں میں، چھلکے سمیت۔ دانہ سخت ہوتا ہے، نمی برابر ' +
+      'ہو جاتی ہے، اور خوشبو تیز ہو جاتی ہے۔',
+    'pr.4t': 'چھلکا اور پالش',
+    'pr.4d':
+      'ہم پتھر کی چکی کی بجائے ربڑ کے رولر استعمال کرتے ہیں، کیونکہ وہ لمبے دانے پر ' +
+      'نرم رہتے ہیں۔ پھر دو بار پالش، دوسری بار پانی کے ساتھ۔',
+    'pr.5t': 'چھانٹی',
+    'pr.5d':
+      'ایک مشین لمبائی کے حساب سے ٹوٹے دانے الگ کرتی ہے۔ پھر رنگ والی مشین سفیدی مائل، ' +
+      'بدرنگ اور باہر کا دانہ نکال دیتی ہے۔ یہ دو بار چلتی ہے۔',
+    'pr.6t': 'بوری بھرنا',
+    'pr.6d':
+      'پورے 25 یا 50 کلو تولا جاتا ہے، سلائی، مہر اور سٹیک۔ آرڈر پکا ہونے والے دن ہی ' +
+      'لوڈنگ، بشرطیکہ مال موجود ہو۔',
+
+    /* ---- quality ---- */
+    'q.eyebrow': '05 — ہماری حدیں',
+    'q.title': 'وہ نمبر جن کا ہم وعدہ کرتے ہیں',
+    'q.lede':
+      'یہ ٹاپ گریڈ کی حدیں ہیں۔ ہر لوڈ کے ساتھ ایک کارڈ جاتا ہے جس پر اس بیچ کی اصل ' +
+      'ریڈنگ لکھی ہوتی ہے، صرف یہ حدیں نہیں۔',
+    'q.1': 'بوری بھرتے وقت نمی',
+    'q.2': 'ٹوٹے دانے، ٹاپ گریڈ',
+    'q.3': 'خراب یا بدرنگ',
+    'q.4': 'ایک ہی قسم',
+    'q.5': 'مٹی اور کنکر',
+    'q.6': 'رنگ والی مشین کے چکر',
+    'q.assure':
+      'سمجھ نہیں آ رہا کون سی قسم چاہیے؟ ایک کلو کا نمونہ منگوا لیں۔ ہم پورے پاکستان ' +
+      'میں مفت بھیجتے ہیں، تاکہ آپ ٹرک منگوانے سے پہلے پکا کر دیکھ لیں۔',
+    'q.cta': 'نمونہ منگوائیں',
+
+    /* ---- bulk order ---- */
+    'o.eyebrow': '06 — بڑا آرڈر',
+    'o.title': 'اپنا لوڈ نکالیں',
+    'o.lede':
+      'یہ ہماری مل پر اندازاً قیمت ہے، ڈلیوری اور ٹیکس سے پہلے۔ آدھا ٹرک 50 کلو کی 130 ' +
+      'بوریاں اور پورا ٹرک 260 بوریاں ہے۔ رعایت 100 بوریوں سے شروع ہوتی ہے۔',
+    'o.grade': 'چاول کی قسم',
+    'o.size': 'بوری کا سائز',
+    'o.qty': 'بوریاں',
+    'o.tonnes': 'کل وزن',
+    'o.discount': 'رعایت',
+    'o.truck': 'ٹرک',
+    'o.total': 'اندازاً کل',
+    'o.cta': 'یہ واٹس ایپ پر بھیجیں',
+    'o.part': 'تھوڑا لوڈ',
+    'o.half': 'آدھا ٹرک',
+    'o.full': 'پورا ٹرک',
+    'o.none': '—',
+
+    /* ---- buyers ---- */
+    'v.eyebrow': '07 — ہمارے خریدار',
+    'v.title': 'کون ہم سے خریدتا ہے',
+    'v.1':
+      'چار سال سے 50 کلو سیلہ لے رہے ہیں اور ایک بار بھی وزن کم نہیں نکلا۔ بیچ کارڈ پر ' +
+      'وہی لکھا ہوتا ہے جو لیب کہتی ہے۔',
+    'v.1n': 'حمزہ ٹریڈرز',
+    'v.1r': 'ہول سیل · لاہور',
+    'v.2':
+      'ہم رات کو 300 بندوں کا کھانا بناتے ہیں۔ سٹیم والا چاول ہر بوری سے ایک جیسا پکتا ' +
+      'ہے۔ باورچی خانے کو اس کے علاوہ کچھ نہیں چاہیے۔',
+    'v.2n': 'ڈیرہ ریسٹورنٹ گروپ',
+    'v.2r': 'ریسٹورنٹ · اسلام آباد',
+    'v.3':
+      'انہوں نے کائنات کا کنٹینر گیارہ دن میں دبئی بھیجا، کاغذات بالکل صاف۔ یہ آج کل ' +
+      'کم ہی ہوتا ہے۔',
+    'v.3n': 'گلف کریسنٹ FZE',
+    'v.3r': 'ایکسپورٹ · دبئی',
+
+    /* ---- contact ---- */
+    'c.eyebrow': '08 — رابطہ',
+    'c.title': 'آج کا ریٹ پوچھیں',
+    'c.lede':
+      'ہمیں قسم، بوری کا سائز اور اندازاً تعداد بتا دیں۔ ہم آپ کو پکا ریٹ، ڈلیوری کی ' +
+      'تاریخ اور آپ کے شہر تک کرایہ بتا دیں گے۔',
+    'c.mill': 'مل اور دفتر',
+    'c.phone': 'فون اور واٹس ایپ',
+    'c.email': 'ای میل',
+    'c.hours': 'کھلنے کا وقت',
+    'c.hoursv': 'پیر تا ہفتہ، صبح 8:00 – شام 6:00',
+    'c.wa': 'واٹس ایپ پر پیغام بھیجیں',
+    'f.name': 'آپ کا نام',
+    'f.firm': 'دکان یا کمپنی',
+    'f.phone': 'فون نمبر',
+    'f.phoneph': '+92 3xx xxxxxxx',
+    'f.city': 'آپ کا شہر',
+    'f.grade': 'چاول کی قسم',
+    'f.unsure': 'پتہ نہیں — آپ بتائیں',
+    'f.qty': 'کتنی بوریاں',
+    'f.qtyph': '40',
+    'f.msg': 'اور کچھ کہنا ہے؟',
+    'f.msgph': 'ڈلیوری کا شہر، پیکنگ، کب چاہیے…',
+    'f.send': 'پیغام بھیجیں',
+    'f.errname': 'براہ کرم اپنا نام لکھیں تاکہ ہمیں پتہ ہو کس کو کال کرنی ہے۔',
+    'f.errphone': 'یہ فون نمبر چھوٹا لگ رہا ہے — دوبارہ دیکھ لیں۔',
+    'f.ok': 'شکریہ {name} — ہم آپ کو آج کے ریٹ کے ساتھ کال کریں گے۔',
+
+    /* ---- footer ---- */
+    'ft.blurb': 'دھان پنجاب سے خریدا، ایک سیزن رکھا، اور اپنی مل میں پیس کر بوری میں بھرا۔',
+    'ft.site': 'صفحات',
+    'ft.mill': 'مل',
+    'ft.rights': 'سنہری رائس ملز۔ جملہ حقوق محفوظ ہیں۔',
+    'ft.note': 'ریٹ منڈی کے ساتھ بدلتے رہتے ہیں۔',
+    'wa.float': 'واٹس ایپ پر آرڈر',
+    'wa.card':
+      'السلام علیکم۔ مجھے {name}، {kg} کلو بوری کا آج کا ریٹ بھیج دیں۔',
+    'wa.calc':
+      'السلام علیکم۔ ریٹ بتا دیں: {name}، {kg} کلو کی {qty} بوریاں۔ ' +
+      'کل وزن تقریباً {tonnes}۔ اندازاً قیمت {total}۔',
+  },
+};
+
+/* ------------------------------------------------------------ runtime */
+
+let lang = 'en';
+let fontsAdded = false;
+const listeners = new Set();
+
+export const t = (key, vars) => {
+  let s = DICT[lang][key] ?? DICT.en[key] ?? key;
+  if (vars) for (const k in vars) s = s.replace('{' + k + '}', vars[k]);
+  return s;
+};
+
+export const current = () => lang;
+export const onLangChange = (fn) => listeners.add(fn);
+
+/* Nastaliq is a heavy file, so it is only fetched if Urdu is actually asked for */
+function loadUrduFonts() {
+  if (fontsAdded) return;
+  fontsAdded = true;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = NASTALIQ;
+  document.head.appendChild(link);
+}
+
+export function setLang(next) {
+  lang = DICT[next] ? next : 'en';
+  if (lang === 'ur') loadUrduFonts();
+
+  const root = document.documentElement;
+  root.lang = lang;
+  root.dir = lang === 'ur' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+  document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+    el.dataset.i18nAttr.split(',').forEach((pair) => {
+      const [attr, key] = pair.split(':');
+      el.setAttribute(attr, t(key));
+    });
+  });
+
+  try {
+    localStorage.setItem('lang', lang);
+  } catch {
+    /* private window — the choice just will not stick */
+  }
+
+  listeners.forEach((fn) => fn(lang));
+}
+
+export function initLang() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem('lang');
+  } catch {
+    /* ignore */
+  }
+  setLang(saved || 'en');
+}

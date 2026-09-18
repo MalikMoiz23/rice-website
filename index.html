@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sunehri Rice Mills — Basmati by the sack, 25 kg &amp; 50 kg</title>
-<meta name="description" content="Punjab rice mill supplying aged Super Basmati, 1121 Sella, Steam and Irri-6 in 25 kg and 50 kg sacks. Mill-direct wholesale rates, nationwide dispatch.">
-<meta name="theme-color" content="#22381F">
+<title>Sunehri Rice Mills — basmati by the bag, 25 kg &amp; 50 kg</title>
+<meta name="description" content="Rice mill in Sheikhupura, Punjab. Aged Super Basmati, 1121 Sella, Steam and Irri-6 in 25 kg and 50 kg bags. Mill prices, delivery all over Pakistan.">
+<meta name="theme-color" content="#14230F">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sunehri Rice Mills — Basmati by the sack">
-<meta property="og:description" content="Aged basmati, sorted and sacked at the mill. 25 kg and 50 kg, dispatched nationwide.">
+<meta property="og:title" content="Sunehri Rice Mills — basmati by the bag">
+<meta property="og:description" content="Aged basmati, cleaned and bagged at our own mill. 25 kg and 50 kg, delivered all over Pakistan.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/lang.css">
 
 <script type="importmap">
 {
@@ -36,13 +37,13 @@
 <div class="grain-overlay" aria-hidden="true"></div>
 <div class="scroll-rail" aria-hidden="true"><span data-scroll-progress></span></div>
 
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
 
 <!-- ─────────────────────────────  header  ───────────────────────────── -->
 <header class="site-header" data-header>
   <div class="shell site-header__inner">
 
-    <a class="brand" href="#top" aria-label="Sunehri Rice Mills, home">
+    <a class="brand" href="#top" aria-label="Sunehri Rice Mills">
       <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
         <g transform="rotate(-28 32 32)">
           <ellipse cx="32" cy="32" rx="9" ry="20"/>
@@ -50,27 +51,31 @@
         </g>
       </svg>
       <span class="brand__text">
-        <strong>Sunehri</strong>
-        <em>Rice Mills</em>
+        <strong data-i18n="brand.name">Sunehri</strong>
+        <em data-i18n="brand.sub">Rice Mills</em>
       </span>
     </a>
 
     <nav class="site-nav" data-nav aria-label="Primary">
       <ul>
-        <li><a href="#range">Range</a></li>
-        <li><a href="#grade">The grain</a></li>
-        <li><a href="#viewer">The sack</a></li>
-        <li><a href="#process">Process</a></li>
-        <li><a href="#quality">Quality</a></li>
-        <li><a href="#order">Bulk order</a></li>
+        <li><a href="#range" data-i18n="nav.range">Our rice</a></li>
+        <li><a href="#grade" data-i18n="nav.grade">The grain</a></li>
+        <li><a href="#viewer" data-i18n="nav.sack">The bag</a></li>
+        <li><a href="#process" data-i18n="nav.process">How we make it</a></li>
+        <li><a href="#quality" data-i18n="nav.quality">Quality</a></li>
+        <li><a href="#order" data-i18n="nav.order">Bulk order</a></li>
       </ul>
     </nav>
 
-    <a class="btn btn--solid btn--sm site-header__cta" href="#contact">Get today's rate</a>
+    <button type="button" class="lang-toggle" data-lang-toggle
+            data-i18n="lang.switch" data-i18n-attr="aria-label:lang.label"
+            aria-label="Switch to Urdu">اردو</button>
+
+    <a class="btn btn--solid btn--sm site-header__cta" href="#contact" data-i18n="nav.cta">Today's price</a>
 
     <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="main-nav">
       <span></span><span></span>
-      <span class="u-sr">Menu</span>
+      <span class="u-sr" data-i18n="nav.menu">Menu</span>
     </button>
 
   </div>
@@ -83,46 +88,55 @@
     <div class="hero__wash" aria-hidden="true"></div>
 
     <div class="shell hero__inner">
-      <p class="eyebrow eyebrow--light">Sheikhupura, Punjab &middot; milling since 1974</p>
+      <p class="eyebrow eyebrow--light" data-i18n="hero.eyebrow">Sheikhupura, Punjab · making rice since 1974</p>
 
-      <h1 class="hero__title">
+      <h1 class="hero__title" data-i18n-html="hero.title">
         Aged basmati,<br>
-        <span class="hero__title-accent">sacked at the mill.</span>
+        <span class="hero__title-accent">packed at our mill.</span>
       </h1>
 
-      <p class="hero__lede">
-        We buy paddy straight off the mandi floor, rest it for a full season, then
-        shell, polish and sortex it in-house. It leaves us in 25&nbsp;kg and 50&nbsp;kg
-        sacks — stitched, batch-stamped and on a truck the same week.
+      <p class="hero__lede" data-i18n="hero.lede">
+        We buy paddy at the mandi, keep it for a full season, then husk, polish and
+        clean it in our own mill. It goes out in 25 kg and 50 kg bags — sewn shut,
+        stamped with the batch, and on a truck the same week.
       </p>
 
       <div class="hero__actions">
-        <a class="btn btn--solid" href="#range">See the range</a>
-        <a class="btn btn--ghost" href="#order">Price a bulk order</a>
+        <a class="btn btn--solid" href="#range" data-i18n="hero.cta1">See our rice</a>
+        <a class="btn btn--ghost" href="#order" data-i18n="hero.cta2">Work out a price</a>
       </div>
 
       <dl class="hero__stats">
-        <div><dt>Monthly dispatch</dt><dd><span data-count-to="42000">0</span><i>sacks</i></dd></div>
-        <div><dt>Minimum ageing</dt><dd><span data-count-to="12">0</span><i>months</i></dd></div>
-        <div><dt>Export markets</dt><dd><span data-count-to="9">0</span><i>countries</i></dd></div>
+        <div>
+          <dt data-i18n="hero.stat1">Bags sent each month</dt>
+          <dd><span data-count-to="42000">0</span><i data-i18n="hero.stat1u">bags</i></dd>
+        </div>
+        <div>
+          <dt data-i18n="hero.stat2">Kept at least</dt>
+          <dd><span data-count-to="12">0</span><i data-i18n="hero.stat2u">months</i></dd>
+        </div>
+        <div>
+          <dt data-i18n="hero.stat3">We sell in</dt>
+          <dd><span data-count-to="9">0</span><i data-i18n="hero.stat3u">countries</i></dd>
+        </div>
       </dl>
     </div>
 
-    <p class="act__tag act__tag--hero" aria-hidden="true">Stage 01 — standing in the field</p>
+    <p class="act__tag act__tag--hero" aria-hidden="true" data-i18n="hero.stage">Step 01 — growing in the field</p>
 
-    <a class="hero__cue" href="#range" aria-label="Scroll to the range"><span></span></a>
+    <a class="hero__cue" href="#range" data-i18n-attr="aria-label:hero.scroll" aria-label="Scroll down to our rice"><span></span></a>
   </section>
 
   <!-- ───────────────────────────  marquee  ─────────────────────────── -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee__track" data-marquee>
-      <span>Super Basmati</span><i>◆</i>
-      <span>1121 Sella</span><i>◆</i>
-      <span>1121 Steam</span><i>◆</i>
-      <span>Irri-6 Long Grain</span><i>◆</i>
-      <span>Broken Basmati</span><i>◆</i>
-      <span>Sortex Cleaned</span><i>◆</i>
-      <span>Nationwide Dispatch</span><i>◆</i>
+      <span data-i18n="mq.1">Super Basmati</span><i>◆</i>
+      <span data-i18n="mq.2">1121 Sella</span><i>◆</i>
+      <span data-i18n="mq.3">1121 Steam</span><i>◆</i>
+      <span data-i18n="mq.4">Irri-6 Long Grain</span><i>◆</i>
+      <span data-i18n="mq.5">Broken Basmati</span><i>◆</i>
+      <span data-i18n="mq.6">Machine cleaned</span><i>◆</i>
+      <span data-i18n="mq.7">Delivery all over Pakistan</span><i>◆</i>
     </div>
   </div>
 
@@ -131,20 +145,19 @@
     <div class="shell">
 
       <div class="section-head" data-reveal>
-        <p class="eyebrow">01 — The range</p>
-        <h2 class="section-title">Five grades, two sack sizes</h2>
-        <p class="section-lede">
-          Rates below are mill-direct, ex-works Sheikhupura, exclusive of freight.
-          They move with the mandi, so treat them as indicative and ask us for the
-          morning's number.
+        <p class="eyebrow" data-i18n="range.eyebrow">01 — Our rice</p>
+        <h2 class="section-title" data-i18n="range.title">Five types, two bag sizes</h2>
+        <p class="section-lede" data-i18n="range.lede">
+          These are our prices at the mill in Sheikhupura. Delivery is not included.
+          Prices move with the mandi, so please call or WhatsApp us for today's rate.
         </p>
       </div>
 
       <div class="weight-switch" data-weight-switch data-reveal>
-        <span class="weight-switch__label">Sack size</span>
-        <div class="weight-switch__track" role="radiogroup" aria-label="Sack size">
-          <button type="button" role="radio" aria-checked="true" data-weight="25" class="is-active">25 kg</button>
-          <button type="button" role="radio" aria-checked="false" data-weight="50">50 kg</button>
+        <span class="weight-switch__label" data-i18n="range.size">Bag size</span>
+        <div class="weight-switch__track" role="radiogroup" data-i18n-attr="aria-label:range.size" aria-label="Bag size">
+          <button type="button" role="radio" aria-checked="true" data-weight="25" class="is-active" data-i18n="range.25">25 kg</button>
+          <button type="button" role="radio" aria-checked="false" data-weight="50" data-i18n="range.50">50 kg</button>
           <span class="weight-switch__thumb" aria-hidden="true"></span>
         </div>
       </div>
@@ -154,130 +167,145 @@
         <li class="product-card" data-tilt data-reveal data-grade-jump="0"
             data-price-25="6250" data-price-50="12200">
           <div class="product-card__top">
-            <span class="product-card__tag product-card__tag--gold">Premium</span>
+            <span class="product-card__tag product-card__tag--gold" data-i18n="p0.tag">Best</span>
             <span class="product-card__len">7.2 mm</span>
           </div>
-          <h3 class="product-card__name">Super Basmati</h3>
-          <p class="product-card__note">
-            Rested twelve months before milling. Slender, non-sticky, doubles in
-            length on the boil. Our biryani grade.
+          <h3 class="product-card__name" data-i18n="p0.name">Super Basmati</h3>
+          <p class="product-card__note" data-i18n="p0.note">
+            Kept twelve months before milling. Thin, long, and does not stick. It gets
+            about twice as long when cooked. This is our biryani rice.
           </p>
           <ul class="product-card__specs">
-            <li><b>Broken</b><span>≤ 2%</span></li>
-            <li><b>Moisture</b><span>≤ 13.5%</span></li>
-            <li><b>Ageing</b><span>12 months</span></li>
+            <li><b data-i18n="spec.broken">Broken bits</b><span>≤ 2%</span></li>
+            <li><b data-i18n="spec.moisture">Water</b><span>≤ 13.5%</span></li>
+            <li><b data-i18n="spec.aged">Kept for</b><span data-i18n="g0.age">12 months</span></li>
           </ul>
-          <button type="button" class="product-card__hint">Inspect the grain</button>
+          <button type="button" class="product-card__hint" data-i18n="card.hint">See this grain close up</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>6,250</span>
-              <i>/ <b data-weight-label>25</b> kg sack</i>
+              <i>/ <b data-weight-label>25</b> <span data-i18n="card.per">kg bag</span></i>
             </p>
-            <a class="btn btn--line btn--sm" href="#order">Order</a>
+            <div class="product-card__buy">
+              <a class="btn btn--line btn--sm" href="#order" data-i18n="card.order">Order</a>
+              <button type="button" class="btn btn--wa btn--sm" data-wa-card data-i18n="card.wa">WhatsApp</button>
+            </div>
           </div>
         </li>
 
         <li class="product-card" data-tilt data-reveal data-grade-jump="1"
             data-price-25="5400" data-price-50="10500">
           <div class="product-card__top">
-            <span class="product-card__tag product-card__tag--amber">Parboiled</span>
+            <span class="product-card__tag product-card__tag--amber" data-i18n="p1.tag">Steamed in husk</span>
             <span class="product-card__len">8.4 mm</span>
           </div>
-          <h3 class="product-card__name">1121 Sella Kainat</h3>
-          <p class="product-card__note">
-            Steamed and dried in the husk, so the grain holds. Golden cast, very
-            high elongation — the export workhorse.
+          <h3 class="product-card__name" data-i18n="p1.name">1121 Sella Kainat</h3>
+          <p class="product-card__note" data-i18n="p1.note">
+            Steamed and dried while still in the husk, so the grain stays whole. Golden
+            colour, and it grows the most of any rice we sell. Our main export type.
           </p>
           <ul class="product-card__specs">
-            <li><b>Broken</b><span>≤ 1%</span></li>
-            <li><b>Moisture</b><span>≤ 12.5%</span></li>
-            <li><b>Ageing</b><span>18 months</span></li>
+            <li><b data-i18n="spec.broken">Broken bits</b><span>≤ 1%</span></li>
+            <li><b data-i18n="spec.moisture">Water</b><span>≤ 12.5%</span></li>
+            <li><b data-i18n="spec.aged">Kept for</b><span data-i18n="g1.age">18 months</span></li>
           </ul>
-          <button type="button" class="product-card__hint">Inspect the grain</button>
+          <button type="button" class="product-card__hint" data-i18n="card.hint">See this grain close up</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>5,400</span>
-              <i>/ <b data-weight-label>25</b> kg sack</i>
+              <i>/ <b data-weight-label>25</b> <span data-i18n="card.per">kg bag</span></i>
             </p>
-            <a class="btn btn--line btn--sm" href="#order">Order</a>
+            <div class="product-card__buy">
+              <a class="btn btn--line btn--sm" href="#order" data-i18n="card.order">Order</a>
+              <button type="button" class="btn btn--wa btn--sm" data-wa-card data-i18n="card.wa">WhatsApp</button>
+            </div>
           </div>
         </li>
 
         <li class="product-card" data-tilt data-reveal data-grade-jump="2"
             data-price-25="5900" data-price-50="11500">
           <div class="product-card__top">
-            <span class="product-card__tag">Steamed</span>
+            <span class="product-card__tag" data-i18n="p2.tag">Steamed</span>
             <span class="product-card__len">8.2 mm</span>
           </div>
-          <h3 class="product-card__name">1121 Steam White</h3>
-          <p class="product-card__note">
-            The same long grain, steamed white rather than parboiled. Cooks loose
-            and clean. Standard for hotel and canteen kitchens.
+          <h3 class="product-card__name" data-i18n="p2.name">1121 Steam White</h3>
+          <p class="product-card__note" data-i18n="p2.note">
+            The same long grain, steamed white instead of golden. Cooks loose and clean.
+            What most hotels and canteens buy.
           </p>
           <ul class="product-card__specs">
-            <li><b>Broken</b><span>≤ 2%</span></li>
-            <li><b>Moisture</b><span>≤ 13%</span></li>
-            <li><b>Ageing</b><span>12 months</span></li>
+            <li><b data-i18n="spec.broken">Broken bits</b><span>≤ 2%</span></li>
+            <li><b data-i18n="spec.moisture">Water</b><span>≤ 13%</span></li>
+            <li><b data-i18n="spec.aged">Kept for</b><span data-i18n="g2.age">12 months</span></li>
           </ul>
-          <button type="button" class="product-card__hint">Inspect the grain</button>
+          <button type="button" class="product-card__hint" data-i18n="card.hint">See this grain close up</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>5,900</span>
-              <i>/ <b data-weight-label>25</b> kg sack</i>
+              <i>/ <b data-weight-label>25</b> <span data-i18n="card.per">kg bag</span></i>
             </p>
-            <a class="btn btn--line btn--sm" href="#order">Order</a>
+            <div class="product-card__buy">
+              <a class="btn btn--line btn--sm" href="#order" data-i18n="card.order">Order</a>
+              <button type="button" class="btn btn--wa btn--sm" data-wa-card data-i18n="card.wa">WhatsApp</button>
+            </div>
           </div>
         </li>
 
         <li class="product-card" data-tilt data-reveal data-grade-jump="3"
             data-price-25="3100" data-price-50="6000">
           <div class="product-card__top">
-            <span class="product-card__tag product-card__tag--leaf">Everyday</span>
+            <span class="product-card__tag product-card__tag--leaf" data-i18n="p3.tag">Everyday</span>
             <span class="product-card__len">6.4 mm</span>
           </div>
-          <h3 class="product-card__name">Irri-6 Long Grain</h3>
-          <p class="product-card__note">
-            Hard, absorbent, forgiving. What the volume kitchens and relief
-            contracts run on. Sortex cleaned like everything else here.
+          <h3 class="product-card__name" data-i18n="p3.name">Irri-6 Long Grain</h3>
+          <p class="product-card__note" data-i18n="p3.note">
+            A hard grain that soaks up plenty of water and is hard to spoil. Used where
+            large amounts are cooked. Machine cleaned like everything else here.
           </p>
           <ul class="product-card__specs">
-            <li><b>Broken</b><span>≤ 5%</span></li>
-            <li><b>Moisture</b><span>≤ 14%</span></li>
-            <li><b>Ageing</b><span>3 months</span></li>
+            <li><b data-i18n="spec.broken">Broken bits</b><span>≤ 5%</span></li>
+            <li><b data-i18n="spec.moisture">Water</b><span>≤ 14%</span></li>
+            <li><b data-i18n="spec.aged">Kept for</b><span data-i18n="g3.age">3 months</span></li>
           </ul>
-          <button type="button" class="product-card__hint">Inspect the grain</button>
+          <button type="button" class="product-card__hint" data-i18n="card.hint">See this grain close up</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>3,100</span>
-              <i>/ <b data-weight-label>25</b> kg sack</i>
+              <i>/ <b data-weight-label>25</b> <span data-i18n="card.per">kg bag</span></i>
             </p>
-            <a class="btn btn--line btn--sm" href="#order">Order</a>
+            <div class="product-card__buy">
+              <a class="btn btn--line btn--sm" href="#order" data-i18n="card.order">Order</a>
+              <button type="button" class="btn btn--wa btn--sm" data-wa-card data-i18n="card.wa">WhatsApp</button>
+            </div>
           </div>
         </li>
 
         <li class="product-card" data-tilt data-reveal data-grade-jump="4"
             data-price-25="2750" data-price-50="5300">
           <div class="product-card__top">
-            <span class="product-card__tag product-card__tag--soil">Value</span>
+            <span class="product-card__tag product-card__tag--soil" data-i18n="p4.tag">Cheapest</span>
             <span class="product-card__len">2–4 mm</span>
           </div>
-          <h3 class="product-card__name">Broken Basmati (Tota)</h3>
-          <p class="product-card__note">
-            Basmati fragments off the length grader. Same aroma, a third of the
-            price. Goes to kheer, khichri and the snack trade.
+          <h3 class="product-card__name" data-i18n="p4.name">Broken Basmati (Tota)</h3>
+          <p class="product-card__note" data-i18n="p4.note">
+            Broken pieces of basmati. Same smell, about one third of the price. Used for
+            kheer, khichri and the snack trade.
           </p>
           <ul class="product-card__specs">
-            <li><b>Grade</b><span>Sortexed</span></li>
-            <li><b>Moisture</b><span>≤ 13.5%</span></li>
-            <li><b>Ageing</b><span>—</span></li>
+            <li><b data-i18n="spec.clean">Cleaning</b><span data-i18n="spec.cleaned">Machine cleaned</span></li>
+            <li><b data-i18n="spec.moisture">Water</b><span>≤ 13.5%</span></li>
+            <li><b data-i18n="spec.aged">Kept for</b><span>—</span></li>
           </ul>
-          <button type="button" class="product-card__hint">Inspect the grain</button>
+          <button type="button" class="product-card__hint" data-i18n="card.hint">See this grain close up</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>2,750</span>
-              <i>/ <b data-weight-label>25</b> kg sack</i>
+              <i>/ <b data-weight-label>25</b> <span data-i18n="card.per">kg bag</span></i>
             </p>
-            <a class="btn btn--line btn--sm" href="#order">Order</a>
+            <div class="product-card__buy">
+              <a class="btn btn--line btn--sm" href="#order" data-i18n="card.order">Order</a>
+              <button type="button" class="btn btn--wa btn--sm" data-wa-card data-i18n="card.wa">WhatsApp</button>
+            </div>
           </div>
         </li>
 
@@ -293,37 +321,37 @@
     <div class="shell grade__grid">
 
       <div class="grade__copy" data-reveal>
-        <p class="eyebrow">02 — Quality, up close</p>
-        <h2 class="section-title">Look at the grain itself</h2>
-        <p class="section-lede">
-          Pick a grade. What turns beside it is that grade at about forty times
-          life size, next to a sack of it — the length, colour and shape are the
-          ones on the spec sheet, not a stock photo.
+        <p class="eyebrow" data-i18n="grade.eyebrow">02 — Quality up close</p>
+        <h2 class="section-title" data-i18n="grade.title">See the grain yourself</h2>
+        <p class="section-lede" data-i18n="grade.lede">
+          Pick a type. The grain turning beside it is that rice at about forty times its
+          real size, next to a sack of the same rice. The length, colour and shape are
+          the real ones, not a photo.
         </p>
 
-        <div class="grade__tabs" data-grade-tabs role="tablist" aria-label="Rice grade">
-          <button type="button" class="chip is-active" role="tab" aria-selected="true" data-grade="0">Super Basmati</button>
-          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="1">1121 Sella</button>
-          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="2">1121 Steam</button>
-          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="3">Irri-6</button>
-          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="4">Broken (Tota)</button>
+        <div class="grade__tabs" data-grade-tabs role="tablist" data-i18n-attr="aria-label:grade.tabs" aria-label="Rice type">
+          <button type="button" class="chip is-active" role="tab" aria-selected="true" data-grade="0" data-i18n="g0.name">Super Basmati</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="1" data-i18n="g1.name">1121 Sella</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="2" data-i18n="g2.name">1121 Steam</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="3" data-i18n="g3.name">Irri-6</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="4" data-i18n="g4.name">Broken (Tota)</button>
         </div>
 
         <dl class="grade__specs">
-          <div><dt>Grain length</dt><dd data-grade-len>7.2 mm</dd></div>
-          <div><dt>Broken grain</dt><dd data-grade-broken>≤ 2%</dd></div>
-          <div><dt>Ageing</dt><dd data-grade-age>12 months</dd></div>
-          <div><dt>Cooked elongation</dt><dd data-grade-elong>2.1×</dd></div>
+          <div><dt data-i18n="grade.len">Grain length</dt><dd data-grade-len>7.2 mm</dd></div>
+          <div><dt data-i18n="grade.broken">Broken bits</dt><dd data-grade-broken>up to 2%</dd></div>
+          <div><dt data-i18n="grade.age">Kept for</dt><dd data-grade-age>12 months</dd></div>
+          <div><dt data-i18n="grade.elong">Grows when cooked</dt><dd data-grade-elong>2.1 times</dd></div>
         </dl>
 
         <p class="grade__note" data-grade-note>
-          Rested twelve months before milling, so the starch firms up and the
-          grain stays separate on the boil. This is the biryani grade.
+          Kept twelve months before milling, so the grain hardens and stays separate when
+          cooked. This is the biryani rice.
         </p>
       </div>
 
       <figure class="grade__stage" data-reveal>
-        <figcaption class="grade__caption" data-grade-caption>Super Basmati &middot; 25 kg sack</figcaption>
+        <figcaption class="grade__caption" data-grade-caption>Super Basmati · 25 kg bag</figcaption>
       </figure>
 
     </div>
@@ -332,9 +360,9 @@
   <!-- ─────────────────────────────  act  ──────────────────────────── -->
   <section class="act" id="act-hull" data-act="1">
     <div class="shell act__inner" data-reveal>
-      <p class="act__tag">Stage 02</p>
-      <h2 class="act__title">It leaves the field inside a hull</h2>
-      <p class="act__text">Every grain comes off the combine sealed in a tough, ribbed husk. That husk is why paddy keeps for a season in a bin, and it is the first thing the mill has to take off.</p>
+      <p class="act__tag" data-i18n="a1.tag">Step 02</p>
+      <h2 class="act__title" data-i18n="a1.title">It comes out of the field wearing a shell</h2>
+      <p class="act__text" data-i18n="a1.text">Every grain leaves the field inside a hard, lined husk. That husk is why paddy can be stored for a whole season. It is the first thing we take off at the mill.</p>
     </div>
   </section>
 
@@ -343,34 +371,33 @@
     <div class="shell viewer__grid">
 
       <div class="viewer__copy" data-reveal>
-        <p class="eyebrow eyebrow--light">03 — The sack</p>
-        <h2 class="section-title">Have a look at what turns up</h2>
-        <p class="section-lede section-lede--light">
-          Laminated PP, double-stitched mouth, printed lot number and mill date on
-          every sack. Drag the bag to turn it. Switch the weight to see the two
-          sizes side by side.
+        <p class="eyebrow eyebrow--light" data-i18n="sack.eyebrow">03 — The bag</p>
+        <h2 class="section-title" data-i18n="sack.title">See what arrives at your shop</h2>
+        <p class="section-lede section-lede--light" data-i18n="sack.lede">
+          Coated woven bag, double-sewn top, and the batch number and mill date printed
+          on every bag. Drag the bag to turn it. Switch the weight to see both sizes.
         </p>
 
         <ul class="viewer__points">
-          <li><b>Laminated woven PP</b> — moisture barrier, rodent-resistant weave.</li>
-          <li><b>Double-stitched mouth</b> — machine chain-stitch, cut-tape opening.</li>
-          <li><b>Batch stamp</b> — mill date, lot and grade on the reverse panel.</li>
-          <li><b>Palletised</b> — 40 × 25 kg or 20 × 50 kg per pallet, shrink-wrapped.</li>
+          <li><b data-i18n="sack.p1">Coated woven bag</b> <span data-i18n="sack.p1t">— keeps damp out, hard for rats to chew through.</span></li>
+          <li><b data-i18n="sack.p2">Double-sewn top</b> <span data-i18n="sack.p2t">— machine stitched, opens with one cut.</span></li>
+          <li><b data-i18n="sack.p3">Batch stamp</b> <span data-i18n="sack.p3t">— mill date, batch number and type printed on the back.</span></li>
+          <li><b data-i18n="sack.p4">On pallets</b> <span data-i18n="sack.p4t">— 40 bags of 25 kg or 20 bags of 50 kg, wrapped.</span></li>
         </ul>
 
         <div class="viewer__switch" data-sack-switch>
-          <button type="button" class="chip is-active" data-sack-weight="25">25 kg sack</button>
-          <button type="button" class="chip" data-sack-weight="50">50 kg sack</button>
+          <button type="button" class="chip is-active" data-sack-weight="25" data-i18n="sack.b25">25 kg bag</button>
+          <button type="button" class="chip" data-sack-weight="50" data-i18n="sack.b50">50 kg bag</button>
         </div>
       </div>
 
       <figure class="viewer__stage" data-reveal>
         <canvas data-sack-canvas></canvas>
-        <figcaption class="viewer__hint" data-sack-hint>Drag to rotate</figcaption>
+        <figcaption class="viewer__hint" data-sack-hint data-i18n="sack.drag">Drag to turn</figcaption>
         <dl class="viewer__meta">
-          <div><dt>Net weight</dt><dd data-sack-net>25 kg</dd></div>
-          <div><dt>Sack size</dt><dd data-sack-dims>18 × 30 in</dd></div>
-          <div><dt>Per pallet</dt><dd data-sack-pallet>40 sacks</dd></div>
+          <div><dt data-i18n="sack.net">Net weight</dt><dd data-sack-net>25 kg</dd></div>
+          <div><dt data-i18n="sack.dims">Bag size</dt><dd data-sack-dims>18 × 30 in</dd></div>
+          <div><dt data-i18n="sack.pallet">Per pallet</dt><dd data-sack-pallet>40</dd></div>
         </dl>
       </figure>
 
@@ -383,70 +410,51 @@
     <div class="shell process__grid">
 
       <div class="process__aside" data-reveal>
-        <p class="eyebrow">04 — Process</p>
-        <h2 class="section-title">Paddy in, sacks out</h2>
-        <p class="section-lede">
-          Six stages, all of them under our own roof. Nothing is toll-milled and
-          nothing is bought finished and re-bagged.
+        <p class="eyebrow" data-i18n="pr.eyebrow">04 — How we make it</p>
+        <h2 class="section-title" data-i18n="pr.title">Paddy in, bags out</h2>
+        <p class="section-lede" data-i18n="pr.lede">
+          Six steps, all done in our own mill. We do not send our rice out to be milled,
+          and we do not buy finished rice and just put our name on it.
         </p>
-        <a class="btn btn--line" href="#contact">Book a mill visit</a>
+        <a class="btn btn--line" href="#contact" data-i18n="pr.cta">Come and see the mill</a>
       </div>
 
       <ol class="process__list">
         <li class="step" data-reveal>
           <span class="step__num">01</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Procurement</h3>
-          <p>
-            Paddy lifted from Sheikhupura and Hafizabad mandis through buyers we
-            have used for twenty years. Every lot moisture-tested on arrival.
-          </p>
+          <h3 data-i18n="pr.1t">Buying</h3>
+          <p data-i18n="pr.1d">We buy paddy at the Sheikhupura and Hafizabad mandis from dealers we have used for twenty years. Every lot is checked for water when it arrives.</p>
         </li>
         <li class="step" data-reveal>
           <span class="step__num">02</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Drying</h3>
-          <p>
-            Brought down to 13% in an LSU dryer, slowly. Rush the drying and the
-            grain fractures in the sheller — that is where broken percentage is
-            won or lost.
-          </p>
+          <h3 data-i18n="pr.2t">Drying</h3>
+          <p data-i18n="pr.2d">Dried slowly down to 13% water. Dry it too fast and the grain cracks when the husk comes off — that is where broken rice comes from.</p>
         </li>
         <li class="step" data-reveal>
           <span class="step__num">03</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Ageing</h3>
-          <p>
-            Twelve to twenty-four months in ventilated bins, still in the husk.
-            Starch firms up, moisture evens out, aroma deepens.
-          </p>
+          <h3 data-i18n="pr.3t">Storing</h3>
+          <p data-i18n="pr.3d">Twelve to twenty-four months in airy bins, still in the husk. The grain hardens, the water spreads evenly, and the smell gets stronger.</p>
         </li>
         <li class="step" data-reveal>
           <span class="step__num">04</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Shelling &amp; polish</h3>
-          <p>
-            Rubber-roll shellers rather than disc — gentler on a long grain. Two
-            silky polish passes, water-assisted on the second.
-          </p>
+          <h3 data-i18n="pr.4t">Husking and polishing</h3>
+          <p data-i18n="pr.4d">We use rubber rollers instead of stone discs, because they are gentler on a long grain. Then two polishing runs, the second one with water.</p>
         </li>
         <li class="step" data-reveal>
           <span class="step__num">05</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Grading &amp; sortex</h3>
-          <p>
-            Length grader pulls the brokens, then a colour sorter takes out chalky,
-            discoloured and foreign grain at two passes.
-          </p>
+          <h3 data-i18n="pr.5t">Sorting</h3>
+          <p data-i18n="pr.5d">One machine pulls out the broken pieces by length. Then a colour machine removes chalky, off-colour and foreign grain. It runs twice.</p>
         </li>
         <li class="step" data-reveal>
           <span class="step__num">06</span>
           <span class="step__grain" data-grain-slot aria-hidden="true"></span>
-          <h3>Sacking</h3>
-          <p>
-            Weighed to net 25 or 50 kg, chain-stitched, lot-stamped and stacked.
-            Loaded on the same day the order is confirmed where stock allows.
-          </p>
+          <h3 data-i18n="pr.6t">Bagging</h3>
+          <p data-i18n="pr.6d">Weighed to exactly 25 or 50 kg, sewn, stamped and stacked. Loaded the same day you confirm, as long as we have stock.</p>
         </li>
       </ol>
 
@@ -456,9 +464,9 @@
   <!-- ─────────────────────────────  act  ──────────────────────────── -->
   <section class="act" id="act-milled" data-act="2">
     <div class="shell act__inner" data-reveal>
-      <p class="act__tag">Stage 03</p>
-      <h2 class="act__title">The hull splits away</h2>
-      <p class="act__text">Two rubber rollers turning at different speeds strip the husk without cracking what is inside. What falls through is rice — brown at first, white once the bran is polished off.</p>
+      <p class="act__tag" data-i18n="a2.tag">Step 03</p>
+      <h2 class="act__title" data-i18n="a2.title">The shell comes off</h2>
+      <p class="act__text" data-i18n="a2.text">Two rubber rollers turn at different speeds and rub the husk off without breaking the grain inside. What comes out is rice — brown first, then white after polishing.</p>
     </div>
   </section>
 
@@ -467,29 +475,29 @@
     <div class="shell">
 
       <div class="section-head section-head--center" data-reveal>
-        <p class="eyebrow">05 — Tolerances</p>
-        <h2 class="section-title">The numbers we hold ourselves to</h2>
-        <p class="section-lede">
-          Premium-grade tolerances. Every dispatch leaves with a lot card carrying
-          the actual readings, not these ceilings.
+        <p class="eyebrow" data-i18n="q.eyebrow">05 — Our limits</p>
+        <h2 class="section-title" data-i18n="q.title">The numbers we promise</h2>
+        <p class="section-lede" data-i18n="q.lede">
+          These are our limits for top grade. Every load leaves with a card showing the
+          real readings for that batch, not just these limits.
         </p>
       </div>
 
       <ul class="spec-grid">
-        <li class="spec" data-reveal><b>≤ 13.5%</b><span>Moisture at packing</span></li>
-        <li class="spec" data-reveal><b>≤ 2%</b><span>Broken grain, premium</span></li>
-        <li class="spec" data-reveal><b>≤ 0.5%</b><span>Damaged or discoloured</span></li>
-        <li class="spec" data-reveal><b>≥ 99%</b><span>Varietal purity</span></li>
-        <li class="spec" data-reveal><b>≤ 0.1%</b><span>Foreign matter</span></li>
-        <li class="spec" data-reveal><b>2×</b><span>Colour sorter passes</span></li>
+        <li class="spec" data-reveal><b>≤ 13.5%</b><span data-i18n="q.1">Water when packed</span></li>
+        <li class="spec" data-reveal><b>≤ 2%</b><span data-i18n="q.2">Broken bits, top grade</span></li>
+        <li class="spec" data-reveal><b>≤ 0.5%</b><span data-i18n="q.3">Damaged or off-colour</span></li>
+        <li class="spec" data-reveal><b>≥ 99%</b><span data-i18n="q.4">Same type throughout</span></li>
+        <li class="spec" data-reveal><b>≤ 0.1%</b><span data-i18n="q.5">Dust and stones</span></li>
+        <li class="spec" data-reveal><b>2×</b><span data-i18n="q.6">Colour machine runs</span></li>
       </ul>
 
       <div class="assure" data-reveal>
-        <p class="assure__text">
-          Not sure of the grade? Ask for a one-kilo sample. We post it free
-          anywhere in Pakistan and you cook it before you commit to a truck.
+        <p class="assure__text" data-i18n="q.assure">
+          Not sure which type you need? Ask for a one kilo sample. We post it free
+          anywhere in Pakistan, so you can cook it before you order a truck.
         </p>
-        <a class="btn btn--solid" href="#contact">Request a sample</a>
+        <a class="btn btn--solid" href="#contact" data-i18n="q.cta">Ask for a sample</a>
       </div>
 
     </div>
@@ -498,9 +506,9 @@
   <!-- ─────────────────────────────  act  ──────────────────────────── -->
   <section class="act" id="act-pair" data-act="3">
     <div class="shell act__inner" data-reveal>
-      <p class="act__tag">Stage 04</p>
-      <h2 class="act__title">The same grain, both ends of the process</h2>
-      <p class="act__text">Paddy on the left, milled on the right. Roughly a third of the weight is husk and bran, and none of it is thrown away — the husk fires the boiler, the bran goes to oil.</p>
+      <p class="act__tag" data-i18n="a3.tag">Step 04</p>
+      <h2 class="act__title" data-i18n="a3.title">The same grain, before and after</h2>
+      <p class="act__text" data-i18n="a3.text">Paddy on one side, milled rice on the other. About one third of the weight is husk and bran. Nothing is wasted — the husk burns in our boiler and the bran goes for oil.</p>
     </div>
   </section>
 
@@ -509,48 +517,48 @@
     <div class="shell order__grid">
 
       <div data-reveal>
-        <p class="eyebrow eyebrow--light">06 — Bulk order</p>
-        <h2 class="section-title">Work out a load</h2>
-        <p class="section-lede section-lede--light">
-          Indicative, ex-works, before freight and tax. Half-truck is 130 sacks of
-          50&nbsp;kg, full truck is 260. Slab discounts apply from 100 sacks.
+        <p class="eyebrow eyebrow--light" data-i18n="o.eyebrow">06 — Bulk order</p>
+        <h2 class="section-title" data-i18n="o.title">Work out your load</h2>
+        <p class="section-lede section-lede--light" data-i18n="o.lede">
+          A guide price at our mill, before delivery and tax. Half a truck is 130 bags of
+          50 kg and a full truck is 260. Discounts start at 100 bags.
         </p>
       </div>
 
       <form class="calc" data-calc data-reveal>
         <div class="field">
-          <label for="calc-grade">Grade</label>
+          <label for="calc-grade" data-i18n="o.grade">Rice type</label>
           <select id="calc-grade" data-calc-grade>
-            <option value="6250|12200">Super Basmati</option>
-            <option value="5400|10500">1121 Sella Kainat</option>
-            <option value="5900|11500">1121 Steam White</option>
-            <option value="3100|6000">Irri-6 Long Grain</option>
-            <option value="2750|5300">Broken Basmati (Tota)</option>
+            <option value="6250|12200" data-i18n="p0.name">Super Basmati</option>
+            <option value="5400|10500" data-i18n="p1.name">1121 Sella Kainat</option>
+            <option value="5900|11500" data-i18n="p2.name">1121 Steam White</option>
+            <option value="3100|6000" data-i18n="p3.name">Irri-6 Long Grain</option>
+            <option value="2750|5300" data-i18n="p4.name">Broken Basmati (Tota)</option>
           </select>
         </div>
 
         <div class="field">
-          <span class="field__label">Sack size</span>
+          <span class="field__label" data-i18n="o.size">Bag size</span>
           <div class="seg" data-calc-weight>
-            <button type="button" class="is-active" data-weight="25">25 kg</button>
-            <button type="button" data-weight="50">50 kg</button>
+            <button type="button" class="is-active" data-weight="25" data-i18n="range.25">25 kg</button>
+            <button type="button" data-weight="50" data-i18n="range.50">50 kg</button>
           </div>
         </div>
 
         <div class="field field--full">
-          <label for="calc-qty">Sacks — <output data-calc-qty-out>40</output></label>
+          <label for="calc-qty"><span data-i18n="o.qty">Bags</span> — <output data-calc-qty-out>40</output></label>
           <input id="calc-qty" type="range" min="10" max="400" step="10" value="40" data-calc-qty>
           <div class="field__scale"><span>10</span><span>200</span><span>400</span></div>
         </div>
 
         <dl class="calc__out">
-          <div><dt>Tonnage</dt><dd data-calc-tonnes>1.00 t</dd></div>
-          <div><dt>Discount</dt><dd data-calc-discount>—</dd></div>
-          <div><dt>Freight class</dt><dd data-calc-truck>Part load</dd></div>
-          <div class="calc__total"><dt>Indicative total</dt><dd data-calc-total>Rs 250,000</dd></div>
+          <div><dt data-i18n="o.tonnes">Total weight</dt><dd data-calc-tonnes>1.00 t</dd></div>
+          <div><dt data-i18n="o.discount">Discount</dt><dd data-calc-discount>—</dd></div>
+          <div><dt data-i18n="o.truck">Truck</dt><dd data-calc-truck>Part load</dd></div>
+          <div class="calc__total"><dt data-i18n="o.total">Guide total</dt><dd data-calc-total>Rs 250,000</dd></div>
         </dl>
 
-        <a class="btn btn--solid btn--full" href="#contact" data-calc-cta>Send this to the mill</a>
+        <a class="btn btn--wa btn--full" href="#contact" target="_blank" rel="noopener" data-calc-cta data-i18n="o.cta">Send this on WhatsApp</a>
       </form>
 
     </div>
@@ -559,9 +567,9 @@
   <!-- ─────────────────────────────  act  ──────────────────────────── -->
   <section class="act" id="act-sack" data-act="4">
     <div class="shell act__inner" data-reveal>
-      <p class="act__tag">Stage 05</p>
-      <h2 class="act__title">Into the sack</h2>
-      <p class="act__text">Weighed to net 25 or 50 kg, stitched at the mouth, stamped with the lot and the mill date. From here it is a truck and an address.</p>
+      <p class="act__tag" data-i18n="a4.tag">Step 05</p>
+      <h2 class="act__title" data-i18n="a4.title">Into the bag</h2>
+      <p class="act__text" data-i18n="a4.text">Weighed to exactly 25 or 50 kg, sewn at the top, and stamped with the batch and the mill date. After that it is a truck and an address.</p>
     </div>
   </section>
 
@@ -569,31 +577,22 @@
   <section class="section" id="voices">
     <div class="shell">
       <div class="section-head" data-reveal>
-        <p class="eyebrow">07 — Buyers</p>
-        <h2 class="section-title">Who is loading from us</h2>
+        <p class="eyebrow" data-i18n="v.eyebrow">07 — Our buyers</p>
+        <h2 class="section-title" data-i18n="v.title">Who buys from us</h2>
       </div>
 
       <ul class="quote-grid">
         <li class="quote" data-reveal>
-          <blockquote>
-            Four years of 50&nbsp;kg Sella and I have not once had to argue about a
-            short weight. The lot cards match what the lab says.
-          </blockquote>
-          <p class="quote__by"><b>Hamza Traders</b><span>Wholesale · Lahore</span></p>
+          <blockquote data-i18n="v.1">Four years of 50 kg Sella and not once a short weight. The batch cards match what the lab says.</blockquote>
+          <p class="quote__by"><b data-i18n="v.1n">Hamza Traders</b><span data-i18n="v.1r">Wholesale · Lahore</span></p>
         </li>
         <li class="quote" data-reveal>
-          <blockquote>
-            We run 300 covers a night. The Steam grade cooks the same every single
-            sack, which is the only thing a kitchen actually wants.
-          </blockquote>
-          <p class="quote__by"><b>Dera Restaurant Group</b><span>HoReCa · Islamabad</span></p>
+          <blockquote data-i18n="v.2">We cook for 300 people a night. The Steam type cooks the same from every bag. That is all a kitchen wants.</blockquote>
+          <p class="quote__by"><b data-i18n="v.2n">Dera Restaurant Group</b><span data-i18n="v.2r">Restaurants · Islamabad</span></p>
         </li>
         <li class="quote" data-reveal>
-          <blockquote>
-            They took a container of Kainat to Dubai on eleven days' notice with
-            documents clean. That is rarer than it should be.
-          </blockquote>
-          <p class="quote__by"><b>Gulf Crescent FZE</b><span>Export · Dubai</span></p>
+          <blockquote data-i18n="v.3">They sent a container of Kainat to Dubai in eleven days with clean papers. That is rarer than it should be.</blockquote>
+          <p class="quote__by"><b data-i18n="v.3n">Gulf Crescent FZE</b><span data-i18n="v.3r">Export · Dubai</span></p>
         </li>
       </ul>
     </div>
@@ -604,70 +603,75 @@
     <div class="shell contact__grid">
 
       <div data-reveal>
-        <p class="eyebrow">08 — Contact</p>
-        <h2 class="section-title">Ask for the morning rate</h2>
-        <p class="section-lede">
-          Tell us the grade, the sack size and roughly how many. You will get a
-          firm number, a dispatch date and freight to your city.
+        <p class="eyebrow" data-i18n="c.eyebrow">08 — Contact</p>
+        <h2 class="section-title" data-i18n="c.title">Ask for today's price</h2>
+        <p class="section-lede" data-i18n="c.lede">
+          Tell us the type, the bag size and roughly how many. We will give you a firm
+          price, a delivery date, and the freight to your city.
         </p>
 
         <ul class="contact__list">
           <li>
-            <b>Mill &amp; office</b>
+            <b data-i18n="c.mill">Mill and office</b>
             <span>Plot 14, Mill Road Industrial Estate<br>Sheikhupura, Punjab 39350</span>
           </li>
           <li>
-            <b>Phone &amp; WhatsApp</b>
-            <span><a href="tel:+920000000000">+92 300 000 0000</a></span>
+            <b data-i18n="c.phone">Phone and WhatsApp</b>
+            <span><a href="tel:+923000000000">+92 300 000 0000</a></span>
           </li>
           <li>
-            <b>Email</b>
+            <b data-i18n="c.email">Email</b>
             <span><a href="mailto:orders@example.com">orders@example.com</a></span>
           </li>
           <li>
-            <b>Loading hours</b>
-            <span>Mon – Sat, 8:00 – 18:00 PKT</span>
+            <b data-i18n="c.hours">Open hours</b>
+            <span data-i18n="c.hoursv">Monday to Saturday, 8:00 am – 6:00 pm</span>
           </li>
         </ul>
+
+        <a class="btn btn--wa" href="https://wa.me/923000000000" target="_blank" rel="noopener" data-wa-plain data-i18n="c.wa">Message us on WhatsApp</a>
       </div>
 
       <form class="form" data-form novalidate data-reveal>
         <div class="field">
-          <label for="f-name">Your name</label>
+          <label for="f-name" data-i18n="f.name">Your name</label>
           <input id="f-name" name="name" type="text" required autocomplete="name">
         </div>
         <div class="field">
-          <label for="f-firm">Business</label>
+          <label for="f-firm" data-i18n="f.firm">Shop or company</label>
           <input id="f-firm" name="firm" type="text" autocomplete="organization">
         </div>
         <div class="field">
-          <label for="f-phone">Phone</label>
-          <input id="f-phone" name="phone" type="tel" required autocomplete="tel" placeholder="+92 3xx xxxxxxx">
+          <label for="f-phone" data-i18n="f.phone">Phone number</label>
+          <input id="f-phone" name="phone" type="tel" required autocomplete="tel"
+                 data-i18n-attr="placeholder:f.phoneph" placeholder="+92 3xx xxxxxxx">
         </div>
         <div class="field">
-          <label for="f-city">City</label>
+          <label for="f-city" data-i18n="f.city">Your city</label>
           <input id="f-city" name="city" type="text" autocomplete="address-level2">
         </div>
         <div class="field">
-          <label for="f-grade">Grade</label>
+          <label for="f-grade" data-i18n="f.grade">Rice type</label>
           <select id="f-grade" name="grade">
-            <option>Super Basmati</option>
-            <option>1121 Sella Kainat</option>
-            <option>1121 Steam White</option>
-            <option>Irri-6 Long Grain</option>
-            <option>Broken Basmati (Tota)</option>
-            <option>Not sure — advise me</option>
+            <option data-i18n="p0.name">Super Basmati</option>
+            <option data-i18n="p1.name">1121 Sella Kainat</option>
+            <option data-i18n="p2.name">1121 Steam White</option>
+            <option data-i18n="p3.name">Irri-6 Long Grain</option>
+            <option data-i18n="p4.name">Broken Basmati (Tota)</option>
+            <option data-i18n="f.unsure">Not sure — please advise</option>
           </select>
         </div>
         <div class="field">
-          <label for="f-qty">Sacks needed</label>
-          <input id="f-qty" name="qty" type="number" min="1" step="1" placeholder="40">
+          <label for="f-qty" data-i18n="f.qty">How many bags</label>
+          <input id="f-qty" name="qty" type="number" min="1" step="1"
+                 data-i18n-attr="placeholder:f.qtyph" placeholder="40">
         </div>
         <div class="field field--full">
-          <label for="f-msg">Anything else</label>
-          <textarea id="f-msg" name="message" rows="4" placeholder="Delivery city, packing preference, timeline…"></textarea>
+          <label for="f-msg" data-i18n="f.msg">Anything else</label>
+          <textarea id="f-msg" name="message" rows="4"
+                    data-i18n-attr="placeholder:f.msgph" placeholder="Delivery city, packing, when you need it…"></textarea>
         </div>
-        <button class="btn btn--solid btn--full" type="submit">Send enquiry</button>
+        <button class="btn btn--solid btn--full" type="submit" data-i18n="f.send">Send message</button>
         <p class="form__status" data-form-status role="status"></p>
       </form>
 
@@ -688,29 +692,32 @@
             <path d="M32 15C27 24 27 40 32 49" class="brand__groove"/>
           </g>
         </svg>
-        <span class="brand__text"><strong>Sunehri</strong><em>Rice Mills</em></span>
+        <span class="brand__text">
+          <strong data-i18n="brand.name">Sunehri</strong>
+          <em data-i18n="brand.sub">Rice Mills</em>
+        </span>
       </a>
-      <p>Paddy bought in Punjab, aged a season, milled and sacked on site.</p>
+      <p data-i18n="ft.blurb">Paddy bought in Punjab, stored a season, milled and bagged at our own mill.</p>
     </div>
 
     <nav class="site-footer__nav" aria-label="Footer">
-      <h2>Site</h2>
+      <h2 data-i18n="ft.site">Pages</h2>
       <ul>
-        <li><a href="#range">Range</a></li>
-        <li><a href="#viewer">The sack</a></li>
-        <li><a href="#process">Process</a></li>
-        <li><a href="#quality">Quality</a></li>
-        <li><a href="#order">Bulk order</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#range" data-i18n="nav.range">Our rice</a></li>
+        <li><a href="#grade" data-i18n="nav.grade">The grain</a></li>
+        <li><a href="#viewer" data-i18n="nav.sack">The bag</a></li>
+        <li><a href="#process" data-i18n="nav.process">How we make it</a></li>
+        <li><a href="#quality" data-i18n="nav.quality">Quality</a></li>
+        <li><a href="#contact" data-i18n="c.eyebrow">Contact</a></li>
       </ul>
     </nav>
 
     <div class="site-footer__contact">
-      <h2>Mill</h2>
+      <h2 data-i18n="ft.mill">Mill</h2>
       <p>
         Plot 14, Mill Road Industrial Estate<br>
         Sheikhupura, Punjab 39350<br>
-        <a href="tel:+920000000000">+92 300 000 0000</a><br>
+        <a href="tel:+923000000000">+92 300 000 0000</a><br>
         <a href="mailto:orders@example.com">orders@example.com</a>
       </p>
     </div>
@@ -718,10 +725,18 @@
   </div>
 
   <div class="shell site-footer__base">
-    <p>&copy; <span data-year>2026</span> Sunehri Rice Mills. All rights reserved.</p>
-    <p>Rates are indicative and move with the mandi.</p>
+    <p>&copy; <span data-year>2026</span> <span data-i18n="ft.rights">Sunehri Rice Mills. All rights reserved.</span></p>
+    <p data-i18n="ft.note">Prices change with the mandi.</p>
   </div>
 </footer>
+
+<!-- always within thumb reach, because most buyers arrive on a phone -->
+<a class="wa-float" href="https://wa.me/923000000000" target="_blank" rel="noopener"
+   data-wa-plain data-i18n-attr="aria-label:wa.float" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.65 4.2 3.71.59.25 1.04.4 1.4.52.59.18 1.12.16 1.55.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.17-.47-.29Z"/>
+  </svg>
+</a>
 
 <script type="module" src="js/main.js"></script>
 </body>

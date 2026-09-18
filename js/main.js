@@ -5,6 +5,12 @@
    ============================================================ */
 
 import { GRADES } from './grades.js';
+import { initLang, setLang, current, onLangChange, t } from './i18n.js';
+
+// Placeholder. Swap for the mill's real WhatsApp number, digits only, with
+// the country code and no + or spaces.
+const WA_NUMBER = '923000000000';
+const waLink = (msg) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 const root = document.documentElement;
 root.classList.add('js');
@@ -14,6 +20,16 @@ const money = new Intl.NumberFormat('en-US');
 
 const $ = (sel, scope = document) => scope.querySelector(sel);
 const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
+
+/* ---------------------------------------------------------- language */
+
+const langToggle = $('[data-lang-toggle]');
+
+if (langToggle) {
+  langToggle.addEventListener('click', () => {
+    setLang(current() === 'ur' ? 'en' : 'ur');
+  });
+}
 
 /* ------------------------------------------------------------ header */
 
@@ -116,7 +132,7 @@ if (counters.length) {
         obs.unobserve(entry.target);
       });
     },
-    { threshold: 0.6 }
+    { threshold: 0.35 }
   );
   counters.forEach((el) => counterObs.observe(el));
 }
@@ -226,10 +242,12 @@ if (calc) {
     return 0;
   };
 
+  const cta = $('[data-calc-cta]', calc);
+
   const truckClass = (tonnes) => {
-    if (tonnes >= 13) return 'Full truck';
-    if (tonnes >= 6.5) return 'Half truck';
-    return 'Part load';
+    if (tonnes >= 13) return t('o.full');
+    if (tonnes >= 6.5) return t('o.half');
+    return t('o.part');
   };
 
   function recalc() {
@@ -247,10 +265,26 @@ if (calc) {
       `${((sacks - qty.min) / (qty.max - qty.min)) * 100}%`
     );
 
-    outTonnes.textContent = `${tonnes.toFixed(2)} t`;
-    outDiscount.textContent = cut ? `−${(cut * 100).toFixed(1)}%` : '—';
+    const weight = `${tonnes.toFixed(2)} t`;
+    const price = `Rs ${money.format(total)}`;
+
+    outTonnes.textContent = weight;
+    outDiscount.textContent = cut ? `−${(cut * 100).toFixed(1)}%` : t('o.none');
     outTruck.textContent = truckClass(tonnes);
-    outTotal.textContent = `Rs ${money.format(total)}`;
+    outTotal.textContent = price;
+
+    // the whole enquiry, already written out for them
+    if (cta) {
+      cta.href = waLink(
+        t('wa.calc', {
+          name: grade.selectedOptions[0].textContent.trim(),
+          kg,
+          qty: sacks,
+          tonnes: weight,
+          total: price,
+        })
+      );
+    }
   }
 
   weightSeg.addEventListener('click', (e) => {
@@ -263,6 +297,7 @@ if (calc) {
 
   grade.addEventListener('change', recalc);
   qty.addEventListener('input', recalc);
+  onLangChange(recalc);
   recalc();
 }
 
@@ -288,14 +323,14 @@ if (form) {
     const name = form.elements.name;
     const phone = form.elements.phone;
 
-    if (!name.value.trim()) return bad(name, 'We need a name to put on the quote.');
+    if (!name.value.trim()) return bad(name, t('f.errname'));
 
     const digits = phone.value.replace(/\D/g, '');
-    if (digits.length < 10) return bad(phone, 'That phone number looks short — check it?');
+    if (digits.length < 10) return bad(phone, t('f.errphone'));
 
     // No backend wired up yet. Swap this for a POST to Formspree, Basin or a
     // small serverless handler before launch.
-    status.textContent = `Thanks ${name.value.trim().split(' ')[0]} — we will call you back with today's rate.`;
+    status.textContent = t('f.ok', { name: name.value.trim().split(' ')[0] });
     status.className = 'form__status is-ok';
     form.reset();
   });
@@ -305,6 +340,9 @@ if (form) {
 
 const year = $('[data-year]');
 if (year) year.textContent = String(new Date().getFullYear());
+
+// last, so every block above has already registered its repaint
+initLang();
 
 /* ----------------------------------------------- story choreography */
 
@@ -371,8 +409,7 @@ if (gradeTabs) {
   let shown = -1;
 
   function showGrade(i) {
-    const g = GRADES[i];
-    if (!g || i === shown) return;
+    if (!GRADES[i]) return;
     shown = i;
 
     $$('button', gradeTabs).forEach((b) => {
@@ -381,12 +418,13 @@ if (gradeTabs) {
       b.setAttribute('aria-selected', String(on));
     });
 
-    out.len.textContent = g.len;
-    out.broken.textContent = g.broken;
-    out.age.textContent = g.age;
-    out.elong.textContent = g.elong;
-    out.note.textContent = g.note;
-    out.caption.textContent = g.caption;
+    const k = 'g' + i + '.';
+    out.len.textContent = t(k + 'len');
+    out.broken.textContent = t(k + 'broken');
+    out.age.textContent = t(k + 'age');
+    out.elong.textContent = t(k + 'elong');
+    out.note.textContent = t(k + 'note');
+    out.caption.textContent = t(k + 'cap');
 
     grade?.setGrade(i);
   }
@@ -399,7 +437,7 @@ if (gradeTabs) {
   // a range card is a doorway into this section
   $$('[data-grade-jump]').forEach((card) => {
     card.addEventListener('click', (e) => {
-      if (e.target.closest('a')) return; // the Order link still goes to the form
+      if (e.target.closest('a, [data-wa-card]')) return; // those have their own job
       showGrade(Number(card.dataset.gradeJump));
       document.getElementById('grade')?.scrollIntoView({
         behavior: reduced ? 'auto' : 'smooth',
@@ -409,6 +447,7 @@ if (gradeTabs) {
   });
 
   showGrade(0);
+  onLangChange(() => showGrade(shown));
 
   if ($('[data-grade-canvas]')) {
     import('./scene-grade.js')
@@ -420,9 +459,24 @@ if (gradeTabs) {
   }
 }
 
+/* --------------------------------------------------------- WhatsApp */
+
+// every card can start a chat with the grade and bag size already filled in
+$$('[data-wa-card]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.product-card');
+    if (!card) return;
+    const kg = $('[data-weight-label]', card)?.textContent.trim() || '25';
+    const name = t('p' + card.dataset.gradeJump + '.name');
+    window.open(waLink(t('wa.card', { name, kg })), '_blank', 'noopener');
+  });
+});
+
 /* -------------------------------------------- grain per process step */
 
-if ($('[data-process-canvas]')) {
+// six extra WebGL viewports is a lot to ask of a mid-range phone, and these
+// grains are decoration rather than information
+if ($('[data-process-canvas]') && window.innerWidth >= 760) {
   import('./scene-process.js')
     .then((m) => m.initProcess())
     .catch((err) => console.warn('process grains skipped:', err.message));
@@ -434,8 +488,8 @@ const sackSwitch = $('[data-sack-switch]');
 
 if (sackSwitch) {
   const META = {
-    25: { net: '25 kg', dims: '18 × 30 in', pallet: '40 sacks' },
-    50: { net: '50 kg', dims: '22 × 36 in', pallet: '20 sacks' },
+    25: { net: '25 kg', dims: '18 × 30 in', pallet: '40' },
+    50: { net: '50 kg', dims: '22 × 36 in', pallet: '20' },
   };
 
   const net = $('[data-sack-net]');

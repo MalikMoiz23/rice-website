@@ -540,7 +540,7 @@
 }
 
 @media (max-width: 760px) {
-  .site-header__cta { display: none; }
+  .site-header .site-header__cta { display: none; }
   .nav-toggle { display: grid; }
 
   .site-nav {
