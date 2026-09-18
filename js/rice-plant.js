@@ -1,67 +1,75 @@
 /* ============================================================
    rice-plant.js — one stalk of paddy
-   Stem, two leaves and a drooping panicle of grain still in the
-   hull, merged into a single geometry with baked vertex colours
-   so the whole field can go out as one instanced draw call.
+   Built to match how a ripe plant actually looks: the rachis
+   arcs over under the weight of the head and the grain hangs
+   off it pointing down, rather than sitting on top of it.
+   Stem, four blades and the panicle merge into one geometry
+   with baked vertex colours, so a whole field is one draw call.
    ============================================================ */
 
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { riceGeometry } from './rice-geometry.js';
 
-const STEM = new THREE.Color('#86a758');
-const LEAF = new THREE.Color('#72964c');
-const HULL = new THREE.Color('#d5b158');
+const STEM = new THREE.Color('#7fa24e');
+const LEAF = new THREE.Color('#6b9243');
+const HULL = new THREE.Color('#cdbd7c');
 
-export function ricePlant({ height = 1.7, grains = 10 } = {}) {
+export function ricePlant({ height = 1.75, grains = 16 } = {}) {
   const parts = [];
 
-  /* stem — leans over, because a ripe head is heavy */
-  const tip = new THREE.Vector3(0.22, height, 0.06);
+  /* stem — already leaning, because the head on top of it is heavy */
+  const tip = new THREE.Vector3(0.26, height, 0.07);
   const stem = new THREE.TubeGeometry(
     new THREE.CatmullRomCurve3([
       new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.02, height * 0.36, 0.01),
-      new THREE.Vector3(0.09, height * 0.72, 0.03),
+      new THREE.Vector3(0.02, height * 0.34, 0.01),
+      new THREE.Vector3(0.1, height * 0.7, 0.03),
       tip,
     ]),
-    8,
-    0.012,
+    9,
+    0.0135,
     5,
     false
   );
   paint(stem, STEM);
   parts.push(stem);
 
-  /* two blades off the stem, drooping away from each other */
-  [0.3, 0.55].forEach((at, i) => {
-    const blade = leaf(height * 0.52);
-    blade.rotateZ(i ? 0.6 : -0.62);
-    blade.rotateY(i ? 2.5 : 0.4);
+  /* four blades, alternating sides, each drooping further than the last */
+  [0.16, 0.33, 0.5, 0.67].forEach((at, i) => {
+    const blade = leaf(height * (0.58 - i * 0.07));
+    blade.rotateZ(i % 2 ? 0.66 : -0.68);
+    blade.rotateY(i * 1.9 + 0.3);
     blade.translate(0, height * at, 0);
     paint(blade, LEAF);
     parts.push(blade);
   });
 
-  /* panicle — the head bends over and the grain hangs off it */
-  const head = new THREE.CatmullRomCurve3([
+  /* panicle — the rachis arcs over and the grain hangs beneath it */
+  const rachis = new THREE.CatmullRomCurve3([
     tip,
-    new THREE.Vector3(0.31, height * 1.11, 0.04),
-    new THREE.Vector3(0.44, height * 1.13, -0.02),
-    new THREE.Vector3(0.53, height * 1.0, -0.07),
+    new THREE.Vector3(0.42, height * 1.09, 0.05),
+    new THREE.Vector3(0.6, height * 1.08, -0.01),
+    new THREE.Vector3(0.74, height * 0.92, -0.08),
   ]);
 
-  const hull = riceGeometry({ segments: 6, radial: 5, length: 0.055, radius: 0.018, husk: true });
+  const spine = new THREE.TubeGeometry(rachis, 8, 0.006, 4, false);
+  paint(spine, STEM);
+  parts.push(spine);
+
+  const hull = riceGeometry({ segments: 5, radial: 5, length: 0.062, radius: 0.019, husk: true });
 
   for (let i = 0; i < grains; i++) {
-    const at = head.getPointAt(i / (grains - 1));
+    const at = rachis.getPointAt(i / (grains - 1));
     const g = hull.clone();
-    g.rotateZ((Math.random() - 0.5) * 1.7);
-    g.rotateX((Math.random() - 0.5) * 1.7);
+
+    // hangs near-vertical with a little splay, nose down
+    g.rotateZ((Math.random() - 0.5) * 0.85);
+    g.rotateY(Math.random() * Math.PI);
     g.translate(
-      at.x + (Math.random() - 0.5) * 0.06,
-      at.y - 0.02 - Math.random() * 0.06,
-      at.z + (Math.random() - 0.5) * 0.06
+      at.x + (Math.random() - 0.5) * 0.07,
+      at.y - 0.035 - Math.random() * 0.085,
+      at.z + (Math.random() - 0.5) * 0.07
     );
     paint(g, HULL);
     parts.push(g);
@@ -82,9 +90,9 @@ function leaf(len) {
 
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
-    const w = 0.04 * (1 - t * 0.85) * (0.35 + Math.sin(t * Math.PI) * 0.9);
+    const w = 0.042 * (1 - t * 0.88) * (0.35 + Math.sin(t * Math.PI) * 0.9);
     const y = t * len;
-    const droop = -Math.pow(t, 2) * len * 0.5;
+    const droop = -Math.pow(t, 2) * len * 0.55;
     position.push(-w, y + droop, 0, w, y + droop, 0);
     uv.push(0, t, 1, t);
   }

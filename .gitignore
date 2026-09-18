@@ -48,3 +48,7 @@ $RECYCLE.BIN/
 *.7z
 .tmp/
 coverage/
+
+# reference footage, not part of the site
+*.mp4
+*.mov

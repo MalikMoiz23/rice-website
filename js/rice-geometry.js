@@ -15,6 +15,10 @@ import * as THREE from 'three';
  * @param {number}  o.length    half-length in world units
  * @param {number}  o.radius    maximum half-width
  * @param {boolean} o.husk      paddy still in the hull: fatter, ridged
+ * @param {number}  o.phiStart  where the revolve starts, for half shells
+ * @param {number}  o.phiLength how far it revolves
+ * @param {number}  o.ridges     lengthwise ribs around the hull, 0 for none
+ * @param {number}  o.ridgeDepth how proud those ribs stand
  */
 export function riceGeometry({
   segments = 14,
@@ -22,6 +26,10 @@ export function riceGeometry({
   length = 0.5,
   radius = 0.145,
   husk = false,
+  phiStart = 0,
+  phiLength = Math.PI * 2,
+  ridges = 0,
+  ridgeDepth = 0.06,
 } = {}) {
   const points = [];
 
@@ -38,7 +46,21 @@ export function riceGeometry({
     points.push(new THREE.Vector2(Math.max(r, 0.0008), y * length));
   }
 
-  const geo = new THREE.LatheGeometry(points, radial);
+  const geo = new THREE.LatheGeometry(points, radial, phiStart, phiLength);
+
+  // a lathe can only vary the radius along the length; real paddy is ribbed
+  // around it, so push the vertices out as a function of their angle
+  if (ridges > 0) {
+    const p = geo.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i);
+      const z = p.getZ(i);
+      if (Math.hypot(x, z) < 1e-5) continue;
+      const f = 1 + ridgeDepth * Math.cos(ridges * Math.atan2(z, x));
+      p.setXYZ(i, x * f, p.getY(i), z * f);
+    }
+  }
+
   geo.computeVertexNormals();
   return geo;
 }
