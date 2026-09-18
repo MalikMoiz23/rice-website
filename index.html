@@ -140,6 +140,54 @@
     </div>
   </div>
 
+  <!-- ─────────────────────────  who we sell to  ───────────────────── -->
+  <section class="section" id="buyers">
+    <div class="shell">
+
+      <div class="section-head" data-reveal>
+        <p class="eyebrow" data-i18n="b.eyebrow">01 — Who we sell to</p>
+        <h2 class="section-title" data-i18n="b.title">One bag, or a full truck</h2>
+        <p class="section-lede" data-i18n="b.lede">
+          We are a wholesale mill, but there is no minimum order. The rice in a
+          single bag going to a house comes off the same stack as the twenty-six
+          tonnes going to a trader — same batch, same lot card, same mill.
+        </p>
+      </div>
+
+      <ul class="buyer-grid">
+        <li class="buyer" data-reveal>
+          <p class="buyer__vol">
+            <span data-i18n="b.vol">Order size</span>
+            <b data-i18n="b.1m">100 bags to a full truck</b>
+          </p>
+          <h3 class="buyer__name" data-i18n="b.1t">Traders and wholesale</h3>
+          <p class="buyer__note" data-i18n="b.1d">Mill price, collected from Sheikhupura or delivered. Loaded the same day you confirm, when we have the stock. Once we have traded a few times we can talk about credit.</p>
+          <button type="button" class="btn btn--wa btn--sm buyer__cta" data-wa-buyer="1" data-i18n="b.1c">Ask for a truck rate</button>
+        </li>
+
+        <li class="buyer" data-reveal>
+          <p class="buyer__vol">
+            <span data-i18n="b.vol">Order size</span>
+            <b data-i18n="b.2m">10 to 100 bags</b>
+          </p>
+          <h3 class="buyer__name" data-i18n="b.2t">Shops, hotels and caterers</h3>
+          <p class="buyer__note" data-i18n="b.2d">A standing monthly order of the same grade every time, so what comes out of your pot does not change from one bag to the next. Delivered to your city.</p>
+          <button type="button" class="btn btn--wa btn--sm buyer__cta" data-wa-buyer="2" data-i18n="b.2c">Ask for a shop rate</button>
+        </li>
+
+        <li class="buyer" data-reveal>
+          <p class="buyer__vol">
+            <span data-i18n="b.vol">Order size</span>
+            <b data-i18n="b.3m">1 or 2 bags</b>
+          </p>
+          <h3 class="buyer__name" data-i18n="b.3t">For the home</h3>
+          <p class="buyer__note" data-i18n="b.3d">Yes, we sell single bags. The same rice, from the same mill, with the same lot card a trader gets. To your door across Punjab, by courier anywhere else in Pakistan.</p>
+          <button type="button" class="btn btn--wa btn--sm buyer__cta" data-wa-buyer="3" data-i18n="b.3c">Order one bag</button>
+        </li>
+      </ul>
+    </div>
+  </section>
+
   <!-- ────────────────────────────  range  ─────────────────────────── -->
   <section class="section" id="range">
     <div class="shell">
@@ -547,8 +595,8 @@
 
         <div class="field field--full">
           <label for="calc-qty"><span data-i18n="o.qty">Bags</span> — <output data-calc-qty-out>40</output></label>
-          <input id="calc-qty" type="range" min="10" max="400" step="10" value="40" data-calc-qty>
-          <div class="field__scale"><span>10</span><span>200</span><span>400</span></div>
+          <input id="calc-qty" type="range" min="1" max="400" step="1" value="40" data-calc-qty>
+          <div class="field__scale"><span>1</span><span>200</span><span>400</span></div>
         </div>
 
         <dl class="calc__out">
@@ -703,12 +751,13 @@
     <nav class="site-footer__nav" aria-label="Footer">
       <h2 data-i18n="ft.site">Pages</h2>
       <ul>
+        <li><a href="#buyers" data-i18n="b.title">One bag, or a full truck</a></li>
         <li><a href="#range" data-i18n="nav.range">Our rice</a></li>
         <li><a href="#grade" data-i18n="nav.grade">The grain</a></li>
         <li><a href="#viewer" data-i18n="nav.sack">The bag</a></li>
         <li><a href="#process" data-i18n="nav.process">How we make it</a></li>
         <li><a href="#quality" data-i18n="nav.quality">Quality</a></li>
-        <li><a href="#contact" data-i18n="c.eyebrow">Contact</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
       </ul>
     </nav>
 

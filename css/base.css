@@ -36,7 +36,7 @@
      dark throughout and surfaces are glass rather than fill. --scrim is
      what each section lays over the canvas to keep its copy readable. */
   --scrim: rgb(13 24 9 / 0.68);
-  --blur: 20px;
+  --blur: 12px;
   --surface: rgb(255 255 255 / 0.055);
   --surface-hi: rgb(255 255 255 / 0.1);
   --text: var(--rice-050);

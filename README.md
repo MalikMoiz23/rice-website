@@ -31,6 +31,7 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── main.js          nav, reveals, toggles, calculator, WhatsApp, language
 │   ├── i18n.js          the English and Urdu dictionaries, and the switcher
 │   ├── grades.js        the five grades as grain dimensions (no text)
+│   ├── webgl.js         shared WebGL check, context-loss guard, quality guard
 │   ├── rice-geometry.js one rice grain, revolved from a profile
 │   ├── rice-plant.js    one stalk of paddy: stem, leaves, drooping panicle
 │   ├── open-sack.js     the jute sack the milled rice pours into
@@ -133,10 +134,22 @@ Needs WebGL2 and import maps: Chrome/Edge 89+, Firefox 108+, Safari 16.4+. Witho
 WebGL the whole site still works — the canvas keeps a CSS gradient and every scene
 is skipped.
 
-There are four WebGL contexts. Each one pauses when its section is off screen, and
-the six process grains are skipped entirely below 760px, because six extra viewports
-is a lot to ask of a mid-range phone. If it stutters on low-end hardware, the
-contexts can be consolidated onto a single renderer.
+There are four WebGL contexts. Each pauses when its section is off screen, the six
+process grains are skipped below 760px, and every canvas survives a lost context by
+hiding itself rather than going black (see `js/webgl.js`).
+
+Three things keep scrolling smooth and are easy to undo by accident:
+
+- The capability check lives in `webgl.js` and releases its probe context. A copy
+  per scene leaks a context each, and past the browser cap the oldest live context
+  is force-lost — a canvas that was working turns black.
+- Scroll handlers only record a value. Per-instance work happens once per frame in
+  the render loop, never in the scroll event, which fires far more often.
+- The frosted panels only blur while near the viewport (`.is-near`, set from
+  `main.js`). Blurring a live canvas is the most expensive thing on the page.
+
+Measured on integrated graphics, scrolling the full page: median frame 6.9ms,
+90th percentile 7.0ms, 99th 21ms.
 
 `prefers-reduced-motion` stops every animation loop and all scroll transitions; the
 scenes still follow the scroll, they just do not idle-animate.

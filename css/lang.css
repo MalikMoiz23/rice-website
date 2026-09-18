@@ -300,3 +300,10 @@
 [lang="ur"] .brand__text { line-height: 1.5; }
 [lang="ur"] .brand__text strong { font-size: 1.12rem; }
 [lang="ur"] .brand__text em { font-size: 0.56rem; letter-spacing: 0.08em; opacity: 0.6; }
+
+/* ═══════════════════════════════════════ when the GPU gives up ═════ */
+
+/* A lost context leaves a black rectangle. Hiding the canvas lets the CSS
+   underneath show instead, which is the same fallback a machine without
+   WebGL gets. webgl.js puts this class on and takes it off again. */
+canvas.is-context-lost { display: none; }

@@ -19,6 +19,7 @@ import * as THREE from 'three';
 import { riceGeometry } from './rice-geometry.js';
 import { ricePlant } from './rice-plant.js';
 import { openSack } from './open-sack.js';
+import { supportsWebGL, guardContext, makeQualityGuard } from './webgl.js';
 
 const PADDY = new THREE.Color('#d2bb8a'); // hull on
 const BROWN = new THREE.Color('#b3865a'); // shelled, bran still on
@@ -44,8 +45,8 @@ export function initStory(canvas) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const small = window.innerWidth < 760;
 
-  const PLANTS = small ? 300 : 850;
-  const CLOUD = small ? 700 : 1500;
+  const PLANTS = small ? 240 : 620;
+  const CLOUD = small ? 560 : 1100;
 
   const renderer = new THREE.WebGLRenderer({
     canvas: el,
@@ -57,6 +58,7 @@ export function initStory(canvas) {
   renderer.toneMappingExposure = 1.12;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  const quality = makeQualityGuard(renderer);
 
   const scene = new THREE.Scene();
   scene.background = skyTexture();
@@ -265,12 +267,17 @@ export function initStory(canvas) {
   /* ════════════════════════════════════════════════════════════ stage */
 
   let stage = 0;
+  let wantStage = 0;
   let painted = -1;
 
+  /** 0 = standing in the field, 1 = milled white. Cheap on purpose. */
   function setStage(s) {
-    stage = clamp(s, 0, CAM.length - 1);
+    wantStage = clamp(s, 0, CAM.length - 1);
+  }
 
-    // recolouring walks every instance, so only when it would actually show
+  /* the costly half, run at most once per frame from step() */
+  function applyStage() {
+    stage = wantStage;
     if (Math.abs(stage - painted) < 0.01) return;
     painted = stage;
 
@@ -297,6 +304,7 @@ export function initStory(canvas) {
   let frame = 0;
 
   function step(dt, t) {
+    applyStage();
     const s = stage;
 
     /* --- how much of each act is showing --- */
@@ -432,9 +440,15 @@ export function initStory(canvas) {
     frame = requestAnimationFrame(tick);
     if (!onScreen || !pageVisible) return;
     const dt = Math.min(clock.getDelta(), 0.05);
+    quality(dt);
     step(dt, clock.elapsedTime);
     render();
   }
+
+  guardContext(el, {
+    onLost: () => { running = false; cancelAnimationFrame(frame); },
+    onRestored: () => { if (!reduced) { running = true; tick(); } },
+  });
 
   /* only draw while one of the clear act sections is actually showing */
   const acts = new Set();
@@ -516,13 +530,4 @@ function skyTexture() {
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.mapping = THREE.EquirectangularReflectionMapping;
   return tex;
-}
-
-function supportsWebGL() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
-  } catch {
-    return false;
-  }
 }

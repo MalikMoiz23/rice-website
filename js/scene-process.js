@@ -8,6 +8,7 @@
 
 import * as THREE from 'three';
 import { riceGeometry } from './rice-geometry.js';
+import { supportsWebGL, guardContext, makeQualityGuard } from './webgl.js';
 
 const STEPS = [
   { color: '#c9a24a', husk: true },  // 01 procurement — paddy as bought
@@ -68,11 +69,23 @@ export function initProcess() {
     return mesh;
   });
 
+  let boxes = [];
+
+  function measure() {
+    boxes = slots.map((s) => {
+      const r = s.getBoundingClientRect();
+      return { top: r.top + window.scrollY, left: r.left, w: r.width, h: r.height };
+    });
+  }
+
   function resize() {
     renderer.setSize(window.innerWidth, window.innerHeight, false);
+    measure();
   }
   resize();
   window.addEventListener('resize', resize);
+  window.addEventListener('load', measure);
+  document.fonts?.ready.then(measure);
 
   /* ------------------------------------------------------------- loop */
 
@@ -91,15 +104,19 @@ export function initProcess() {
 
     const t = clock.elapsedTime;
 
-    for (let i = 0; i < slots.length; i++) {
-      const r = slots[i].getBoundingClientRect();
-      if (r.width === 0 || r.bottom < 0 || r.top > vh) continue;
+    const scrolled = window.scrollY;
+
+    for (let i = 0; i < boxes.length; i++) {
+      const b = boxes[i];
+      const top = b.top - scrolled;
+      const bottom = top + b.h;
+      if (b.w === 0 || bottom < 0 || top > vh) continue;
 
       // WebGL counts y from the bottom of the drawing buffer
-      renderer.setViewport(r.left, vh - r.bottom, r.width, r.height);
-      renderer.setScissor(r.left, vh - r.bottom, r.width, r.height);
+      renderer.setViewport(b.left, vh - bottom, b.w, b.h);
+      renderer.setScissor(b.left, vh - bottom, b.w, b.h);
 
-      camera.aspect = r.width / r.height;
+      camera.aspect = b.w / b.h;
       camera.updateProjectionMatrix();
 
       grains.forEach((g, j) => { g.visible = j === i; });
@@ -128,6 +145,11 @@ export function initProcess() {
     ).observe(section);
   }
 
+  guardContext(canvas, {
+    onLost: () => { running = false; cancelAnimationFrame(frame); },
+    onRestored: () => { if (!reduced) { running = true; tick(); } },
+  });
+
   if (reduced) {
     window.addEventListener('scroll', () => { if (onScreen) draw(); }, { passive: true });
   } else {
@@ -145,13 +167,4 @@ export function initProcess() {
       renderer.dispose();
     },
   };
-}
-
-function supportsWebGL() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
-  } catch {
-    return false;
-  }
 }

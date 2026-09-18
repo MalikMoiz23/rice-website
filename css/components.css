@@ -579,3 +579,61 @@
 }
 .product-card:hover .product-card__hint { opacity: 1; gap: 0.7rem; }
 .product-card__hint::after { content: "→"; }
+
+/* ------------------------------------------------- who we sell to */
+
+.buyer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.buyer {
+  display: flex;
+  flex-direction: column;
+  padding: 1.7rem 1.5rem 1.5rem;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease);
+}
+.buyer:hover { background: var(--surface-hi); border-color: rgb(232 201 116 / 0.4); }
+
+.buyer__vol {
+  display: grid;
+  gap: 0.3rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px dashed var(--line);
+}
+.buyer__vol span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.buyer__vol b {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--accent);
+}
+
+.buyer__name { margin-top: 1.2rem; font-size: var(--fs-h3); }
+
+.buyer__note {
+  margin-top: 0.7rem;
+  margin-bottom: 1.5rem;
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+
+.buyer__cta { margin-top: auto; align-self: flex-start; }
+
+@media (max-width: 760px) {
+  .buyer__cta { align-self: stretch; justify-content: center; }
+}

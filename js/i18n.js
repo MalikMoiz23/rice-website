@@ -25,6 +25,7 @@ export const DICT = {
     'nav.quality': 'Quality',
     'nav.order': 'Bulk order',
     'nav.cta': "Today's price",
+    'nav.contact': 'Contact',
     'nav.menu': 'Menu',
     'skip': 'Skip to content',
     'brand.name': 'Sunehri',
@@ -59,8 +60,38 @@ export const DICT = {
     'mq.6': 'Machine cleaned',
     'mq.7': 'Delivery all over Pakistan',
 
+    /* ---- who we sell to ---- */
+    'b.eyebrow': '01 — Who we sell to',
+    'b.title': 'One bag, or a full truck',
+    'b.lede':
+      'We are a wholesale mill, but there is no minimum order. The rice in a ' +
+      'single bag going to a house comes off the same stack as the twenty-six ' +
+      'tonnes going to a trader — same batch, same lot card, same mill.',
+    'b.vol': 'Order size',
+    'b.1t': 'Traders and wholesale',
+    'b.1m': '100 bags to a full truck',
+    'b.1d':
+      'Mill price, collected from Sheikhupura or delivered. Loaded the same day ' +
+      'you confirm, when we have the stock. Once we have traded a few times we ' +
+      'can talk about credit.',
+    'b.1c': 'Ask for a truck rate',
+    'b.2t': 'Shops, hotels and caterers',
+    'b.2m': '10 to 100 bags',
+    'b.2d':
+      'A standing monthly order of the same grade every time, so what comes out ' +
+      'of your pot does not change from one bag to the next. Delivered to your ' +
+      'city.',
+    'b.2c': 'Ask for a shop rate',
+    'b.3t': 'For the home',
+    'b.3m': '1 or 2 bags',
+    'b.3d':
+      'Yes, we sell single bags. The same rice, from the same mill, with the same ' +
+      'lot card a trader gets. To your door across Punjab, by courier anywhere ' +
+      'else in Pakistan.',
+    'b.3c': 'Order one bag',
+
     /* ---- range ---- */
-    'range.eyebrow': '01 — Our rice',
+    'range.eyebrow': '02 — Our rice',
     'range.title': 'Five types, two bag sizes',
     'range.lede':
       'These are our prices at the mill in Sheikhupura. Delivery is not included. ' +
@@ -105,7 +136,7 @@ export const DICT = {
       'kheer, khichri and the snack trade.',
 
     /* ---- grade, up close ---- */
-    'grade.eyebrow': '02 — Quality up close',
+    'grade.eyebrow': '03 — Quality up close',
     'grade.title': 'See the grain yourself',
     'grade.lede':
       'Pick a type. The grain turning beside it is that rice at about forty times ' +
@@ -186,7 +217,7 @@ export const DICT = {
       'mill date. After that it is a truck and an address.',
 
     /* ---- sack viewer ---- */
-    'sack.eyebrow': '03 — The bag',
+    'sack.eyebrow': '04 — The bag',
     'sack.title': 'See what arrives at your shop',
     'sack.lede':
       'Coated woven bag, double-sewn top, and the batch number and mill date printed on ' +
@@ -207,7 +238,7 @@ export const DICT = {
     'sack.pallet': 'Per pallet',
 
     /* ---- process ---- */
-    'pr.eyebrow': '04 — How we make it',
+    'pr.eyebrow': '05 — How we make it',
     'pr.title': 'Paddy in, bags out',
     'pr.lede':
       'Six steps, all done in our own mill. We do not send our rice out to be milled, and ' +
@@ -239,7 +270,7 @@ export const DICT = {
       'confirm, as long as we have stock.',
 
     /* ---- quality ---- */
-    'q.eyebrow': '05 — Our limits',
+    'q.eyebrow': '06 — Our limits',
     'q.title': 'The numbers we promise',
     'q.lede':
       'These are our limits for top grade. Every load leaves with a card showing the real ' +
@@ -256,7 +287,7 @@ export const DICT = {
     'q.cta': 'Ask for a sample',
 
     /* ---- bulk order ---- */
-    'o.eyebrow': '06 — Bulk order',
+    'o.eyebrow': '07 — Bulk order',
     'o.title': 'Work out your load',
     'o.lede':
       'A guide price at our mill, before delivery and tax. Half a truck is 130 bags of 50 kg ' +
@@ -275,7 +306,7 @@ export const DICT = {
     'o.none': '—',
 
     /* ---- buyers ---- */
-    'v.eyebrow': '07 — Our buyers',
+    'v.eyebrow': '08 — Our buyers',
     'v.title': 'Who buys from us',
     'v.1':
       'Four years of 50 kg Sella and not once a short weight. The batch cards match what the ' +
@@ -294,7 +325,7 @@ export const DICT = {
     'v.3r': 'Export · Dubai',
 
     /* ---- contact ---- */
-    'c.eyebrow': '08 — Contact',
+    'c.eyebrow': '09 — Contact',
     'c.title': "Ask for today's price",
     'c.lede':
       'Tell us the type, the bag size and roughly how many. We will give you a firm price, a ' +
@@ -330,6 +361,8 @@ export const DICT = {
     'wa.float': 'Order on WhatsApp',
     'wa.card':
       'Assalam o alaikum. Please send me today’s price for {name}, {kg} kg bag.',
+    'wa.buyer':
+      'Assalam o alaikum. I am buying as: {who}, {size}. Please send me your rates.',
     'wa.calc':
       'Assalam o alaikum. Please quote: {name}, {kg} kg bags × {qty}. ' +
       'Total weight about {tonnes}. Guide price {total}.',
@@ -344,6 +377,7 @@ export const DICT = {
     'nav.quality': 'کوالٹی',
     'nav.order': 'بڑا آرڈر',
     'nav.cta': 'آج کا ریٹ',
+    'nav.contact': 'رابطہ',
     'nav.menu': 'مینو',
     'skip': 'مواد پر جائیں',
     'brand.name': 'سنہری',
@@ -378,8 +412,37 @@ export const DICT = {
     'mq.6': 'مشین سے صاف',
     'mq.7': 'پورے پاکستان میں ڈلیوری',
 
+    /* ---- who we sell to ---- */
+    'b.eyebrow': '01 — ہم کس کو بیچتے ہیں',
+    'b.title': 'ایک بوری ہو یا پورا ٹرک',
+    'b.lede':
+      'ہم ہول سیل مل ہیں، لیکن کم از کم آرڈر کی کوئی شرط نہیں۔ ایک گھر کو ' +
+      'جانے والی اکیلی بوری کا چاول اسی ڈھیر سے نکلتا ہے جس سے تاجر کا چھبیس ٹن — ' +
+      'وہی بیچ، وہی کارڈ، وہی مل۔',
+    'b.vol': 'آرڈر کا سائز',
+    'b.1t': 'تاجر اور ہول سیل',
+    'b.1m': '100 بوریاں سے پورا ٹرک',
+    'b.1d':
+      'مل کا ریٹ، شیخوپورہ سے خود اٹھائیں یا ہم پہنچا دیں۔ آرڈر پکا ہونے ' +
+      'والے دن ہی لوڈنگ، اگر مال موجود ہو۔ چند بار کام کرنے کے بعد ' +
+      'ادھار کی بات بھی ہو سکتی ہے۔',
+    'b.1c': 'ٹرک کا ریٹ پوچھیں',
+    'b.2t': 'دکاندار، ہوٹل اور کیٹرر',
+    'b.2m': '10 سے 100 بوریاں',
+    'b.2d':
+      'ہر مہینے کا پکا آرڈر، ہر بار وہی قسم، تاکہ آپ کی دیگ ایک بوری ' +
+      'سے دوسری بوری تک نہ بدلے۔ آپ کے شہر تک ڈلیوری۔',
+    'b.2c': 'دکان کا ریٹ پوچھیں',
+    'b.3t': 'گھر کے لیے',
+    'b.3m': '1 یا 2 بوریاں',
+    'b.3d':
+      'جی ہاں، ہم اکیلی بوری بھی بیچتے ہیں۔ وہی چاول، وہی مل، اور وہی ' +
+      'بیچ کارڈ جو تاجر کو ملتا ہے۔ پنجاب میں آپ کے گھر تک، باقی ' +
+      'پاکستان میں کورئیر سے۔',
+    'b.3c': 'ایک بوری آرڈر کریں',
+
     /* ---- range ---- */
-    'range.eyebrow': '01 — ہمارے چاول',
+    'range.eyebrow': '02 — ہمارے چاول',
     'range.title': 'پانچ اقسام، دو بوری سائز',
     'range.lede':
       'یہ شیخوپورہ میں ہماری مل کے ریٹ ہیں۔ ان میں ڈلیوری شامل نہیں۔ ریٹ منڈی کے ' +
@@ -424,7 +487,7 @@ export const DICT = {
       'سنیکس میں استعمال ہوتا ہے۔',
 
     /* ---- grade, up close ---- */
-    'grade.eyebrow': '02 — کوالٹی، قریب سے',
+    'grade.eyebrow': '03 — کوالٹی، قریب سے',
     'grade.title': 'دانہ خود دیکھ لیں',
     'grade.lede':
       'کوئی قسم چنیں۔ ساتھ گھومتا ہوا دانہ اسی چاول کا ہے، اصل سے تقریباً چالیس گنا ' +
@@ -504,7 +567,7 @@ export const DICT = {
       'مہر۔ اس کے بعد بس ٹرک اور آپ کا پتہ۔',
 
     /* ---- sack viewer ---- */
-    'sack.eyebrow': '03 — بوری',
+    'sack.eyebrow': '04 — بوری',
     'sack.title': 'دیکھیں آپ کی دکان پر کیا پہنچے گا',
     'sack.lede':
       'لیمینیٹ شدہ بنی ہوئی بوری، اوپر سے ڈبل سلائی، اور ہر بوری پر بیچ نمبر اور مل کی ' +
@@ -525,7 +588,7 @@ export const DICT = {
     'sack.pallet': 'فی پیلٹ',
 
     /* ---- process ---- */
-    'pr.eyebrow': '04 — تیاری کا طریقہ',
+    'pr.eyebrow': '05 — تیاری کا طریقہ',
     'pr.title': 'دھان اندر، بوریاں باہر',
     'pr.lede':
       'چھ مرحلے، سب ہماری اپنی مل میں۔ ہم اپنا چاول باہر پسوانے نہیں بھیجتے، اور نہ ہی ' +
@@ -557,7 +620,7 @@ export const DICT = {
       'لوڈنگ، بشرطیکہ مال موجود ہو۔',
 
     /* ---- quality ---- */
-    'q.eyebrow': '05 — ہماری حدیں',
+    'q.eyebrow': '06 — ہماری حدیں',
     'q.title': 'وہ نمبر جن کا ہم وعدہ کرتے ہیں',
     'q.lede':
       'یہ ٹاپ گریڈ کی حدیں ہیں۔ ہر لوڈ کے ساتھ ایک کارڈ جاتا ہے جس پر اس بیچ کی اصل ' +
@@ -574,7 +637,7 @@ export const DICT = {
     'q.cta': 'نمونہ منگوائیں',
 
     /* ---- bulk order ---- */
-    'o.eyebrow': '06 — بڑا آرڈر',
+    'o.eyebrow': '07 — بڑا آرڈر',
     'o.title': 'اپنا لوڈ نکالیں',
     'o.lede':
       'یہ ہماری مل پر اندازاً قیمت ہے، ڈلیوری اور ٹیکس سے پہلے۔ آدھا ٹرک 50 کلو کی 130 ' +
@@ -593,7 +656,7 @@ export const DICT = {
     'o.none': '—',
 
     /* ---- buyers ---- */
-    'v.eyebrow': '07 — ہمارے خریدار',
+    'v.eyebrow': '08 — ہمارے خریدار',
     'v.title': 'کون ہم سے خریدتا ہے',
     'v.1':
       'چار سال سے 50 کلو سیلہ لے رہے ہیں اور ایک بار بھی وزن کم نہیں نکلا۔ بیچ کارڈ پر ' +
@@ -612,7 +675,7 @@ export const DICT = {
     'v.3r': 'ایکسپورٹ · دبئی',
 
     /* ---- contact ---- */
-    'c.eyebrow': '08 — رابطہ',
+    'c.eyebrow': '09 — رابطہ',
     'c.title': 'آج کا ریٹ پوچھیں',
     'c.lede':
       'ہمیں قسم، بوری کا سائز اور اندازاً تعداد بتا دیں۔ ہم آپ کو پکا ریٹ، ڈلیوری کی ' +
@@ -648,6 +711,8 @@ export const DICT = {
     'wa.float': 'واٹس ایپ پر آرڈر',
     'wa.card':
       'السلام علیکم۔ مجھے {name}، {kg} کلو بوری کا آج کا ریٹ بھیج دیں۔',
+    'wa.buyer':
+      'السلام علیکم۔ میں {who}، {size} کے طور پر لینا چاہتا ہوں۔ براہ کرم ریٹ بھیج دیں۔',
     'wa.calc':
       'السلام علیکم۔ ریٹ بتا دیں: {name}، {kg} کلو کی {qty} بوریاں۔ ' +
       'کل وزن تقریباً {tonnes}۔ اندازاً قیمت {total}۔',

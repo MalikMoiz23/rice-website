@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { supportsWebGL, guardContext, makeQualityGuard } from './webgl.js';
 
 const W = 1.3;
 const H = 2.55;
@@ -234,6 +235,11 @@ export function initSack(canvas) {
   let visible = true;
   let frame = 0;
 
+  guardContext(el, {
+    onLost: () => { running = false; cancelAnimationFrame(frame); },
+    onRestored: () => { running = true; tick(); },
+  });
+
   const tick = () => {
     if (!running) return;
     frame = requestAnimationFrame(tick);
@@ -392,13 +398,4 @@ function roundRect(g, x, y, w, h, r) {
   g.arcTo(x, y + h, x, y, r);
   g.arcTo(x, y, x + w, y, r);
   g.closePath();
-}
-
-function supportsWebGL() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
-  } catch {
-    return false;
-  }
 }

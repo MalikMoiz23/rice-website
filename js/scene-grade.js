@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import { riceGeometry } from './rice-geometry.js';
 import { openSack } from './open-sack.js';
 import { GRADES } from './grades.js';
+import { supportsWebGL, guardContext, makeQualityGuard } from './webgl.js';
 
 export function initGrade(canvas) {
   const el = canvas || document.querySelector('[data-grade-canvas]');
@@ -24,6 +25,7 @@ export function initGrade(canvas) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.15;
+  const quality = makeQualityGuard(renderer);
 
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x0a1206, 0.09);
@@ -169,9 +171,15 @@ export function initGrade(canvas) {
     frame = requestAnimationFrame(tick);
     if (!onScreen || !pageVisible) return;
     const dt = Math.min(clock.getDelta(), 0.05);
+    quality(dt);
     step(dt, clock.elapsedTime);
     render();
   }
+
+  guardContext(el, {
+    onLost: () => { running = false; cancelAnimationFrame(frame); },
+    onRestored: () => { if (!reduced) { running = true; tick(); } },
+  });
 
   if (section) {
     new IntersectionObserver(
@@ -207,13 +215,4 @@ export function initGrade(canvas) {
       renderer.dispose();
     },
   };
-}
-
-function supportsWebGL() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
-  } catch {
-    return false;
-  }
 }
