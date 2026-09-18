@@ -58,6 +58,7 @@
     <nav class="site-nav" data-nav aria-label="Primary">
       <ul>
         <li><a href="#range">Range</a></li>
+        <li><a href="#grade">The grain</a></li>
         <li><a href="#viewer">The sack</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#quality">Quality</a></li>
@@ -150,7 +151,7 @@
 
       <ul class="product-grid">
 
-        <li class="product-card" data-tilt data-reveal
+        <li class="product-card" data-tilt data-reveal data-grade-jump="0"
             data-price-25="6250" data-price-50="12200">
           <div class="product-card__top">
             <span class="product-card__tag product-card__tag--gold">Premium</span>
@@ -166,6 +167,7 @@
             <li><b>Moisture</b><span>≤ 13.5%</span></li>
             <li><b>Ageing</b><span>12 months</span></li>
           </ul>
+          <button type="button" class="product-card__hint">Inspect the grain</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>6,250</span>
@@ -175,7 +177,7 @@
           </div>
         </li>
 
-        <li class="product-card" data-tilt data-reveal
+        <li class="product-card" data-tilt data-reveal data-grade-jump="1"
             data-price-25="5400" data-price-50="10500">
           <div class="product-card__top">
             <span class="product-card__tag product-card__tag--amber">Parboiled</span>
@@ -191,6 +193,7 @@
             <li><b>Moisture</b><span>≤ 12.5%</span></li>
             <li><b>Ageing</b><span>18 months</span></li>
           </ul>
+          <button type="button" class="product-card__hint">Inspect the grain</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>5,400</span>
@@ -200,7 +203,7 @@
           </div>
         </li>
 
-        <li class="product-card" data-tilt data-reveal
+        <li class="product-card" data-tilt data-reveal data-grade-jump="2"
             data-price-25="5900" data-price-50="11500">
           <div class="product-card__top">
             <span class="product-card__tag">Steamed</span>
@@ -216,6 +219,7 @@
             <li><b>Moisture</b><span>≤ 13%</span></li>
             <li><b>Ageing</b><span>12 months</span></li>
           </ul>
+          <button type="button" class="product-card__hint">Inspect the grain</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>5,900</span>
@@ -225,7 +229,7 @@
           </div>
         </li>
 
-        <li class="product-card" data-tilt data-reveal
+        <li class="product-card" data-tilt data-reveal data-grade-jump="3"
             data-price-25="3100" data-price-50="6000">
           <div class="product-card__top">
             <span class="product-card__tag product-card__tag--leaf">Everyday</span>
@@ -241,6 +245,7 @@
             <li><b>Moisture</b><span>≤ 14%</span></li>
             <li><b>Ageing</b><span>3 months</span></li>
           </ul>
+          <button type="button" class="product-card__hint">Inspect the grain</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>3,100</span>
@@ -250,7 +255,7 @@
           </div>
         </li>
 
-        <li class="product-card" data-tilt data-reveal
+        <li class="product-card" data-tilt data-reveal data-grade-jump="4"
             data-price-25="2750" data-price-50="5300">
           <div class="product-card__top">
             <span class="product-card__tag product-card__tag--soil">Value</span>
@@ -266,6 +271,7 @@
             <li><b>Moisture</b><span>≤ 13.5%</span></li>
             <li><b>Ageing</b><span>—</span></li>
           </ul>
+          <button type="button" class="product-card__hint">Inspect the grain</button>
           <div class="product-card__foot">
             <p class="price">
               <small>Rs</small><span data-price>2,750</span>
@@ -276,6 +282,50 @@
         </li>
 
       </ul>
+    </div>
+  </section>
+
+  <!-- ───────────────────────  one grade, up close  ─────────────────── -->
+  <section class="section section--dark grade" id="grade">
+    <canvas class="grade__canvas" data-grade-canvas aria-hidden="true"></canvas>
+    <div class="grade__veil" aria-hidden="true"></div>
+
+    <div class="shell grade__grid">
+
+      <div class="grade__copy" data-reveal>
+        <p class="eyebrow">02 — Quality, up close</p>
+        <h2 class="section-title">Look at the grain itself</h2>
+        <p class="section-lede">
+          Pick a grade. What turns beside it is that grade at about forty times
+          life size, next to a sack of it — the length, colour and shape are the
+          ones on the spec sheet, not a stock photo.
+        </p>
+
+        <div class="grade__tabs" data-grade-tabs role="tablist" aria-label="Rice grade">
+          <button type="button" class="chip is-active" role="tab" aria-selected="true" data-grade="0">Super Basmati</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="1">1121 Sella</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="2">1121 Steam</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="3">Irri-6</button>
+          <button type="button" class="chip" role="tab" aria-selected="false" data-grade="4">Broken (Tota)</button>
+        </div>
+
+        <dl class="grade__specs">
+          <div><dt>Grain length</dt><dd data-grade-len>7.2 mm</dd></div>
+          <div><dt>Broken grain</dt><dd data-grade-broken>≤ 2%</dd></div>
+          <div><dt>Ageing</dt><dd data-grade-age>12 months</dd></div>
+          <div><dt>Cooked elongation</dt><dd data-grade-elong>2.1×</dd></div>
+        </dl>
+
+        <p class="grade__note" data-grade-note>
+          Rested twelve months before milling, so the starch firms up and the
+          grain stays separate on the boil. This is the biryani grade.
+        </p>
+      </div>
+
+      <figure class="grade__stage" data-reveal>
+        <figcaption class="grade__caption" data-grade-caption>Super Basmati &middot; 25 kg sack</figcaption>
+      </figure>
+
     </div>
   </section>
 
@@ -293,7 +343,7 @@
     <div class="shell viewer__grid">
 
       <div class="viewer__copy" data-reveal>
-        <p class="eyebrow eyebrow--light">02 — The sack</p>
+        <p class="eyebrow eyebrow--light">03 — The sack</p>
         <h2 class="section-title">Have a look at what turns up</h2>
         <p class="section-lede section-lede--light">
           Laminated PP, double-stitched mouth, printed lot number and mill date on
@@ -333,7 +383,7 @@
     <div class="shell process__grid">
 
       <div class="process__aside" data-reveal>
-        <p class="eyebrow">03 — Process</p>
+        <p class="eyebrow">04 — Process</p>
         <h2 class="section-title">Paddy in, sacks out</h2>
         <p class="section-lede">
           Six stages, all of them under our own roof. Nothing is toll-milled and
@@ -417,7 +467,7 @@
     <div class="shell">
 
       <div class="section-head section-head--center" data-reveal>
-        <p class="eyebrow">04 — Quality</p>
+        <p class="eyebrow">05 — Tolerances</p>
         <h2 class="section-title">The numbers we hold ourselves to</h2>
         <p class="section-lede">
           Premium-grade tolerances. Every dispatch leaves with a lot card carrying
@@ -459,7 +509,7 @@
     <div class="shell order__grid">
 
       <div data-reveal>
-        <p class="eyebrow eyebrow--light">05 — Bulk order</p>
+        <p class="eyebrow eyebrow--light">06 — Bulk order</p>
         <h2 class="section-title">Work out a load</h2>
         <p class="section-lede section-lede--light">
           Indicative, ex-works, before freight and tax. Half-truck is 130 sacks of
@@ -519,7 +569,7 @@
   <section class="section" id="voices">
     <div class="shell">
       <div class="section-head" data-reveal>
-        <p class="eyebrow">06 — Buyers</p>
+        <p class="eyebrow">07 — Buyers</p>
         <h2 class="section-title">Who is loading from us</h2>
       </div>
 
@@ -554,7 +604,7 @@
     <div class="shell contact__grid">
 
       <div data-reveal>
-        <p class="eyebrow">07 — Contact</p>
+        <p class="eyebrow">08 — Contact</p>
         <h2 class="section-title">Ask for the morning rate</h2>
         <p class="section-lede">
           Tell us the grade, the sack size and roughly how many. You will get a

@@ -4,6 +4,8 @@
    tilt on the product cards, and the bulk-order calculator.
    ============================================================ */
 
+import { GRADES } from './grades.js';
+
 const root = document.documentElement;
 root.classList.add('js');
 
@@ -349,6 +351,73 @@ if (storyCanvas && actEls.length) {
   window.addEventListener('scroll', paint, { passive: true });
   window.addEventListener('resize', () => { measure(); paint(); });
   window.addEventListener('load', () => { measure(); paint(); });
+}
+
+/* -------------------------------------------------- grade, up close */
+
+const gradeTabs = $('[data-grade-tabs]');
+
+if (gradeTabs) {
+  const out = {
+    len: $('[data-grade-len]'),
+    broken: $('[data-grade-broken]'),
+    age: $('[data-grade-age]'),
+    elong: $('[data-grade-elong]'),
+    note: $('[data-grade-note]'),
+    caption: $('[data-grade-caption]'),
+  };
+
+  let grade = null;
+  let shown = -1;
+
+  function showGrade(i) {
+    const g = GRADES[i];
+    if (!g || i === shown) return;
+    shown = i;
+
+    $$('button', gradeTabs).forEach((b) => {
+      const on = Number(b.dataset.grade) === i;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+
+    out.len.textContent = g.len;
+    out.broken.textContent = g.broken;
+    out.age.textContent = g.age;
+    out.elong.textContent = g.elong;
+    out.note.textContent = g.note;
+    out.caption.textContent = g.caption;
+
+    grade?.setGrade(i);
+  }
+
+  gradeTabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-grade]');
+    if (btn) showGrade(Number(btn.dataset.grade));
+  });
+
+  // a range card is a doorway into this section
+  $$('[data-grade-jump]').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // the Order link still goes to the form
+      showGrade(Number(card.dataset.gradeJump));
+      document.getElementById('grade')?.scrollIntoView({
+        behavior: reduced ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    });
+  });
+
+  showGrade(0);
+
+  if ($('[data-grade-canvas]')) {
+    import('./scene-grade.js')
+      .then((m) => {
+        grade = m.initGrade();
+        grade?.setGrade(shown);
+      })
+      .catch((err) => console.warn('grade scene skipped:', err.message));
+  }
 }
 
 /* -------------------------------------------- grain per process step */

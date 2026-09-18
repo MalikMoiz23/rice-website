@@ -22,7 +22,7 @@ const PROFILE = [
   [0.69, MOUTH_Y],
 ];
 
-export function openSack(renderer, { heapGrains = 520 } = {}) {
+export function openSack(renderer, { heapGrains = 520, grainColor = 0xfbf8f0 } = {}) {
   const group = new THREE.Group();
   const jute = burlapTexture(renderer);
 
@@ -92,7 +92,7 @@ export function openSack(renderer, { heapGrains = 520 } = {}) {
 
   const dome = new THREE.Mesh(
     new THREE.SphereGeometry(0.64, 40, 20),
-    new THREE.MeshStandardMaterial({ color: 0xf7f2e4, roughness: 0.66, metalness: 0 })
+    new THREE.MeshStandardMaterial({ color: grainColor, roughness: 0.66, metalness: 0 })
   );
   dome.scale.y = 0.6;
   dome.castShadow = true;
@@ -102,7 +102,7 @@ export function openSack(renderer, { heapGrains = 520 } = {}) {
   const grainGeo = riceGeometry({ segments: 8, radial: 6, length: 0.042, radius: 0.013 });
   const loose = new THREE.InstancedMesh(
     grainGeo,
-    new THREE.MeshStandardMaterial({ color: 0xfbf8f0, roughness: 0.34, metalness: 0.02 }),
+    new THREE.MeshStandardMaterial({ color: grainColor, roughness: 0.34, metalness: 0.02 }),
     heapGrains
   );
   loose.castShadow = true;
@@ -142,10 +142,18 @@ export function openSack(renderer, { heapGrains = 520 } = {}) {
   }
   setFill(0);
 
+  /** what is in the sack changes with the grade on show */
+  function setGrainColor(hex) {
+    dome.material.color.setHex(hex);
+    dome.material.color.multiplyScalar(0.94); // the bulk reads darker than a loose grain
+    loose.material.color.setHex(hex);
+  }
+
   return {
     group,
     mouthY: MOUTH_Y,
     setFill,
+    setGrainColor,
     dispose() {
       bodyGeo.dispose();
       body.material.dispose();
