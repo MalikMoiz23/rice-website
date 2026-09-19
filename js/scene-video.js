@@ -113,6 +113,9 @@ export function initVideo(cuts, { onFail } = {}, el) {
 
   return {
     setStage(stage) {
+      // below zero the page is still in its hero, and holds on the last
+      // shot: the dish finished and on the table
+      if (stage < 0) { want = marks[LAST]; return; }
       const s = Math.min(Math.max(stage, 0), LAST);
       const i = Math.min(Math.floor(s), LAST - 1);
       want = marks[i] + (marks[i + 1] - marks[i]) * (s - i);

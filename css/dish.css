@@ -237,7 +237,10 @@
   z-index: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* The footage is shot close already. Filling a wide screen with it crops
+     the pot out of its own frame, so it is shown whole and let to sit in
+     the dark instead. The gradient on the canvas behind fills the edges. */
+  object-fit: contain;
   pointer-events: none;
   opacity: 0;
   transition: opacity 420ms var(--ease-out);
@@ -267,7 +270,10 @@
 @media (max-width: 760px) {
   .dish-page--film .dish-video {
     inset: 0 0 auto 0;
-    height: 52svh;
+    /* Deep enough to be worth looking at, shallow enough that filling it
+       only trims the edges of the frame rather than the middle out of it. */
+    height: 34svh;
+    object-fit: cover;
     -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
   }

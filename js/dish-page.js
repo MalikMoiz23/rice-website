@@ -45,6 +45,12 @@ if (steps.length) {
   function stage() {
     const y = window.scrollY;
     const last = anchors.length - 1;
+
+    /* Above the first step the page is still introducing the dish, so the
+       scene holds on the finished plate: the first thing anyone sees is
+       what they would be buying the rice to make. It cuts to the first
+       step just before that step's copy arrives, not after it. */
+    if (y < anchors[0] - window.innerHeight * 0.45) return -1;
     if (y <= anchors[0]) return 0;
     if (y >= anchors[last]) return last;
 
