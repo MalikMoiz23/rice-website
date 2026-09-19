@@ -68,7 +68,7 @@ export function initGrade(canvas) {
       fall: 0.06 + Math.random() * 0.3,
       spin: (Math.random() - 0.5) * 0.7,
       phase: Math.random() * Math.PI * 2,
-      scale: 0.085 + Math.random() * 0.15,
+      scale: 0.17 + Math.random() * 0.3,
     };
   }
 
@@ -144,7 +144,9 @@ export function initGrade(canvas) {
 
     hero.rotation.set(0.42, t * 0.5, Math.sin(t * 0.6) * 0.1);
     hero.position.y = 0.16 + Math.sin(t * 0.7) * 0.05;
-    hero.scale.setScalar(1.0 * pulse);
+    // grades.js now holds true half-measurements, so the display scale carries
+    // the magnification instead of the data being wrong
+    hero.scale.setScalar(1.95 * pulse);
 
     sack.group.rotation.y = Math.sin(t * 0.25) * 0.28;
 

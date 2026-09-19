@@ -366,6 +366,105 @@ export const DICT = {
     'wa.calc':
       'Assalam o alaikum. Please quote: {name}, {kg} kg bags × {qty}. ' +
       'Total weight about {tonnes}. Guide price {total}.',
+
+    /* ---- the dish pages ---- */
+    'nav.dishes': 'What to cook',
+    'card.cook': 'What it cooks best',
+    'dp.eyebrow': 'What it cooks best',
+    'dp.back': 'All five rices',
+    'dp.why': 'Why this rice',
+    'dp.how': 'How it is made',
+    'dp.grow': 'Cooked length',
+    'dp.growv': 'grows {x} times',
+    'dp.scroll': 'Scroll to watch it cook',
+    'dp.other': 'The other four',
+    'dp.otherlede': 'Every rice we mill has a job it is better at than the rest.',
+    'dp.cta': 'Order this rice on WhatsApp',
+    'dp.price': 'See the price',
+    'dp.step': 'Step',
+    'wa.dish':
+      'Assalam o alaikum. I want {rice} for {dish}. Please send me today\u2019s price.',
+
+    'd0.dish': 'Biryani',
+    'd0.tag': 'The rice biryani is actually made with',
+    'd0.why':
+      'Biryani asks a lot of a grain. It has to sit under a heavy layer of masala, ' +
+      'take the steam, and still come out separate when you fold it. Super Basmati ' +
+      'is rested twelve months before milling so it cooks firm instead of breaking, ' +
+      'and it grows to about 2.1 times its length \u2014 which is why a good biryani ' +
+      'looks long and loose rather than packed down.',
+    'd0.s1t': 'Wash and soak',
+    'd0.s1d': 'Rinse until the water runs clear, then soak about thirty minutes. Longer than that and the grain goes soft before it ever sees heat.',
+    'd0.s2t': 'Par-boil',
+    'd0.s2d': 'Boil in plenty of salted water until it is roughly seventy percent done. It finishes in the steam, not in the pot.',
+    'd0.s3t': 'Layer over the masala',
+    'd0.s3d': 'Meat and masala on the bottom, rice over it, then the colour, the fried onion and the herbs.',
+    'd0.s4t': 'Dum',
+    'd0.s4d': 'Seal the lid and leave it on a low flame. The steam has nowhere to go but up through the rice, and that is what carries the flavour.',
+
+    'd1.dish': 'Pulao and kabuli chawal',
+    'd1.tag': 'For rice that has to hold its shape in stock',
+    'd1.why':
+      'Sella is steamed inside the husk before it is milled, which hardens the grain ' +
+      'right through. It will sit in stock, take a fry, and still come out as separate ' +
+      'grains. It grows about 2.4 times, the longest of anything we sell, so a plate ' +
+      'of pulao looks generous.',
+    'd1.s1t': 'Rinse',
+    'd1.s1d': 'A short rinse only. Sella does not want a long soak \u2014 the parboiling has already done half that work.',
+    'd1.s2t': 'Fry in the stock',
+    'd1.s2d': 'Fry the rice in the yakhni with the whole spices until every grain is coated.',
+    'd1.s3t': 'Simmer',
+    'd1.s3d': 'Measure the stock, cover it, and leave it alone. Stirring is what breaks a pulao.',
+    'd1.s4t': 'Rest',
+    'd1.s4d': 'Off the heat, lid on, ten minutes. The last of the stock finishes going into the grain.',
+
+    'd2.dish': 'Everyday boiled rice',
+    'd2.tag': 'The one that cooks the same from every bag',
+    'd2.why':
+      'This is what a kitchen runs on when the same plate has to leave the pass a ' +
+      'hundred times a night. Steamed white rather than parboiled, so it cooks loose ' +
+      'and clean with no colour and no surprises. What you measured last week still ' +
+      'works this week.',
+    'd2.s1t': 'Rinse',
+    'd2.s1d': 'Two or three changes of water, until it stops going cloudy.',
+    'd2.s2t': 'Boil',
+    'd2.s2d': 'Plenty of salted water, hard boil, no lid. Test a grain at eight minutes.',
+    'd2.s3t': 'Drain',
+    'd2.s3d': 'Drain the moment it is done. Rice left sitting in hot water keeps cooking.',
+    'd2.s4t': 'Fluff',
+    'd2.s4d': 'A fork, not a spoon, and only once. Then the lid back on for five minutes.',
+
+    'd3.dish': 'Deg cooking',
+    'd3.tag': 'When you are cooking for three hundred',
+    'd3.why':
+      'A hard grain that drinks a lot of water and forgives a rough boil, which is ' +
+      'exactly what you want in a deg the size of a table. It costs about half what ' +
+      'basmati costs per plate, and at that scale that is the whole argument.',
+    'd3.s1t': 'Wash in the deg',
+    'd3.s1d': 'Wash it where you are going to cook it. Moving soaked rice around in that quantity is how it breaks.',
+    'd3.s2t': 'Fill and measure',
+    'd3.s2d': 'Water by measure, not by eye. At this size a small error is twenty kilos of wrong.',
+    'd3.s3t': 'Boil hard',
+    'd3.s3d': 'A hard rolling boil, then the flame right down and the lid on.',
+    'd3.s4t': 'Serve from the deg',
+    'd3.s4d': 'It holds heat for hours, which is half the reason it gets used for functions.',
+
+    'd4.dish': 'Kheer and khichri',
+    'd4.tag': 'Short pieces that thicken a pot',
+    'd4.why':
+      'Broken basmati is not a lesser rice, it is a different job. The pieces come ' +
+      'off the sorting machine short, so they let go of their starch quickly and ' +
+      'thicken milk without you adding anything. The same aroma as the whole grain, ' +
+      'at about a third of the price.',
+    'd4.s1t': 'Rinse briefly',
+    'd4.s1d': 'Rinse once, quickly. You want to keep some of that starch \u2014 it is what does the thickening.',
+    'd4.s2t': 'Simmer in milk',
+    'd4.s2d': 'Full-fat milk on a low flame, and keep it moving so it does not catch on the bottom.',
+    'd4.s3t': 'Sweeten late',
+    'd4.s3d': 'Sugar goes in near the end. Add it early and the rice stops softening.',
+    'd4.s4t': 'Garnish and cool',
+    'd4.s4d': 'Cardamom, pistachio, almond. It thickens again as it cools, so stop just before you think it is right.',
+
   },
 
   ur: {
@@ -716,6 +815,102 @@ export const DICT = {
     'wa.calc':
       'السلام علیکم۔ ریٹ بتا دیں: {name}، {kg} کلو کی {qty} بوریاں۔ ' +
       'کل وزن تقریباً {tonnes}۔ اندازاً قیمت {total}۔',
+
+    /* ---- the dish pages ---- */
+    'nav.dishes': 'کیا پکائیں',
+    'card.cook': 'یہ کس کھانے کے لیے بہترین ہے',
+    'dp.eyebrow': 'یہ کس کھانے کے لیے بہترین ہے',
+    'dp.back': 'پانچوں چاول',
+    'dp.why': 'یہی چاول کیوں',
+    'dp.how': 'کیسے بنتا ہے',
+    'dp.grow': 'پکنے کے بعد لمبائی',
+    'dp.growv': '{x} گنا بڑھتا ہے',
+    'dp.scroll': 'پکتے ہوئے دیکھنے کے لیے سکرول کریں',
+    'dp.other': 'باقی چار',
+    'dp.otherlede': 'ہمارے ہر چاول کا ایک کام ہے جس میں وہ باقی سب سے بہتر ہے۔',
+    'dp.cta': 'یہ چاول واٹس ایپ پر آرڈر کریں',
+    'dp.price': 'قیمت دیکھیں',
+    'dp.step': 'مرحلہ',
+    'wa.dish':
+      'السلام علیکم۔ مجھے {dish} کے لیے {rice} چاہیے۔ براہ کرم آج کا ریٹ بھیج دیں۔',
+
+    'd0.dish': 'بریانی',
+    'd0.tag': 'بریانی اصل میں اسی چاول سے بنتی ہے',
+    'd0.why':
+      'بریانی دانے سے بہت کچھ مانگتی ہے۔ اسے مصالحے کی بھاری تہہ کے نیچے بیٹھنا ہے، ' +
+      'بھاپ سہنی ہے، اور پھر بھی ہلاتے وقت کھلا رہنا ہے۔ سپر باسمتی کو پیسنے سے پہلے ' +
+      'بارہ مہینے رکھا جاتا ہے، اس لیے یہ ٹوٹنے کی بجائے سخت پکتا ہے، اور تقریباً 2.1 ' +
+      'گنا لمبا ہو جاتا ہے — اسی لیے اچھی بریانی دبی ہوئی نہیں، لمبی اور کھلی لگتی ہے۔',
+    'd0.s1t': 'دھو کر بھگوئیں',
+    'd0.s1d': 'اتنا دھوئیں کہ پانی صاف آنے لگے، پھر تقریباً تیس منٹ بھگوئیں۔ اس سے زیادہ رکھیں تو دانہ آگ دیکھنے سے پہلے ہی نرم ہو جاتا ہے۔',
+    'd0.s2t': 'آدھا ابالیں',
+    'd0.s2d': 'کھلے نمکین پانی میں تقریباً ستر فیصد تک ابالیں۔ باقی پکائی بھاپ میں ہوتی ہے، دیگ میں نہیں۔',
+    'd0.s3t': 'مصالحے پر تہہ لگائیں',
+    'd0.s3d': 'نیچے گوشت اور مصالحہ، اوپر چاول، پھر رنگ، تلی ہوئی پیاز اور ہرا دھنیا۔',
+    'd0.s4t': 'دم',
+    'd0.s4d': 'ڈھکن بند کر کے ہلکی آنچ پر رکھ دیں۔ بھاپ کے پاس چاول میں سے اوپر جانے کے علاوہ کوئی راستہ نہیں، اور یہی ذائقہ اوپر لے جاتی ہے۔',
+
+    'd1.dish': 'پلاؤ اور کابلی چاول',
+    'd1.tag': 'جب چاول کو یخنی میں بھی ثابت رہنا ہو',
+    'd1.why':
+      'سیلہ کو پیسنے سے پہلے چھلکے کے اندر ہی سٹیم کیا جاتا ہے، جس سے دانہ اندر تک ' +
+      'سخت ہو جاتا ہے۔ یہ یخنی میں بیٹھ سکتا ہے، بھُن سکتا ہے، اور پھر بھی کھلا کھلا ' +
+      'نکلتا ہے۔ یہ تقریباً 2.4 گنا بڑھتا ہے، ہمارے سب چاولوں سے زیادہ، اس لیے پلاؤ ' +
+      'کی پلیٹ بھری بھری لگتی ہے۔',
+    'd1.s1t': 'ہلکا دھوئیں',
+    'd1.s1d': 'بس ایک ہلکا دھلائی۔ سیلہ کو لمبے بھگونے کی ضرورت نہیں — سٹیم پہلے ہی آدھا کام کر چکی ہے۔',
+    'd1.s2t': 'یخنی میں بھونیں',
+    'd1.s2d': 'ثابت گرم مصالحے کے ساتھ چاول کو یخنی میں اتنا بھونیں کہ ہر دانے پر چڑھ جائے۔',
+    'd1.s3t': 'دم پر رکھیں',
+    'd1.s3d': 'یخنی ناپ کر ڈالیں، ڈھک دیں، اور چھیڑیں نہیں۔ ہلانا ہی پلاؤ کو توڑتا ہے۔',
+    'd1.s4t': 'تھوڑی دیر رکھیں',
+    'd1.s4d': 'آنچ بند، ڈھکن بند، دس منٹ۔ بچی ہوئی یخنی دانے کے اندر چلی جاتی ہے۔',
+
+    'd2.dish': 'روز کا ابلا چاول',
+    'd2.tag': 'جو ہر بوری سے ایک جیسا پکتا ہے',
+    'd2.why':
+      'یہ وہ چاول ہے جس پر باورچی خانہ چلتا ہے جب ایک ہی پلیٹ رات میں سو بار باہر ' +
+      'جانی ہو۔ سنہری کی بجائے سفید سٹیم کیا ہوا، اس لیے کھلا اور صاف پکتا ہے، نہ رنگ ' +
+      'نہ کوئی حیرانی۔ پچھلے ہفتے کا ناپ اس ہفتے بھی چلتا ہے۔',
+    'd2.s1t': 'دھوئیں',
+    'd2.s1d': 'دو تین بار پانی بدلیں، جب تک گدلا آنا بند نہ ہو جائے۔',
+    'd2.s2t': 'ابالیں',
+    'd2.s2d': 'کھلا نمکین پانی، تیز ابال، ڈھکن نہیں۔ آٹھ منٹ پر ایک دانہ چکھ لیں۔',
+    'd2.s3t': 'پانی نکالیں',
+    'd2.s3d': 'پکتے ہی پانی نکال دیں۔ گرم پانی میں پڑا چاول پکتا رہتا ہے۔',
+    'd2.s4t': 'کھلائیں',
+    'd2.s4d': 'چمچ نہیں، کانٹا، اور صرف ایک بار۔ پھر پانچ منٹ ڈھکن بند۔',
+
+    'd3.dish': 'دیگ کا کھانا',
+    'd3.tag': 'جب تین سو بندوں کا پکانا ہو',
+    'd3.why':
+      'سخت دانہ جو کافی پانی پیتا ہے اور تیز ابال بھی سہہ لیتا ہے، اور میز جتنی بڑی ' +
+      'دیگ میں آپ کو یہی چاہیے۔ فی پلیٹ باسمتی سے تقریباً آدھی لاگت پڑتی ہے، اور اس ' +
+      'پیمانے پر یہی پوری بات ہے۔',
+    'd3.s1t': 'دیگ میں ہی دھوئیں',
+    'd3.s1d': 'جہاں پکانا ہے وہیں دھوئیں۔ اتنی مقدار میں بھیگا چاول اِدھر اُدھر کرنے سے ہی ٹوٹتا ہے۔',
+    'd3.s2t': 'ناپ کر پانی ڈالیں',
+    'd3.s2d': 'پانی اندازے سے نہیں، ناپ سے۔ اس سائز پر چھوٹی سی غلطی بیس کلو کی غلطی بن جاتی ہے۔',
+    'd3.s3t': 'تیز ابال',
+    'd3.s3d': 'پہلے تیز ابال، پھر آنچ بالکل ہلکی اور ڈھکن بند۔',
+    'd3.s4t': 'دیگ سے ہی نکالیں',
+    'd3.s4d': 'یہ گھنٹوں گرم رہتی ہے، اور تقریبات میں اسی لیے استعمال ہوتی ہے۔',
+
+    'd4.dish': 'کھیر اور کھچڑی',
+    'd4.tag': 'چھوٹے ٹکڑے جو دیگچی گاڑھی کر دیں',
+    'd4.why':
+      'ٹوٹا باسمتی کم درجے کا چاول نہیں، یہ الگ کام کا چاول ہے۔ چھانٹنے والی مشین سے ' +
+      'ٹکڑے چھوٹے نکلتے ہیں، اس لیے یہ اپنا نشاستہ جلدی چھوڑتے ہیں اور دودھ کو بغیر ' +
+      'کچھ ڈالے گاڑھا کر دیتے ہیں۔ خوشبو ثابت دانے جیسی، قیمت تقریباً ایک تہائی۔',
+    'd4.s1t': 'ہلکا دھوئیں',
+    'd4.s1d': 'ایک بار، جلدی سے۔ کچھ نشاستہ رہنے دیں — گاڑھا وہی کرتا ہے۔',
+    'd4.s2t': 'دودھ میں پکائیں',
+    'd4.s2d': 'پورے کریم والا دودھ، ہلکی آنچ، اور ہلاتے رہیں تاکہ نیچے نہ لگے۔',
+    'd4.s3t': 'چینی آخر میں',
+    'd4.s3d': 'چینی آخر میں ڈالیں۔ پہلے ڈال دیں تو چاول نرم ہونا بند کر دیتا ہے۔',
+    'd4.s4t': 'سجا کر ٹھنڈا کریں',
+    'd4.s4d': 'الائچی، پستہ، بادام۔ ٹھنڈی ہو کر اور گاڑھی ہوتی ہے، اس لیے ٹھیک لگنے سے ذرا پہلے ہی روک دیں۔',
+
   },
 };
 

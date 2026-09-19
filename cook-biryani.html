@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biryani — made with Super Basmati | Sunehri Rice Mills</title>
+<meta name="description" content="The rice biryani is actually made with Super Basmati from Sunehri Rice Mills, Sheikhupura. Watch it cook, then order by the bag or by the truck.">
+<meta name="theme-color" content="#0D0906">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Biryani — made with Super Basmati">
+<meta property="og:description" content="The rice biryani is actually made with">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/lang.css">
+<link rel="stylesheet" href="css/dish.css">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body class="dish-page" id="top" data-rice="0">
+
+<canvas class="dish-canvas" data-dish-canvas aria-hidden="true"></canvas>
+
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="scroll-rail" aria-hidden="true"><span data-scroll-progress></span></div>
+
+<a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+
+<!-- ─────────────────────────────  header  ───────────────────────────── -->
+<header class="site-header" data-header>
+  <div class="shell site-header__inner">
+
+    <a class="brand" href="index.html" aria-label="Sunehri Rice Mills">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <g transform="rotate(-28 32 32)">
+          <ellipse cx="32" cy="32" rx="9" ry="20"/>
+          <path d="M32 15C27 24 27 40 32 49" class="brand__groove"/>
+        </g>
+      </svg>
+      <span class="brand__text">
+        <strong data-i18n="brand.name">Sunehri</strong>
+        <em data-i18n="brand.sub">Rice Mills</em>
+      </span>
+    </a>
+
+    <nav class="site-nav" data-nav aria-label="Primary">
+      <ul>
+        <li><a href="index.html#range" data-i18n="nav.range">Our rice</a></li>
+        <li><a href="index.html#grade" data-i18n="nav.grade">The grain</a></li>
+        <li><a href="cook-biryani.html" class="is-current" aria-current="page" data-i18n="nav.dishes">What to cook</a></li>
+        <li><a href="index.html#process" data-i18n="nav.process">How we make it</a></li>
+        <li><a href="index.html#quality" data-i18n="nav.quality">Quality</a></li>
+        <li><a href="index.html#order" data-i18n="nav.order">Bulk order</a></li>
+      </ul>
+    </nav>
+
+    <button type="button" class="lang-toggle" data-lang-toggle
+            data-i18n="lang.switch" data-i18n-attr="aria-label:lang.label"
+            aria-label="Switch to Urdu">اردو</button>
+
+    <a class="btn btn--solid btn--sm site-header__cta" href="index.html#contact" data-i18n="nav.cta">Today's price</a>
+
+    <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span>
+      <span class="u-sr" data-i18n="nav.menu">Menu</span>
+    </button>
+
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ────────────────────────────  hero  ──────────────────────────── -->
+  <section class="dish-hero">
+    <div class="dish-hero__wash" aria-hidden="true"></div>
+
+    <div class="shell dish-hero__inner">
+      <p class="dish-hero__rice" data-i18n="p0.name">Super Basmati</p>
+      <h1 class="dish-hero__title" data-i18n="d0.dish">Biryani</h1>
+      <p class="dish-hero__tag" data-i18n="d0.tag">The rice biryani is actually made with</p>
+
+      <div class="dish-hero__actions">
+        <button type="button" class="btn btn--wa" data-wa-dish data-i18n="dp.cta">Order this rice on WhatsApp</button>
+        <a class="btn btn--ghost" href="index.html#range" data-i18n="dp.price">See the price</a>
+      </div>
+    </div>
+
+    <p class="dish-hero__cue" aria-hidden="true">
+      <span></span>
+      <em data-i18n="dp.scroll">Scroll to watch it cook</em>
+    </p>
+  </section>
+
+  <!-- ───────────────────────────  why this rice  ──────────────────── -->
+  <section class="section dish-why">
+    <div class="shell dish-why__grid">
+
+      <div data-reveal>
+        <p class="eyebrow" data-i18n="dp.why">Why this rice</p>
+        <h2 class="section-title" data-i18n="p0.name">Super Basmati</h2>
+        <p class="section-lede" data-i18n="d0.why">Biryani asks a lot of a grain. It has to sit under a heavy layer of masala, take the steam, and still come out separate when you fold it. Super Basmati is rested twelve months before milling so it cooks firm instead of breaking, and it grows to about 2.1 times its length — which is why a good biryani looks long and loose rather than packed down.</p>
+        <div class="dish-cta">
+          <button type="button" class="btn btn--wa btn--sm" data-wa-dish data-i18n="dp.cta">Order this rice on WhatsApp</button>
+          <a class="btn btn--line btn--sm" href="index.html#grade" data-i18n="card.hint">See this grain close up</a>
+        </div>
+      </div>
+
+      <dl class="dish-stat" data-reveal>
+        <dt data-i18n="dp.grow">Cooked length</dt>
+        <dd data-dish-grow>grows 2.1 times</dd>
+        <dt data-i18n="grade.len">Grain length</dt>
+        <dd data-i18n="g0.len">7.2 mm</dd>
+        <dt data-i18n="grade.age">Kept for</dt>
+        <dd data-i18n="g0.age">12 months</dd>
+      </dl>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────────  the four cooking steps  ───────────────── -->
+  <p class="u-sr" data-i18n="dp.how">How it is made</p>
+
+  <!-- ──────────────────────────────  step 1  ─────────────────────────── -->
+  <section class="act" data-step="0">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag"><span data-i18n="dp.step">Step</span> 01</p>
+      <h2 class="act__title" data-i18n="d0.s1t">Wash and soak</h2>
+      <p class="act__text" data-i18n="d0.s1d">Rinse until the water runs clear, then soak about thirty minutes. Longer than that and the grain goes soft before it ever sees heat.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────  step 2  ─────────────────────────── -->
+  <section class="act" data-step="1">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag"><span data-i18n="dp.step">Step</span> 02</p>
+      <h2 class="act__title" data-i18n="d0.s2t">Par-boil</h2>
+      <p class="act__text" data-i18n="d0.s2d">Boil in plenty of salted water until it is roughly seventy percent done. It finishes in the steam, not in the pot.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────  step 3  ─────────────────────────── -->
+  <section class="act" data-step="2">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag"><span data-i18n="dp.step">Step</span> 03</p>
+      <h2 class="act__title" data-i18n="d0.s3t">Layer over the masala</h2>
+      <p class="act__text" data-i18n="d0.s3d">Meat and masala on the bottom, rice over it, then the colour, the fried onion and the herbs.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────  step 4  ─────────────────────────── -->
+  <section class="act" data-step="3">
+    <div class="shell act__inner" data-reveal>
+      <p class="act__tag"><span data-i18n="dp.step">Step</span> 04</p>
+      <h2 class="act__title" data-i18n="d0.s4t">Dum</h2>
+      <p class="act__text" data-i18n="d0.s4d">Seal the lid and leave it on a low flame. The steam has nowhere to go but up through the rice, and that is what carries the flavour.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────  the other four  ──────────────────── -->
+  <section class="section section--dark">
+    <div class="shell">
+
+      <div class="section-head" data-reveal>
+        <p class="eyebrow" data-i18n="dp.other">The other four</p>
+        <h2 class="section-title" data-i18n="dp.otherlede">Every rice we mill has a job it is better at than the rest.</h2>
+      </div>
+
+      <ul class="other-grid">
+        <li>
+          <a class="other" href="cook-pulao.html">
+            <span class="other__rice" data-i18n="p1.name">1121 Sella Kainat</span>
+            <span class="other__dish" data-i18n="d1.dish">Pulao and kabuli chawal</span>
+            <span class="other__tag" data-i18n="d1.tag">For rice that has to hold its shape in stock</span>
+            <span class="other__go" data-i18n="card.cook">What it cooks best</span>
+          </a>
+        </li>
+        <li>
+          <a class="other" href="cook-boiled-rice.html">
+            <span class="other__rice" data-i18n="p2.name">1121 Steam White</span>
+            <span class="other__dish" data-i18n="d2.dish">Everyday boiled rice</span>
+            <span class="other__tag" data-i18n="d2.tag">The one that cooks the same from every bag</span>
+            <span class="other__go" data-i18n="card.cook">What it cooks best</span>
+          </a>
+        </li>
+        <li>
+          <a class="other" href="cook-deg.html">
+            <span class="other__rice" data-i18n="p3.name">Irri-6 Long Grain</span>
+            <span class="other__dish" data-i18n="d3.dish">Deg cooking</span>
+            <span class="other__tag" data-i18n="d3.tag">When you are cooking for three hundred</span>
+            <span class="other__go" data-i18n="card.cook">What it cooks best</span>
+          </a>
+        </li>
+        <li>
+          <a class="other" href="cook-kheer.html">
+            <span class="other__rice" data-i18n="p4.name">Broken Basmati (Tota)</span>
+            <span class="other__dish" data-i18n="d4.dish">Kheer and khichri</span>
+            <span class="other__tag" data-i18n="d4.tag">Short pieces that thicken a pot</span>
+            <span class="other__go" data-i18n="card.cook">What it cooks best</span>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ─────────────────────────────  footer  ───────────────────────────── -->
+<footer class="site-footer">
+  <div class="shell site-footer__grid">
+
+    <div class="site-footer__brand">
+      <a class="brand brand--light" href="index.html">
+        <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <g transform="rotate(-28 32 32)">
+          <ellipse cx="32" cy="32" rx="9" ry="20"/>
+          <path d="M32 15C27 24 27 40 32 49" class="brand__groove"/>
+        </g>
+      </svg>
+        <span class="brand__text">
+          <strong data-i18n="brand.name">Sunehri</strong>
+          <em data-i18n="brand.sub">Rice Mills</em>
+        </span>
+      </a>
+      <p data-i18n="ft.blurb">Paddy bought in Punjab, stored a season, milled and bagged at our own mill.</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <h2 data-i18n="ft.site">Pages</h2>
+      <ul>
+        <li><a href="index.html#buyers" data-i18n="b.title">One bag, or a full truck</a></li>
+        <li><a href="index.html#range" data-i18n="nav.range">Our rice</a></li>
+        <li><a href="cook-biryani.html" data-i18n="nav.dishes">What to cook</a></li>
+        <li><a href="index.html#process" data-i18n="nav.process">How we make it</a></li>
+        <li><a href="index.html#contact" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <h2 data-i18n="ft.mill">Mill</h2>
+      <p>
+        Plot 14, Mill Road Industrial Estate<br>
+        Sheikhupura, Punjab 39350<br>
+        <a href="tel:+923000000000">+92 300 000 0000</a><br>
+        <a href="mailto:orders@example.com">orders@example.com</a>
+      </p>
+    </div>
+
+  </div>
+
+  <div class="shell site-footer__base">
+    <p>&copy; <span data-year>2026</span> <span data-i18n="ft.rights">Sunehri Rice Mills. All rights reserved.</span></p>
+    <p data-i18n="ft.note">Prices change with the mandi.</p>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/923000000000" target="_blank" rel="noopener"
+   data-i18n-attr="aria-label:wa.float" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.65 4.2 3.71.59.25 1.04.4 1.4.52.59.18 1.12.16 1.55.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.17-.47-.29Z"/>
+  </svg>
+</a>
+
+<script type="module" src="js/dish-page.js"></script>
+</body>
+</html>

@@ -1,141 +1,19 @@
 /* ============================================================
-   main.js — page behaviour
-   Header state, scroll reveals, sack-weight toggles, pointer
-   tilt on the product cards, and the bulk-order calculator.
+   main.js — the home page
+
+   Everything specific to index.html: the sack-weight toggle, the
+   pointer tilt on the rice cards, the bulk-order calculator, the
+   enquiry form, the grade viewer and the four scenes.
+
+   Header, nav, language toggle, reveals and counters are shared
+   with the dish pages and live in chrome.js.
    ============================================================ */
 
 import { GRADES } from './grades.js';
-import { initLang, setLang, current, onLangChange, t } from './i18n.js';
+import { initLang, onLangChange, t } from './i18n.js';
+import { $, $$, reduced, money, waLink, initChrome } from './chrome.js';
 
-// Placeholder. Swap for the mill's real WhatsApp number, digits only, with
-// the country code and no + or spaces.
-const WA_NUMBER = '923000000000';
-const waLink = (msg) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-
-const root = document.documentElement;
-root.classList.add('js');
-
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const money = new Intl.NumberFormat('en-US');
-
-const $ = (sel, scope = document) => scope.querySelector(sel);
-const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
-
-/* ---------------------------------------------------------- language */
-
-const langToggle = $('[data-lang-toggle]');
-
-if (langToggle) {
-  langToggle.addEventListener('click', () => {
-    setLang(current() === 'ur' ? 'en' : 'ur');
-  });
-}
-
-/* ------------------------------------------------------------ header */
-
-const header = $('[data-header]');
-const nav = $('[data-nav]');
-const navToggle = $('[data-nav-toggle]');
-const progress = $('[data-scroll-progress]');
-
-function onScroll() {
-  header.classList.toggle('is-stuck', window.scrollY > 24);
-
-  const span = document.body.scrollHeight - window.innerHeight;
-  progress.style.width = span > 0 ? `${(window.scrollY / span) * 100}%` : '0%';
-}
-
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
-
-navToggle.addEventListener('click', () => {
-  const open = nav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(open));
-});
-
-nav.addEventListener('click', (e) => {
-  if (e.target.closest('a')) {
-    nav.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  }
-});
-
-/* highlight whichever section is sitting under the header */
-const navLinks = new Map(
-  $$('[data-nav] a')
-    .map((a) => [a.getAttribute('href').slice(1), a])
-    .filter(([id]) => document.getElementById(id))
-);
-
-if (navLinks.size) {
-  const spy = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const link = navLinks.get(entry.target.id);
-        if (!link) return;
-        if (entry.isIntersecting) {
-          navLinks.forEach((l) => l.classList.remove('is-current'));
-          link.classList.add('is-current');
-        }
-      });
-    },
-    { rootMargin: '-45% 0px -50% 0px' }
-  );
-  navLinks.forEach((_, id) => spy.observe(document.getElementById(id)));
-}
-
-/* ----------------------------------------------------- scroll reveal */
-
-const revealables = $$('[data-reveal]');
-
-if (reduced || !('IntersectionObserver' in window)) {
-  revealables.forEach((el) => el.classList.add('is-in'));
-} else {
-  const revealer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry, i) => {
-        if (!entry.isIntersecting) return;
-        // small stagger so a grid does not pop in all at once
-        setTimeout(() => entry.target.classList.add('is-in'), i * 70);
-        obs.unobserve(entry.target);
-      });
-    },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
-  );
-  revealables.forEach((el) => revealer.observe(el));
-}
-
-/* -------------------------------------------------------- counters */
-
-function countTo(el, target, duration = 1500) {
-  if (reduced) {
-    el.textContent = money.format(target);
-    return;
-  }
-  const start = performance.now();
-  const tick = (now) => {
-    const t = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = money.format(Math.round(target * eased));
-    if (t < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-const counters = $$('[data-count-to]');
-if (counters.length) {
-  const counterObs = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        countTo(entry.target, Number(entry.target.dataset.countTo));
-        obs.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.35 }
-  );
-  counters.forEach((el) => counterObs.observe(el));
-}
+initChrome();
 
 /* -------------------------------------------- sack size on the cards */
 
@@ -208,14 +86,6 @@ if (canHover && !reduced) {
       card.style.setProperty('--rx', '0deg');
     });
   });
-}
-
-/* ---------------------------------------------------------- marquee */
-
-const marquee = $('[data-marquee]');
-if (marquee) {
-  // the CSS scrolls the track by -50%, so it needs two identical halves
-  marquee.innerHTML += marquee.innerHTML;
 }
 
 /* ------------------------------------------------- bulk calculator */
@@ -335,14 +205,6 @@ if (form) {
     form.reset();
   });
 }
-
-/* -------------------------------------------------------------- misc */
-
-const year = $('[data-year]');
-if (year) year.textContent = String(new Date().getFullYear());
-
-// last, so every block above has already registered its repaint
-initLang();
 
 /* ----------------------------------------------- story choreography */
 
@@ -472,7 +334,6 @@ $$('[data-wa-card]').forEach((btn) => {
   });
 });
 
-
 // each buyer card opens a chat that already says which kind of buyer it is
 $$('[data-wa-buyer]').forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -529,3 +390,7 @@ if (sackSwitch) {
   // the drag hint has done its job once someone drags
   sackCanvas?.addEventListener('pointerdown', () => hint?.classList.add('is-gone'), { once: true });
 }
+
+/* Last of all: applying the saved language repaints every block above,
+   so each one has to have registered its listener by now. */
+initLang();

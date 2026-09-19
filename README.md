@@ -1,7 +1,8 @@
 # Sunehri Rice Mills — website
 
 Marketing and wholesale-order site for a rice mill selling in 25 kg and 50 kg bags.
-English and Urdu, with a scroll-driven 3D sequence running the length of the page.
+English and Urdu, with a scroll-driven 3D sequence running the length of the home
+page and a cooking scene on each of the five dish pages.
 
 Static site. No framework, no build step, no dependencies to install. HTML + CSS +
 ES modules, with Three.js pulled from a CDN.
@@ -22,13 +23,22 @@ ES modules, with Three.js pulled from a CDN.
 ```
 .
 ├── index.html
+├── cook-biryani.html      one page per rice — generated, see tools/
+├── cook-pulao.html
+├── cook-boiled-rice.html
+├── cook-deg.html
+├── cook-kheer.html
 ├── css/
 │   ├── base.css         design tokens, reset, typography
 │   ├── layout.css       header, hero, sections, act breaks, footer
 │   ├── components.css   buttons, cards, forms, steps
-│   └── lang.css         Urdu type, right-to-left, WhatsApp, phone sizes
+│   ├── lang.css         Urdu type, right-to-left, WhatsApp, phone sizes
+│   └── dish.css         the five what-it-cooks-best pages
 ├── js/
-│   ├── main.js          nav, reveals, toggles, calculator, WhatsApp, language
+│   ├── main.js          the home page: cards, calculator, grade viewer
+│   ├── chrome.js        header, nav, language, reveals — shared by every page
+│   ├── dish-page.js     entry for the five dish pages
+│   ├── dishes.js        which dish each rice is for, and how it is plated
 │   ├── i18n.js          the English and Urdu dictionaries, and the switcher
 │   ├── grades.js        the five grades as grain dimensions (no text)
 │   ├── webgl.js         shared WebGL check, context-loss guard, quality guard
@@ -38,8 +48,11 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── scene-story.js   the page-long field → paddy → white rice → sack sequence
 │   ├── scene-grade.js   one grade up close: grain, sack, drifting backdrop
 │   ├── scene-process.js six small grains, one per milling step
-│   └── scene-sack.js    the draggable 25/50 kg product bag
-└── assets/
+│   ├── scene-sack.js    the draggable 25/50 kg product bag
+│   └── scene-dish.js    the dish cooking, in four scroll steps
+├── assets/
+└── tools/
+    └── build-dishes.mjs generates the five cook-*.html pages
 ```
 
 ## How the page-long animation works
@@ -58,6 +71,35 @@ from 0 to 4. Whole numbers land exactly when an act section is centred:
 
 Everything between is interpolated. Content sections sit on top as frosted glass,
 so the scene stays visible the whole way down.
+
+## The dish pages
+
+Five pages, one per rice: `cook-biryani.html`, `cook-pulao.html`,
+`cook-boiled-rice.html`, `cook-deg.html` and `cook-kheer.html`. Each says what its
+rice is for and why, then runs a four-step cooking scene driven by scroll — dry
+grain in the vessel, soaking, layered over the masala, finished and steaming.
+
+They are **generated**, not hand-written. The site itself still has no build step;
+this is a one-off so five pages cannot drift apart:
+
+```bash
+node tools/build-dishes.mjs
+```
+
+Re-run it after editing the template in `tools/build-dishes.mjs`, the dish copy in
+`js/i18n.js` (keys `d0.*`–`d4.*`) or the plating in `js/dishes.js`. The English text
+baked into the HTML is pulled from the dictionary at generation time, so it cannot
+disagree with what the language switcher shows.
+
+Two things in `js/scene-dish.js` are tied to real figures rather than picked to
+look nice, and are easy to break:
+
+- Cooked rice is scaled by each grade’s actual elongation, so Super Basmati at 2.1
+  really does read longer on screen than Irri-6 at 1.6.
+- A vessel is not a cylinder. `VESSELS` carries `base`/`bed` for where dry rice
+  lies on the floor and `fill`/`cap` for where the cooked surface sits and how wide
+  it may be there. Sizing the heap from `dishes.js` alone put rice through the side
+  of the bowl and onto the table.
 
 ## Running it
 
