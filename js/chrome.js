@@ -95,6 +95,7 @@ export function initChrome() {
   if (reduced || !('IntersectionObserver' in window)) {
     revealables.forEach((el) => el.classList.add('is-in'));
   } else if (revealables.length) {
+    const pending = revealables.slice();
     const revealer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry, i) => {
@@ -102,11 +103,38 @@ export function initChrome() {
           // small stagger so a grid does not pop in all at once
           setTimeout(() => entry.target.classList.add('is-in'), i * 70);
           obs.unobserve(entry.target);
+          const at = pending.indexOf(entry.target);
+          if (at > -1) pending.splice(at, 1);
         });
       },
       { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
     );
     revealables.forEach((el) => revealer.observe(el));
+
+    /* The observer is not enough on its own. An instant jump — an anchor
+       link, a reload part-way down the page, a scroll position the browser
+       restores — can carry a section past the viewport without the observer
+       ever reporting it, and it then sits at opacity 0 for good. This sweep
+       is the backstop. It only looks well inside the viewport, later than
+       the observer fires, so ordinary scrolling still gets the stagger and
+       this catches nothing but the ones that were dropped. */
+    let queued = 0;
+    const sweep = () => {
+      queued = 0;
+      const late = window.innerHeight * 0.6;
+      for (let i = pending.length - 1; i >= 0; i--) {
+        if (pending[i].getBoundingClientRect().top > late) continue;
+        pending[i].classList.add('is-in');
+        revealer.unobserve(pending[i]);
+        pending.splice(i, 1);
+      }
+    };
+    const queueSweep = () => { if (!queued) queued = requestAnimationFrame(sweep); };
+
+    window.addEventListener('scroll', queueSweep, { passive: true });
+    window.addEventListener('resize', queueSweep);
+    window.addEventListener('load', queueSweep);
+    queueSweep();
   }
 
   /* --------------------------------------------------------- counters */
