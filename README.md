@@ -38,7 +38,7 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── main.js          the home page: cards, calculator, grade viewer
 │   ├── chrome.js        header, nav, language, reveals — shared by every page
 │   ├── dish-page.js     entry for the five dish pages
-│   ├── dishes.js        which dish each rice is for, and how it is plated
+│   ├── dishes.js        which dish each rice is for, and its six cooking steps
 │   ├── i18n.js          the English and Urdu dictionaries, and the switcher
 │   ├── grades.js        the five grades as grain dimensions (no text)
 │   ├── webgl.js         shared WebGL check, context-loss guard, quality guard
@@ -49,7 +49,8 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── scene-grade.js   one grade up close: grain, sack, drifting backdrop
 │   ├── scene-process.js six small grains, one per milling step
 │   ├── scene-sack.js    the draggable 25/50 kg product bag
-│   └── scene-dish.js    the dish cooking, in four scroll steps
+│   ├── kitchen.js       colander, degchi, karahi, stove, flame, lid, plates
+│   └── scene-dish.js    the dish cooking, in six scroll steps
 ├── assets/
 └── tools/
     └── build-dishes.mjs generates the five cook-*.html pages
@@ -76,8 +77,12 @@ so the scene stays visible the whole way down.
 
 Five pages, one per rice: `cook-biryani.html`, `cook-pulao.html`,
 `cook-boiled-rice.html`, `cook-deg.html` and `cook-kheer.html`. Each says what its
-rice is for and why, then runs a four-step cooking scene driven by scroll — dry
-grain in the vessel, soaking, layered over the masala, finished and steaming.
+rice is for and why, then runs a six-step cooking scene driven by scroll.
+
+Biryani follows the six steps of a real one, in order: wash it in a colander under
+the tap, boil it in a degchi over a lit burner, simmer the chicken salan in a
+karahi, layer the rice over it, seal the lid on with a rope of dough for the dum,
+serve it. The other four borrow the same vessels wherever the step is the same.
 
 They are **generated**, not hand-written. The site itself still has no build step;
 this is a one-off so five pages cannot drift apart:
@@ -96,10 +101,23 @@ look nice, and are easy to break:
 
 - Cooked rice is scaled by each grade’s actual elongation, so Super Basmati at 2.1
   really does read longer on screen than Irri-6 at 1.6.
-- A vessel is not a cylinder. `VESSELS` carries `base`/`bed` for where dry rice
-  lies on the floor and `fill`/`cap` for where the cooked surface sits and how wide
-  it may be there. Sizing the heap from `dishes.js` alone put rice through the side
-  of the bowl and onto the table.
+- A vessel is not a cylinder. Every one in `js/kitchen.js` is turned from a lathe
+  profile, and `radiusAt(y)` reads that same profile back as the real interior
+  radius at a height. Rice, water and salan are all seated at a height and then
+  made exactly that wide. Guessing a width instead is what used to put a disc of
+  salan straight through the side of the karahi, and water out of the bottom of
+  the pot.
+- The camera is not placed by hand. It is worked back from how wide the vessel is
+  and how far down you have to look to see its floor, which is why a flat plate is
+  seen almost side-on and a degchi is looked down into. The one exception is a lit
+  burner: the shot flattens out then, because from any steeper angle the pot hides
+  its own flame.
+
+`js/dishes.js` holds six stage directions per dish — which vessel, burner lit or
+not, how much water, how full and how cooked the rice is, what is on top — and
+`scene-dish.js` interpolates between the two the scroll currently sits between.
+Nothing is keyframed. `STEPS` is exported from there and the generator reads it,
+so adding a seventh step means editing one array and re-running the generator.
 
 ## Running it
 
