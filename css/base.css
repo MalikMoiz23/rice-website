@@ -105,6 +105,10 @@
 * { margin: 0; }
 
 html {
+  /* the whole site is dark, and native controls need telling. Without this a
+     select drops open on the operating system default white, with our cream
+     text on it — the options are there but unreadable. */
+  color-scheme: dark;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;

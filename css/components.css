@@ -437,6 +437,14 @@
   background-position: right 0.95rem center;
   background-size: 12px;
 }
+/* Firefox and some Chromium builds still paint the open list from the OS,
+   so the options get their colours spelled out as well. */
+.field select option,
+.calc select option {
+  background-color: #14230f;
+  color: #f8f3e7;
+}
+
 .field :is(input, select, textarea):focus {
   outline: none;
   border-color: var(--accent);
