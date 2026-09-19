@@ -50,8 +50,11 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── scene-process.js six small grains, one per milling step
 │   ├── scene-sack.js    the draggable 25/50 kg product bag
 │   ├── kitchen.js       colander, degchi, karahi, stove, flame, lid, plates
-│   └── scene-dish.js    the dish cooking, in six scroll steps
+│   ├── scene-dish.js    the dish cooking, in six scroll steps
+│   └── scene-video.js   or a real clip of it, scrubbed by the scroll
 ├── assets/
+│   ├── biryani-wide.mp4  the scrubbed clip, desktop
+│   └── biryani-small.mp4 the same, for phones
 └── tools/
     └── build-dishes.mjs generates the five cook-*.html pages
 ```
@@ -83,6 +86,65 @@ Biryani follows the six steps of a real one, in order: wash it in a colander und
 the tap, boil it in a degchi over a lit burner, simmer the chicken salan in a
 karahi, layer the rice over it, seal the lid on with a rope of dough for the dum,
 serve it. The other four borrow the same vessels wherever the step is the same.
+
+### Footage, where there is any
+
+Biryani does not use the modelled scene. `js/dishes.js` gives it a `footage`
+block and the scroll scrubs a real clip of the same six steps instead, one shot
+per step. The other four dishes have no clip and still run the 3D scene; adding
+one is a matter of dropping the file in `assets/` and adding a `footage` block
+with its cut points.
+
+`js/scene-video.js` exposes the same two methods `initDish` does, so
+`js/dish-page.js` does not care which it got. If the video will not play, the
+modelled scene loads instead, so nothing is lost on a browser that cannot
+handle it. When the video does work, `scene-dish.js` is never even fetched.
+
+Two things make a clip scrub rather than stutter, and both are easy to undo:
+
+- **Keyframes.** Seeking to a point between keyframes makes the decoder start
+  at the one before it and work forward. The clip as supplied had six
+  keyframes in ten seconds and took most of a second to land on a frame. It is
+  re-encoded with one every fourth frame. Any replacement needs the same:
+
+  ```bash
+  ffmpeg -i source.mp4 -an \
+    -vf "scale=1024:-2:flags=lanczos" \
+    -c:v libx264 -profile:v high -pix_fmt yuv420p -preset slow -crf 26 \
+    -g 4 -keyint_min 4 -sc_threshold 0 -movflags +faststart \
+    assets/biryani-wide.mp4
+  ```
+
+  Then the same again at `scale=640:-2` and `-crf 27` for
+  `assets/biryani-small.mp4`. `scene-video.js` picks between them on viewport
+  width before it sets `src`, because changing it afterwards throws away
+  everything already buffered.
+
+- **One seek per frame.** `currentTime` is set from a single `requestAnimation-
+  Frame` loop, never from the scroll event, and not at all while the target is
+  inside the frame already on screen.
+
+The cut points in `footage.cuts` are read off the clip, not guessed:
+
+```bash
+ffmpeg -i source.mp4 -vf "select='gt(scene,0.35)',metadata=print:file=-" -an -f null -
+```
+
+Step *n* parks in the middle of shot *n*, so a cut lands about halfway between
+two steps rather than on one of them.
+
+A phone is portrait and the footage is landscape, so `object-fit: cover` threw
+away everything either side of the middle — a shot of a pot came out as a dark
+stripe. Under 760px it is a band across the top instead, masked out at its
+lower edge, with the copy below it.
+
+**The clip is not of this mill.** It was generated, and it carried the
+generator's watermark in the bottom-right corner, which is cropped off in the
+encode above (`crop=1124:720:0:0` before the scale). Replacing it with real
+footage of the actual mill and kitchen would be worth doing before this is
+shown to customers.
+
+### Generating the pages
 
 They are **generated**, not hand-written. The site itself still has no build step;
 this is a one-off so five pages cannot drift apart:
