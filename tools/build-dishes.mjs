@@ -14,7 +14,7 @@
 
 import { writeFileSync } from 'node:fs';
 import { DICT } from '../js/i18n.js';
-import { DISHES } from '../js/dishes.js';
+import { DISHES, STEPS } from '../js/dishes.js';
 
 const en = DICT.en;
 const t = (k) => {
@@ -48,7 +48,7 @@ const NAV = [
 ];
 
 function steps(i) {
-  return [1, 2, 3, 4]
+  return Array.from({ length: STEPS }, (_, k) => k + 1)
     .map(
       (n) => `
   <!-- ──────────────────────────────  step ${n}  ─────────────────────────── -->
@@ -207,7 +207,7 @@ ${NAV.map(([href, key]) => `        <li><a href="${href}"${key === 'nav.dishes' 
     </div>
   </section>
 
-  <!-- ─────────────────────  the four cooking steps  ───────────────── -->
+  <!-- ───────────────────────  the cooking steps  ─────────────────── -->
   <p class="u-sr" data-i18n="dp.how">${esc(t('dp.how'))}</p>
 ${steps(i)}
   <!-- ──────────────────────────  the other four  ──────────────────── -->
