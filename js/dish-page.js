@@ -41,7 +41,7 @@ if (steps.length) {
     });
   }
 
-  // a continuous 0–3, hitting a whole number exactly on each step
+  // continuous, hitting a whole number exactly on each step
   function stage() {
     const y = window.scrollY;
     const last = anchors.length - 1;

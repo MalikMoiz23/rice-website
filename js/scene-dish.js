@@ -1,77 +1,47 @@
 /* ============================================================
-   scene-dish.js — the dish being made, in four scroll steps
+   scene-dish.js — the dish being cooked, step by scrolled step
 
-     0  dry grain in the vessel, as it comes out of the bag
-     1  washed and soaking, the grain swells
-     2  the chicken curry goes in and the rice piles over it
-     3  finished — full length, colour in patches, fried onion,
-        mint, chicken sitting in it, steam coming off
+   This is a director, not an animation. dishes.js holds six stage
+   directions per dish — which vessel, whether the burner is lit,
+   how much water, how heaped and how cooked the rice is, what has
+   gone on top — and everything here interpolates between the two
+   the scroll currently sits between. Nothing is keyframed by hand.
 
-   Two things here are tied to real figures rather than picked to
-   look nice:
+   For biryani that is the six panels of the reference: wash it
+   under the tap in a colander, boil it in a degchi over a flame,
+   simmer the chicken salan in a karahi, layer the rice over it,
+   seal the lid with dough for the dum, serve it on the plate.
+
+   Three things are worked out rather than picked to look nice:
 
    - every grain is the real grade. Raw length and width come from
-     grades.js, and the finished mound scales each grain by that
-     grade's actual cooked elongation, so biryani reads long and
-     loose because Super Basmati really does grow 2.1 times.
+     grades.js and `swell` scales each grain toward that grade's
+     actual cooked elongation, so biryani reads long and loose
+     because Super Basmati really does grow 2.1 times.
 
-   - a vessel is not a cylinder. VESSELS carries where the floor
-     is and how wide rice can lie on it, separately from where the
-     cooked surface sits and how wide the heap may be up there.
-     Sizing the heap from dishes.js alone put rice through the
-     side of the bowl and onto the table.
+   - a vessel is not a cylinder. Rice, curry and water are seated
+     at a height and then made exactly as wide as kitchen.js says
+     that vessel is at that height. Guessing a width instead is
+     what used to put a disc of salan straight through the side
+     of the karahi.
+
+   - the camera is not placed by hand either. It is worked back
+     from how wide the vessel is and how deep you have to look to
+     see its floor, which is why a shallow plate is seen almost
+     side-on and a degchi is looked down into. The one exception
+     is a lit burner: the shot flattens out then, because from
+     any steeper angle the pot hides its own flame.
    ============================================================ */
 
 import * as THREE from 'three';
 import { riceGeometry } from './rice-geometry.js';
 import { GRADES } from './grades.js';
 import { DISHES } from './dishes.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { VESSELS, stove, flames, bubbles, tap, lid, STOVE_H } from './kitchen.js';
 import { supportsWebGL, guardContext, makeQualityGuard } from './webgl.js';
 
 const TAU = Math.PI * 2;
-
-/* bottom-to-top lathe profiles, [radius, height].
-
-   `base`/`bed` are where dry rice lies on the floor and how wide it spreads
-   there. `fill`/`cap` are where the cooked surface sits and how wide the heap
-   may be at that height, which is higher up and so wider. `view` lifts the
-   camera so a deep pot is seen into rather than across. */
-const VESSELS = {
-  /* the engraved copper thaal biryani is served out of */
-  copper: {
-    profile: [[0, 0.06], [1.4, 0.02], [1.58, 0.14], [1.74, 0.32], [1.84, 0.42], [1.77, 0.45]],
-    material: { color: 0x8a5a2f, roughness: 0.33, metalness: 0.88 },
-    bed: 1.24, base: 0.06, fill: 0.12, cap: 1.28,
-    view: { lift: 1, look: 0.15 },
-  },
-  /* a plain white plate, which is what pulao turns up on */
-  plate: {
-    profile: [[0, 0.04], [1.28, 0], [1.48, 0.1], [1.64, 0.24], [1.71, 0.31]],
-    material: { color: 0xf3efe7, roughness: 0.3, metalness: 0.02 },
-    bed: 1.15, base: 0.04, fill: 0.1, cap: 1.2,
-    view: { lift: 1, look: 0.12 },
-  },
-  degh: {
-    profile: [[0, 0], [0.92, 0], [1.2, 0.26], [1.32, 0.72], [1.28, 1.02], [1.39, 1.1]],
-    material: { color: 0xb9a179, roughness: 0.32, metalness: 0.72 },
-    bed: 0.86, base: 0.06, fill: 0.62, cap: 1.06,
-    view: { lift: 1.5, look: 0.95 },
-  },
-  bowl: {
-    profile: [[0, 0.02], [0.52, 0], [0.84, 0.24], [0.97, 0.56], [1.03, 0.65]],
-    material: { color: 0xeee7d8, roughness: 0.44, metalness: 0.04 },
-    bed: 0.5, base: 0.06, fill: 0.34, cap: 0.8,
-    view: { lift: 1.2, look: 0.5 },
-  },
-};
-
-/* camera, one keyframe per step */
-const CAM = [
-  { p: [0, 3.15, 5.3], l: [0, 0.18, 0] },
-  { p: [0, 2.65, 4.7], l: [0, 0.24, 0] },
-  { p: [0.95, 2.1, 4.25], l: [0, 0.4, 0] },
-  { p: [0.55, 1.72, 3.8], l: [0, 0.46, 0] },
-];
 
 export function initDish(riceIndex, canvas) {
   const el = canvas || document.querySelector('[data-dish-canvas]');
@@ -81,83 +51,164 @@ export function initDish(riceIndex, canvas) {
   const grade = GRADES[riceIndex];
   if (!dish || !grade) return null;
 
+  const script = dish.script;
+  const LAST = script.length - 1;
+
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const small = window.innerWidth < 760;
   const COUNT = small ? 2200 : 5200;
-  const top = dish.top || {};
+  const topSpec = dish.top || {};
   const many = (n) => (small ? Math.round((n || 0) * 0.5) : n || 0);
 
   const renderer = new THREE.WebGLRenderer({ canvas: el, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = 1.16;
+  renderer.toneMappingExposure = 1.34;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const quality = makeQualityGuard(renderer);
 
   const scene = new THREE.Scene();
   scene.background = backdrop();
-  scene.fog = new THREE.FogExp2(0x120d07, 0.055);
+
+  /* Steel and aluminium are mirrors: with nothing but a dark gradient to
+     reflect, every pot came out the colour of the table. This gives them a
+     room to pick up, kept well under 1 so the kitchen stays warm. */
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.05).texture;
+  scene.environmentIntensity = 0.5;
+  pmrem.dispose();
+
+  scene.fog = new THREE.FogExp2(0x1a1209, 0.028);
 
   const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 60);
 
-  /* ─────────────────────────────────────────────────────── vessel */
-
-  const vessel = VESSELS[dish.vessel];
-  const pot = new THREE.Mesh(
-    new THREE.LatheGeometry(vessel.profile.map(([r, y]) => new THREE.Vector2(r, y)), 72),
-    new THREE.MeshStandardMaterial({ ...vessel.material, side: THREE.DoubleSide })
-  );
-  pot.castShadow = true;
-  pot.receiveShadow = true;
-  scene.add(pot);
+  /* ───────────────────────────────────────── table and burner ── */
 
   const table = new THREE.Mesh(
-    new THREE.CircleGeometry(6, 48),
-    new THREE.MeshStandardMaterial({ color: 0x241809, roughness: 0.95 })
+    new THREE.CircleGeometry(9, 48),
+    new THREE.MeshStandardMaterial({ color: 0x3a2712, roughness: 0.93 })
   );
   table.rotation.x = -Math.PI / 2;
   table.position.y = -0.002;
   table.receiveShadow = true;
   scene.add(table);
 
-  const moundR = Math.min(dish.cook.mound.r, vessel.cap);
-  const moundH = dish.cook.mound.h;
-  const floor = vessel.fill; // the cooked surface, part-way up the vessel
-  const bedY = vessel.base;  // the dry grain, down on the floor
+  const burner = stove();
+  scene.add(burner);
 
-  /* ──────────────────────────────── the curry layer underneath */
+  const fire = flames(small ? 12 : 18);
+  scene.add(fire.mesh);
 
-  let masala = null;
-  if (dish.masala !== null) {
-    masala = new THREE.Mesh(
-      new THREE.CylinderGeometry(moundR * 0.95, moundR * 0.86, 0.16, 40),
-      new THREE.MeshStandardMaterial({ color: dish.masala, roughness: 0.68, transparent: true })
-    );
-    masala.position.y = floor - 0.07;
-    scene.add(masala);
+  /* everything that stands on the burner rides in here */
+  const hob = new THREE.Group();
+  scene.add(hob);
+
+  /* ─────────────────────────────────────── every vessel used ── */
+
+  const used = [...new Set(script.map((s) => s.v))];
+  const vessels = {};
+
+  used.forEach((name) => {
+    const built = VESSELS[name]();
+    // they cross-fade into one another at a step boundary
+    built.object.traverse((o) => {
+      if (!o.material) return;
+      o.material = o.material.clone();
+      o.material.transparent = true;
+    });
+    vessels[name] = built;
+    hob.add(built.object);
+  });
+
+  /* ─────────────────────────────────── the lid, and the tap ── */
+
+  const wantsLid = script.some((s) => s.lid);
+  const cover = wantsLid ? lid() : null;
+  if (cover) {
+    cover.traverse((o) => {
+      if (!o.material) return;
+      o.material = o.material.clone();
+      o.material.transparent = true;
+    });
+    hob.add(cover);
   }
 
-  /* ────────────────────────────── kheer sits in milk, not on air */
+  const wantsTap = script.some((s) => s.pour);
+  const water_in = wantsTap ? tap() : null;
+  if (water_in) hob.add(water_in.object);
 
-  let milk = null;
-  if (dish.cook.creamy) {
-    milk = new THREE.Mesh(
-      new THREE.CylinderGeometry(moundR * 1.04, moundR * 0.88, 0.3, 40),
-      new THREE.MeshStandardMaterial({ color: 0xfaf3e2, roughness: 0.28, transparent: true })
-    );
-    milk.position.y = floor - 0.05;
-    scene.add(milk);
-  }
+  /* ────────────────────────────────────── water, bubbles, curry ── */
 
-  /* ─────────────────────────────────────────────────── the rice */
+  /* WATER_LEVEL and SAUCE_LEVEL are fractions of a vessel's load, so the
+     same numbers mean "nearly brimming" in a colander and in a deg. */
+  const WATER_LEVEL = 0.95;
+  const SAUCE_LEVEL = 0.62;
+
+  const waterMat = new THREE.MeshPhysicalMaterial({
+    color: 0xe7f1ea,
+    roughness: 0.06,
+    transmission: 0.62,
+    thickness: 0.45,
+    transparent: true,
+    opacity: 0,
+  });
+
+  const curryMat = new THREE.MeshStandardMaterial({
+    color: dish.masala ?? 0x9e3a18,
+    roughness: 0.42,
+    metalness: 0.06,
+    transparent: true,
+    opacity: 0,
+  });
+
+  const milkMat = dish.cook.creamy
+    ? new THREE.MeshStandardMaterial({ color: 0xfaf3e2, roughness: 0.28, transparent: true, opacity: 0 })
+    : null;
+
+  /* One body of liquid per vessel, turned on that vessel's own wall. A
+     cylinder cannot do this job: in anything that narrows towards its floor
+     — which is every pot here — the bottom of it comes out through the
+     side, and that is exactly what used to happen. */
+  const liquids = {};
+  used.forEach((name) => {
+    const v = vessels[name];
+    liquids[name] = {
+      water: fill(v, WATER_LEVEL, waterMat),
+      curry: fill(v, SAUCE_LEVEL, curryMat),
+      milk: milkMat ? fill(v, SAUCE_LEVEL, milkMat) : null,
+    };
+    Object.values(liquids[name]).forEach((m) => m && hob.add(m));
+  });
+
+  /* Layering is the one step where the salan has to be seen, and by then
+     it is underneath a potful of rice. So it is also poured over the top,
+     the way the reference photograph has it: a ladleful in the middle with
+     the white grain still showing round the edge. */
+  const poured = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 30, 14, 0, TAU, 0, Math.PI / 2),
+    curryMat.clone()
+  );
+  poured.visible = false;
+  hob.add(poured);
+
+  const boil = bubbles(small ? 30 : 70);
+  hob.add(boil.mesh);
+
+  /* what is floating in the salan: chicken, tomato, whole green chilli */
+  const chunkGeo = new THREE.IcosahedronGeometry(0.12, 1);
+  const salan = dish.masala
+    ? scatter(many(22), chunkGeo, [0xd08a3c, 0xbb3a1c, 0x336f24, 0xc2701f], 0.02, false)
+    : null;
+  if (salan) hob.add(salan.mesh);
+
+  /* ───────────────────────────────────────────────── the rice ── */
 
   /* A cooked grain is about 15 mm against a platter around 350 mm across. The
-     vessel here is roughly 3.4 units wide, so a finished grain wants to be
-     about 0.15 long — and it has to be that AFTER the elongation below, which
-     is why the raw size is divided by it. */
-  const cookedLength = 0.15;
-  const halfRaw = cookedLength / 2 / dish.cook.grow;
+     vessels here are roughly 3 units wide, so a finished grain wants to be
+     about 0.15 long — and it has to be that AFTER the elongation, which is why
+     the raw size is divided by it. */
+  const halfRaw = 0.15 / 2 / dish.cook.grow;
 
   const grainGeo = riceGeometry({
     segments: 8,
@@ -173,120 +224,82 @@ export function initDish(riceIndex, canvas) {
   );
   rice.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   rice.castShadow = true;
-  scene.add(rice);
+  hob.add(rice);
 
-  const raw = new THREE.Color(grade.grain.color);
+  const rawColor = new THREE.Color(grade.grain.color);
   const tints = dish.cook.tint.map((hex) => new THREE.Color(hex));
-  const grains = new Array(COUNT);
   const tint = new THREE.Color();
+  const grains = new Array(COUNT);
 
+  /* Stored as fractions of whatever vessel is on screen, so the same grain
+     works in a colander, a degchi and a plate without being rebuilt. */
   for (let i = 0; i < COUNT; i++) {
-    // dry: a flat bed across the floor of the vessel
-    const ra = Math.random() * TAU;
-    const rr = vessel.bed * Math.sqrt(Math.random());
-
-    // cooked: filling a dome, which is how a served mound actually sits
-    const ca = Math.random() * TAU;
-    const cr = moundR * Math.sqrt(Math.random());
-    const cap = moundH * (1 - (cr / moundR) ** 2);
-    const cx = Math.cos(ca) * cr;
-    const cz = Math.sin(ca) * cr;
-
+    const u = Math.random() * TAU;
+    const v = Math.sqrt(Math.random());
     grains[i] = {
-      dry: [Math.cos(ra) * rr, bedY + 0.01 + Math.random() * 0.07, Math.sin(ra) * rr],
-      done: [cx, floor + cap * (0.18 + 0.82 * Math.random()), cz],
+      u, v,
+      h: Math.random(),
       // tipped flat, then given a heading — a bed of rice lies down
       spin: [Math.PI / 2 + (Math.random() - 0.5) * 0.75, Math.random() * TAU, (Math.random() - 0.5) * 0.5],
       wobble: Math.random() * TAU,
-      shade: dish.cook.patchy ? patchAt(cx, cz) : pickTint(dish.cook.mix),
+      shade: dish.cook.patchy ? patchAt(Math.cos(u) * v, Math.sin(u) * v) : pickTint(dish.cook.mix),
       jitter: 0.9 + Math.random() * 0.25,
     };
-    rice.setColorAt(i, raw);
+    rice.setColorAt(i, rawColor);
   }
   rice.instanceColor.needsUpdate = true;
 
-  /* ───────────────────────────────────────── water while soaking */
+  /* ──────────────────────────── chicken, kebab, onion, mint ── */
 
-  const water = new THREE.Mesh(
-    new THREE.CylinderGeometry(vessel.bed * 1.06, vessel.bed * 0.96, 0.26, 44),
-    new THREE.MeshPhysicalMaterial({
-      color: 0xdfe8dc,
-      roughness: 0.08,
-      transmission: 0.9,
-      thickness: 0.4,
-      transparent: true,
-      opacity: 0,
-    })
-  );
-  water.position.y = bedY + 0.09;
-  scene.add(water);
+  const props = new THREE.Group();
+  hob.add(props);
+  const meat = [];
 
-  /* ═══════════════════════ what goes on and in the finished rice ══ */
-
-  const props = new THREE.Group(); // chicken and kebab, each scaled in place
-  scene.add(props);
-  const pieces = [];
-
-  /* chicken — the thing the first version of this was missing */
-  const chickenCount = many(top.chicken);
+  const chickenCount = many(topSpec.chicken);
   for (let i = 0; i < chickenCount; i++) {
     const stick = drumstick();
-    const a = (i / chickenCount) * TAU + 0.6;
-    const r = moundR * 0.5;
-    const cap = moundH * (1 - (r / moundR) ** 2);
-    // resting on the surface, tipped over, the way a drumstick lies
-    stick.position.set(Math.cos(a) * r, floor + cap + 0.04, Math.sin(a) * r);
-    stick.rotation.set(-1.28 + (Math.random() - 0.5) * 0.25, a + 1.1, (Math.random() - 0.5) * 0.35);
-    stick.userData.size = 1.35;
+    stick.userData.a = (i / chickenCount) * TAU + 0.6;
+    stick.userData.r = 0.5;
+    stick.userData.size = 1.05;
     stick.scale.setScalar(0.001);
     props.add(stick);
-    pieces.push(stick);
+    meat.push(stick);
   }
 
-  /* shami kebab — flat, browned, sitting on the rice */
-  const kebabCount = many(top.kebab);
+  const kebabCount = many(topSpec.kebab);
   for (let i = 0; i < kebabCount; i++) {
     const kebab = new THREE.Mesh(
       new THREE.CylinderGeometry(0.19, 0.185, 0.06, 20),
       new THREE.MeshStandardMaterial({ color: 0x7a4a24, roughness: 0.78 })
     );
-    const a = -2.5 + i * 1.25; // clear of the chicken, which sits at 0.6
-    const r = moundR * 0.56;
-    const cap = moundH * (1 - (r / moundR) ** 2);
-    kebab.position.set(Math.cos(a) * r, floor + cap + 0.03, Math.sin(a) * r);
-    kebab.rotation.set((Math.random() - 0.5) * 0.25, Math.random() * TAU, (Math.random() - 0.5) * 0.25);
+    kebab.userData.a = -2.5 + i * 1.25; // clear of the chicken, which sits at 0.6
+    kebab.userData.r = 0.56;
+    kebab.userData.size = 1;
     kebab.castShadow = true;
     kebab.scale.setScalar(0.001);
     props.add(kebab);
-    pieces.push(kebab);
+    meat.push(kebab);
   }
 
-  /* fried onion — curved slivers, not beads */
-  const onionGeo = new THREE.TorusGeometry(0.058, 0.0105, 4, 10, Math.PI * 0.9);
-  onionGeo.scale(1, 1, 0.34); // flattened, because fried onion is a shaving
-  const onion = scatter(
-    many(top.onion),
-    onionGeo,
-    [0xb0682a, 0x8d4c18, 0xc4813c],
-    moundR, moundH, floor, 0.035, true
-  );
+  /* fried onion is a shaving, so it is a flattened curved sliver lying face up */
+  const onionGeo = new THREE.TorusGeometry(0.062, 0.012, 4, 10, Math.PI * 0.9);
+  onionGeo.scale(1, 1, 0.34);
+  const onion = scatter(many(topSpec.onion), onionGeo, [0x8f4a12, 0x6d3409, 0xa95f1d], 0.035, true);
 
-  /* mint — flat leaves */
   const mintGeo = new THREE.SphereGeometry(0.05, 7, 5);
   mintGeo.scale(1, 0.13, 0.62);
-  const mint = scatter(many(top.mint), mintGeo, [0x3f7f2c, 0x51923a], moundR, moundH, floor, 0.045, true);
+  const mint = scatter(many(topSpec.mint), mintGeo, [0x3f7f2c, 0x51923a], 0.045, true);
 
-  /* pistachio and almond, for the kheer */
   const nuts = scatter(
-    many(top.nuts),
+    many(topSpec.nuts),
     new THREE.SphereGeometry(0.022, 7, 5),
     [0x7fae3f, 0xe8d9a8, 0xc9455a],
-    moundR, moundH, floor, 0.03
+    0.03, false
   );
 
-  [onion, mint, nuts].forEach((s) => s && scene.add(s.mesh));
+  [onion, mint, nuts].forEach((s) => s && hob.add(s.mesh));
 
-  /* ─────────────────────────────────────────────────────── steam */
+  /* ─────────────────────────────────────────────────── steam ── */
 
   const STEAM = small ? 10 : 22;
   const steam = new THREE.InstancedMesh(
@@ -301,42 +314,47 @@ export function initDish(riceIndex, canvas) {
     STEAM
   );
   steam.frustumCulled = false;
-  scene.add(steam);
+  hob.add(steam);
 
   const puffs = Array.from({ length: STEAM }, () => ({
     a: Math.random() * TAU,
-    r: Math.random() * 0.45,
+    r: Math.random() * 0.5,
     t: Math.random(),
     speed: 0.16 + Math.random() * 0.22,
     scale: 0.7 + Math.random() * 0.9,
   }));
 
-  /* ─────────────────────────────────────────────────────── light */
+  /* ─────────────────────────────────────────────────── light ── */
 
-  scene.add(new THREE.HemisphereLight(0xfff1d8, 0x3a2a18, 0.85));
+  scene.add(new THREE.HemisphereLight(0xfff1d8, 0x4a3520, 1.15));
 
-  const key = new THREE.DirectionalLight(0xfff0cf, 3.2);
-  key.position.set(2.6, 4.2, 3.4);
+  const key = new THREE.DirectionalLight(0xfff0cf, 4.2);
+  key.position.set(2.6, 5.2, 3.4);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
   key.shadow.camera.near = 1;
-  key.shadow.camera.far = 14;
-  key.shadow.camera.left = -3;
-  key.shadow.camera.right = 3;
-  key.shadow.camera.top = 3;
-  key.shadow.camera.bottom = -3;
+  key.shadow.camera.far = 18;
+  key.shadow.camera.left = -4;
+  key.shadow.camera.right = 4;
+  key.shadow.camera.top = 4;
+  key.shadow.camera.bottom = -4;
   key.shadow.bias = -0.0008;
   scene.add(key);
 
-  const warm = new THREE.PointLight(0xffb45c, 22, 9, 2);
-  warm.position.set(-2.1, 1.5, 1.6);
-  scene.add(warm);
-
-  const rim = new THREE.DirectionalLight(0xffd9a0, 1.2);
-  rim.position.set(-3, 1.4, -3);
+  const rim = new THREE.DirectionalLight(0xffd9a0, 1.7);
+  rim.position.set(-3.4, 2.1, -3);
   scene.add(rim);
 
-  /* ────────────────────────────────────────────────────── sizing */
+  /* the burner throws its own light, and only while it is lit */
+  const fireLight = new THREE.PointLight(0xff8a2a, 0, 5, 2);
+  fireLight.position.set(0, 0.25, 0);
+  scene.add(fireLight);
+
+  const warm = new THREE.PointLight(0xffb45c, 26, 11, 2);
+  warm.position.set(-2.4, 2, 2);
+  scene.add(warm);
+
+  /* ────────────────────────────────────────────────── sizing ── */
 
   function resize() {
     const w = el.clientWidth || 1;
@@ -348,108 +366,211 @@ export function initDish(riceIndex, canvas) {
   resize();
   new ResizeObserver(resize).observe(el);
 
-  /* ─────────────────────────────────────────────────────── stage */
+  /* ─────────────────────────────────────────────────── stage ── */
 
   let stage = 0;
   let want = 0;
   let painted = -1;
 
-  function setStage(s) {
-    want = clamp(s, 0, CAM.length - 1);
-  }
+  const setStage = (s) => { want = clamp(s, 0, LAST); };
 
-  function applyStage() {
-    stage = want;
-    // 5200 colour lerps plus a buffer upload; the tint shifts slowly enough
-    // that doing it every 0.05 of a stage is indistinguishable
-    if (Math.abs(stage - painted) < 0.05) return;
-    // and outside the window where the colour actually moves, never
-    if (stage < 1.6 && painted < 1.6) return;
-    if (stage > 3.05 && painted > 3.05) return;
-    painted = stage;
-
-    // colour arrives late: rice does not take the curry until it is layered
-    const t = smoothstep(1.7, 3, stage);
+  function repaintRice(amount) {
+    if (Math.abs(amount - painted) < 0.05) return;
+    painted = amount;
     for (let i = 0; i < COUNT; i++) {
-      tint.lerpColors(raw, tints[grains[i].shade], t);
+      tint.lerpColors(rawColor, tints[grains[i].shade], amount);
       rice.setColorAt(i, tint);
     }
     rice.instanceColor.needsUpdate = true;
   }
 
-  /* ──────────────────────────────────────────────────────── loop */
+  /** the height a fraction of a vessel's load sits at, and how wide it is there */
+  function level(v, fraction) {
+    const y = v.base + (v.fill - v.base) * fraction;
+    return { y, r: v.radiusAt(y) };
+  }
+
+  /* ──────────────────────────────────────────────────── loop ── */
 
   const clock = new THREE.Clock();
   const dummy = new THREE.Object3D();
-  // Y after X, so the heading turns the laid-down grain rather than rolling it
-  dummy.rotation.order = 'YXZ';
-  const face = new THREE.Object3D(); // steam billboards, kept separate
+  dummy.rotation.order = 'YXZ'; // Y after X turns the laid-down grain, not rolls it
+  const face = new THREE.Object3D();
   let running = true;
   let pageVisible = true;
   let frame = 0;
 
   function step(dt, time) {
-    applyStage();
-    const s = stage;
+    stage = want;
 
-    const swell = mix(1, dish.cook.grow, smoothstep(0.85, 3, s));
-    const rise = smoothstep(1.3, 3, s);
-    const wet = smoothstep(0.5, 1.1, s) * (1 - smoothstep(1.5, 2.1, s));
-    const layered = smoothstep(1.5, 2.4, s);
-    const meatIn = smoothstep(1.7, 2.5, s);
-    const done = smoothstep(2.45, 3, s);
+    const i0 = Math.min(Math.floor(stage), LAST);
+    const i1 = Math.min(i0 + 1, LAST);
+    const f = ease(stage - i0);
+    const A = script[i0];
+    const B = script[i1];
+    const va = vessels[A.v];
+    const vb = vessels[B.v];
 
-    /* the rice: swells, climbs into a mound, takes the colour */
-    for (let i = 0; i < COUNT; i++) {
-      const g = grains[i];
-      const bob = Math.sin(time * 0.6 + g.wobble) * 0.004 * rise;
+    /* the stage directions, blended */
+    const heap = mix(A.heap, B.heap, f);
+    const piled = mix(A.dome, B.dome, f);
+    const swell = mix(A.swell, B.swell, f);
+    const wet = mix(A.water, B.water, f);
+    const bubbling = mix(A.boil, B.boil, f);
+    const lit = mix(A.fire, B.fire, f);
+    const onHob = mix(A.stove, B.stove, f);
+    const sauce = mix(A.curry, B.curry, f);
+    const riceOn = mix(A.rice, B.rice, f);
+    const colour = mix(A.tint, B.tint, f);
+    const topping = mix(A.top, B.top, f);
+    const tapOn = mix(A.pour, B.pour, f);
+    const sealed = mix(A.lid, B.lid, f);
 
-      dummy.position.set(
-        mix(g.dry[0], g.done[0], rise),
-        mix(g.dry[1], g.done[1], rise) + bob,
-        mix(g.dry[2], g.done[2], rise)
+    /* Every surface is measured inside each vessel and only then blended, so
+       nothing is ever wider than whichever one is actually on screen. */
+    const la = level(va, heap);
+    const lb = level(vb, heap);
+    const floorY = mix(la.y, lb.y, f);
+    /* A grain is placed by its centre and is about 0.15 long, so a bed that
+       reaches the wall has half a grain sticking through it. The inset is
+       that half grain. */
+    const R = Math.max(mix(la.r, lb.r, f) * 0.93 - 0.075, 0.12);
+
+    const sa = level(va, SAUCE_LEVEL);
+    const sb = level(vb, SAUCE_LEVEL);
+    const sauceY = mix(sa.y, sb.y, f);
+    const sauceR = mix(sa.r, sb.r, f) * 0.92;
+
+    const wa = level(va, WATER_LEVEL);
+    const wb = level(vb, WATER_LEVEL);
+    const brim = mix(wa.y, wb.y, f);
+    const brimR = mix(wa.r, wb.r, f) * 0.97;
+
+    const floor = mix(va.base, vb.base, f);
+    const rimY = mix(va.rim, vb.rim, f);
+    const rimR = mix(va.radiusAt(va.rim), vb.radiusAt(vb.rim), f);
+    const outer = mix(va.outer, vb.outer, f);
+
+    const lift = onHob * STOVE_H;
+    hob.position.y = lift;
+
+    burner.visible = onHob > 0.02;
+    fire.update(camera, time, lit);
+    fireLight.intensity = lit * 11;
+
+    /* vessels cross-fade where the script swaps them, and what is inside
+       each one fades with it rather than on its own */
+    used.forEach((name) => {
+      let w = 0;
+      if (A.v === name) w += 1 - f;
+      if (B.v === name) w += f;
+      w = Math.min(1, w);
+
+      const v = vessels[name];
+      v.object.visible = w > 0.01;
+      if (v.object.visible) setOpacity(v.object, w);
+
+      const held = liquids[name];
+      show(held.water, w * wet * 0.82);
+      show(held.curry, w * sauce);
+      // milk from the moment it goes on the heat, and it stays milk after
+      show(held.milk, w * Math.max(onHob, colour) * 0.9);
+    });
+
+    const domeH = dish.cook.mound.h * heap * piled;
+
+    /* rice */
+    repaintRice(colour);
+    rice.visible = riceOn > 0.02;
+    if (rice.visible) {
+      for (let i = 0; i < COUNT; i++) {
+        const g = grains[i];
+        const dome = domeH * (1 - g.v * g.v);
+        const bob = Math.sin(time * 0.6 + g.wobble) * 0.004 * heap;
+
+        dummy.position.set(
+          Math.cos(g.u) * g.v * R,
+          floorY + dome * (0.18 + 0.82 * g.h) + bob,
+          Math.sin(g.u) * g.v * R
+        );
+        dummy.rotation.set(g.spin[0], g.spin[1] + time * 0.02, g.spin[2]);
+        // cooked rice gets longer, not thicker
+        const grow = mix(1, dish.cook.grow, swell);
+        dummy.scale.set(g.jitter * riceOn, g.jitter * grow * riceOn, g.jitter * riceOn);
+        dummy.updateMatrix();
+        rice.setMatrixAt(i, dummy.matrix);
+      }
+      rice.instanceMatrix.needsUpdate = true;
+    }
+
+    /* the bubbles coming up through the water, and the tap going into it */
+    boil.update(dt, floor + 0.03, brim, brimR * 0.86, bubbling);
+    if (water_in) water_in.update(time, brim, tapOn);
+
+    /* the ladleful over the rice, and what is floating in it */
+    const overRice = sauce * riceOn * smoothstep(0.35, 0.75, heap);
+    poured.visible = overRice > 0.02;
+    if (poured.visible) {
+      const pr = R * 0.38;
+      poured.material.opacity = overRice;
+      poured.position.set(-R * 0.06, floorY + domeH * 0.82, R * 0.04);
+      poured.scale.set(pr, domeH * 0.22 + 0.03, pr * 0.86);
+    }
+
+    if (salan) {
+      salan.update(
+        dummy,
+        sauce,
+        mix(sauceR * 0.78, R * 0.34, riceOn),
+        0.03,
+        mix(sauceY + 0.03, floorY + domeH * 0.86, riceOn)
       );
-      dummy.rotation.set(g.spin[0], g.spin[1] + time * 0.02, g.spin[2]);
-      // cooked rice gets longer, not thicker
-      dummy.scale.set(g.jitter, g.jitter * swell, g.jitter);
-      dummy.updateMatrix();
-      rice.setMatrixAt(i, dummy.matrix);
-    }
-    rice.instanceMatrix.needsUpdate = true;
-
-    water.material.opacity = wet * 0.72;
-    water.visible = wet > 0.01;
-
-    if (masala) {
-      masala.material.opacity = layered;
-      masala.visible = layered > 0.01;
-    }
-    if (milk) {
-      milk.material.opacity = 0.35 + layered * 0.55;
-      milk.visible = layered > 0.01;
     }
 
-    /* the chicken goes in with the curry, a beat before the rice covers it */
-    props.visible = meatIn > 0.02;
-    if (props.visible) pieces.forEach((p) => p.scale.setScalar(meatIn * (p.userData.size || 1)));
+    /* chicken and kebab sit on whatever surface there is now */
+    const seatY = mix(sauceY + 0.08, floorY, riceOn);
+    props.visible = topping > 0.02 && sealed < 0.6;
+    if (props.visible) {
+      meat.forEach((p) => {
+        const r = p.userData.r * R;
+        const dome = domeH * (1 - (r / Math.max(R, 0.001)) ** 2);
+        p.position.set(Math.cos(p.userData.a) * r, seatY + dome + 0.015, Math.sin(p.userData.a) * r);
+        // laid along the surface, not stood up on the bone
+        p.rotation.set(-1.5, p.userData.a + 1.1, 0);
+        p.scale.setScalar(topping * p.userData.size);
+      });
+    }
 
-    /* onion, mint and nuts are strewn over the finished dish */
-    if (onion) onion.update(dummy, done);
-    if (mint) mint.update(dummy, done);
-    if (nuts) nuts.update(dummy, done);
+    /* onion, mint and nuts only once the dish has taken its colour */
+    const garnish = topping * smoothstep(0.25, 0.8, colour) * (1 - sealed);
+    if (onion) onion.update(dummy, garnish, R, domeH, floorY);
+    if (mint) mint.update(dummy, garnish, R, domeH, floorY);
+    if (nuts) nuts.update(dummy, garnish, R, domeH, floorY);
 
-    /* steam only once it is actually hot */
-    steam.material.opacity = done * 0.42 * dish.steam;
-    steam.visible = done > 0.02;
+    /* the lid, sealed on with its rope of dough */
+    if (cover) {
+      cover.visible = sealed > 0.02;
+      if (cover.visible) {
+        setOpacity(cover, sealed);
+        cover.position.y = rimY - 0.02;
+        cover.scale.setScalar((rimR * 1.05) / 1.08);
+      }
+    }
+
+    /* steam: off the boil, off the salan, out of a sealed lid, off the plate */
+    const hot = clamp(Math.max(bubbling, garnish, sauce * 0.85, sealed), 0, 1) * dish.steam;
+    steam.material.opacity = hot * 0.4;
+    steam.visible = hot > 0.02;
     if (steam.visible) {
+      const from = sealed > 0.5 ? rimY + 0.28 : Math.max(floorY + domeH, sauceY) + 0.22;
       for (let i = 0; i < STEAM; i++) {
         const p = puffs[i];
         p.t = (p.t + dt * p.speed) % 1;
-        const lift = p.t * 1.5;
+        const rise = p.t * 1.5;
         face.position.set(
-          Math.cos(p.a) * p.r * (1 + p.t * 0.7),
-          floor + moundH + 0.22 + lift,
-          Math.sin(p.a) * p.r * (1 + p.t * 0.7)
+          Math.cos(p.a) * p.r * R * (1 + p.t * 0.7),
+          from + rise,
+          Math.sin(p.a) * p.r * R * (1 + p.t * 0.7)
         );
         face.quaternion.copy(camera.quaternion); // always face the lens
         face.scale.setScalar(p.scale * (0.5 + p.t * 1.5) * Math.sin(p.t * Math.PI));
@@ -459,22 +580,25 @@ export function initDish(riceIndex, canvas) {
       steam.instanceMatrix.needsUpdate = true;
     }
 
-    /* camera walks the keyframes and drifts so it never sits still */
-    const i0 = Math.min(Math.floor(s), CAM.length - 1);
-    const i1 = Math.min(i0 + 1, CAM.length - 1);
-    const f = ease(s - i0);
-    const drift = Math.sin(time * 0.18) * 0.16;
+    /* ── the camera, worked back from the vessel rather than placed ── */
 
-    camera.position.set(
-      mix(CAM[i0].p[0], CAM[i1].p[0], f) + drift,
-      mix(CAM[i0].p[1], CAM[i1].p[1], f) * vessel.view.lift,
-      mix(CAM[i0].p[2], CAM[i1].p[2], f)
-    );
-    camera.lookAt(
-      mix(CAM[i0].l[0], CAM[i1].l[0], f),
-      mix(CAM[i0].l[1], CAM[i1].l[1], f) + vessel.view.look,
-      mix(CAM[i0].l[2], CAM[i1].l[2], f)
-    );
+    // wide enough for the vessel, and for the stove once it is up on one
+    const framed = Math.max(outer, onHob * 1.72);
+    const dist = framed * 2.7 + 1.05;
+
+    // steep enough to see the floor of a deep pot; a flat plate needs almost none
+    let tilt = clamp(Math.atan2((rimY - floorY) * 1.2, 2 * Math.max(R, 0.4)) + 0.2, 0.28, 0.72);
+    // there is nothing to look into once the lid is on, and from any angle
+    // steeper than this the pot hides its own flame
+    tilt = mix(tilt, 0.34, sealed);
+    tilt = mix(tilt, Math.min(tilt, 0.33), lit);
+
+    const aimY = lift + mix(floorY + domeH * 0.55, rimY * 0.55, sealed) + 0.05;
+    const aimX = -0.3 * framed;              // pushed right, clear of the copy
+    const drift = Math.sin(time * 0.18) * 0.12;
+
+    camera.position.set(aimX + drift, aimY + Math.sin(tilt) * dist, Math.cos(tilt) * dist);
+    camera.lookAt(aimX, aimY, 0);
   }
 
   const render = () => renderer.render(scene, camera);
@@ -519,34 +643,62 @@ export function initDish(riceIndex, canvas) {
 
 /* ------------------------------------------------------------ pieces */
 
-/** a drumstick: meat, bone, and the knob on the end of it */
+/** a body of liquid turned on a vessel's own wall, floor up to a level */
+function fill(vessel, fraction, material) {
+  const top = vessel.base + (vessel.fill - vessel.base) * fraction;
+  const hug = 0.97;                       // just inside the wall, never touching
+
+  const points = [new THREE.Vector2(0, vessel.base)];
+  vessel.wall.forEach(([r, y]) => {
+    if (y < top) points.push(new THREE.Vector2(r * hug, y));
+  });
+  points.push(new THREE.Vector2(vessel.radiusAt(top) * hug, top));
+  points.push(new THREE.Vector2(0, top));  // the flat surface
+
+  const mesh = new THREE.Mesh(new THREE.LatheGeometry(points, 44), material.clone());
+  mesh.visible = false;
+  return mesh;
+}
+
+/** show a mesh at an opacity, or not at all */
+function show(mesh, amount) {
+  if (!mesh) return;
+  mesh.visible = amount > 0.02;
+  if (mesh.visible) mesh.material.opacity = amount;
+}
+
+
+/** a drumstick: the meat, the bone it is on, and the knob on the end */
 function drumstick() {
   const g = new THREE.Group();
 
   const meat = new THREE.Mesh(
-    new THREE.SphereGeometry(0.165, 18, 14),
-    new THREE.MeshStandardMaterial({ color: 0xc27c36, roughness: 0.52, metalness: 0.03 })
+    new THREE.SphereGeometry(0.17, 18, 14),
+    new THREE.MeshStandardMaterial({ color: 0xbe7430, roughness: 0.56, metalness: 0.03 })
   );
-  meat.scale.set(1, 1.3, 0.94);
+  // narrow and long, or it reads as an egg with a stick in it
+  meat.scale.set(0.8, 1.5, 0.78);
+  meat.position.y = -0.06;
   meat.castShadow = true;
   g.add(meat);
 
   const boneMat = new THREE.MeshStandardMaterial({ color: 0xeee2cb, roughness: 0.62 });
 
-  const bone = new THREE.Mesh(new THREE.CylinderGeometry(0.027, 0.033, 0.25, 8), boneMat);
-  bone.position.y = 0.23;
+  const bone = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.042, 0.42, 8), boneMat);
+  bone.position.y = 0.3;
   bone.castShadow = true;
   g.add(bone);
 
-  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.044, 10, 8), boneMat);
-  knob.position.y = 0.35;
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.058, 10, 8), boneMat);
+  knob.position.y = 0.5;
+  knob.scale.set(1, 0.82, 1);
   g.add(knob);
 
   return g;
 }
 
-/** instanced bits strewn over the surface of the mound */
-function scatter(count, geometry, palette, moundR, moundH, floor, lift, flat = false) {
+/** instanced bits strewn over whatever surface there is at the time */
+function scatter(count, geometry, palette, lift, flat) {
   if (!count) return null;
 
   const colors = palette.map((hex) => new THREE.Color(hex));
@@ -560,16 +712,15 @@ function scatter(count, geometry, palette, moundR, moundH, floor, lift, flat = f
 
   const bits = [];
   for (let i = 0; i < count; i++) {
-    const a = Math.random() * TAU;
-    const r = moundR * 0.94 * Math.sqrt(Math.random());
-    const cap = moundH * (1 - (r / moundR) ** 2);
     bits.push({
-      pos: [Math.cos(a) * r, floor + cap + lift * (0.4 + Math.random() * 0.8), Math.sin(a) * r],
+      a: Math.random() * TAU,
+      v: Math.sqrt(Math.random()) * 0.94,
       // flat things keep their face to the sky and only vary their heading
       rot: flat
         ? [Math.PI / 2 + (Math.random() - 0.5) * 0.55, Math.random() * TAU, (Math.random() - 0.5) * 0.4]
         : [(Math.random() - 0.5) * 1.5, Math.random() * TAU, (Math.random() - 0.5) * 1.5],
       scale: 0.65 + Math.random() * 0.7,
+      jig: 0.4 + Math.random() * 0.8,
     });
     mesh.setColorAt(i, colors[(Math.random() * colors.length) | 0]);
   }
@@ -577,12 +728,18 @@ function scatter(count, geometry, palette, moundR, moundH, floor, lift, flat = f
 
   return {
     mesh,
-    update(dummy, amount) {
+    update(dummy, amount, R, domeH, floorY) {
       mesh.visible = amount > 0.02;
       if (!mesh.visible) return;
       for (let i = 0; i < count; i++) {
         const b = bits[i];
-        dummy.position.set(b.pos[0], b.pos[1], b.pos[2]);
+        const r = b.v * R;
+        const dome = domeH * (1 - b.v * b.v);
+        dummy.position.set(
+          Math.cos(b.a) * r,
+          floorY + dome + lift * b.jig,
+          Math.sin(b.a) * r
+        );
         dummy.rotation.set(b.rot[0], b.rot[1], b.rot[2]);
         dummy.scale.setScalar(b.scale * amount);
         dummy.updateMatrix();
@@ -602,6 +759,12 @@ const ease = (t) => t * t * (3 - 2 * t);
 function smoothstep(a, b, x) {
   const t = clamp((x - a) / (b - a), 0, 1);
   return t * t * (3 - 2 * t);
+}
+
+function setOpacity(object, value) {
+  object.traverse((o) => {
+    if (o.material) o.material.opacity = value;
+  });
 }
 
 /** weighted pick, so a mound is mostly white with saffron through it */
@@ -633,9 +796,9 @@ function backdrop() {
   c.height = 256;
   const g = c.getContext('2d');
   const grad = g.createLinearGradient(0, 0, 0, 256);
-  grad.addColorStop(0, '#0d0906');
-  grad.addColorStop(0.6, '#1a1109');
-  grad.addColorStop(1, '#2a1b0e');
+  grad.addColorStop(0, '#140e08');
+  grad.addColorStop(0.6, '#26190d');
+  grad.addColorStop(1, '#3d2814');
   g.fillStyle = grad;
   g.fillRect(0, 0, 4, 256);
 
