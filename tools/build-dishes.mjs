@@ -27,6 +27,18 @@ const esc = (s) =>
 
 const file = (i) => `cook-${DISHES[i].slug}.html`;
 
+/* the scrubbed clip, for the dishes there is footage of. src is left off on
+   purpose: js/scene-video.js picks the size before it sets one, because
+   swapping it afterwards throws away everything already buffered. */
+const clip = (i) => {
+  const f = DISHES[i].footage;
+  if (!f) return '';
+  return `
+<video class="dish-video" data-dish-video aria-hidden="true"
+       muted playsinline preload="auto"
+       data-wide="${f.wide}" data-small="${f.small}"></video>`;
+};
+
 const MARK = `<svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
         <g transform="rotate(-28 32 32)">
           <ellipse cx="32" cy="32" rx="9" ry="20"/>
@@ -117,9 +129,9 @@ function page(i) {
 }
 </script>
 </head>
-<body class="dish-page" id="top" data-rice="${i}">
+<body class="dish-page${DISHES[i].footage ? ' dish-page--film' : ''}" id="top" data-rice="${i}">
 
-<canvas class="dish-canvas" data-dish-canvas aria-hidden="true"></canvas>
+<canvas class="dish-canvas" data-dish-canvas aria-hidden="true"></canvas>${clip(i)}
 
 <div class="grain-overlay" aria-hidden="true"></div>
 <div class="scroll-rail" aria-hidden="true"><span data-scroll-progress></span></div>

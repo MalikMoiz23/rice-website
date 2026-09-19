@@ -31,9 +31,12 @@
 }
 </script>
 </head>
-<body class="dish-page" id="top" data-rice="0">
+<body class="dish-page dish-page--film" id="top" data-rice="0">
 
 <canvas class="dish-canvas" data-dish-canvas aria-hidden="true"></canvas>
+<video class="dish-video" data-dish-video aria-hidden="true"
+       muted playsinline preload="auto"
+       data-wide="assets/biryani-wide.mp4" data-small="assets/biryani-small.mp4"></video>
 
 <div class="grain-overlay" aria-hidden="true"></div>
 <div class="scroll-rail" aria-hidden="true"><span data-scroll-progress></span></div>

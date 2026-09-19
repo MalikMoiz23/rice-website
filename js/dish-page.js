@@ -59,12 +59,28 @@ if (steps.length) {
   measure();
 
   // WebGL is optional — the copy and the gradient stand on their own
-  import('./scene-dish.js')
-    .then((m) => {
-      scene = m.initDish(rice);
-      paint();
-    })
-    .catch((err) => console.warn('dish scene skipped:', err.message));
+  const webgl = () =>
+    import('./scene-dish.js')
+      .then((m) => {
+        scene = m.initDish(rice);
+        paint();
+      })
+      .catch((err) => console.warn('dish scene skipped:', err.message));
+
+  /* Where there is footage of the dish being cooked, the scroll scrubs that.
+     The modelled scene stays as the fallback, for a browser that will not
+     play the file at all. */
+  if (dish?.footage) {
+    import('./scene-video.js')
+      .then((m) => {
+        scene = m.initVideo(dish.footage.cuts, { onFail: webgl });
+        if (scene) paint();
+        else webgl();
+      })
+      .catch(webgl);
+  } else {
+    webgl();
+  }
 
   window.addEventListener('scroll', paint, { passive: true });
   window.addEventListener('resize', () => { measure(); paint(); });

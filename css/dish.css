@@ -224,3 +224,54 @@
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
 }
+
+/* ------------------------------------------------- the scrubbed clip */
+
+/* Where a dish has real footage of it being cooked, this sits where the
+   canvas would and the scroll drives its currentTime. It fades in once the
+   first frame has decoded, so the gradient on the canvas underneath is what
+   shows while it loads rather than a black rectangle. */
+.dish-video {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out);
+}
+
+.dish-video.is-ready { opacity: 1; }
+
+/* The copy sits straight on the footage, which is busier and a good deal
+   lighter than the modelled scene, so it needs a darker scrim under it. It
+   is kept narrow and hard to the left: the point of using the footage is to
+   see the food, so only the column the words are in gets darkened. */
+.dish-page--film .act::before {
+  background: radial-gradient(
+    58% 118% at 4% 50%,
+    rgb(8 14 5 / 0.95) 0%,
+    rgb(8 14 5 / 0.74) 42%,
+    rgb(8 14 5 / 0.24) 74%,
+    transparent 100%
+  );
+}
+
+/* A phone is portrait and the footage is landscape, so covering the screen
+   with it crops away everything either side of the middle — a shot of a pot
+   became a dark stripe. It becomes a band across the top instead, faded out
+   at its lower edge into the gradient on the canvas behind it, and the copy
+   sits under it rather than on it. */
+@media (max-width: 760px) {
+  .dish-page--film .dish-video {
+    inset: 0 0 auto 0;
+    height: 52svh;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+  }
+
+  /* nothing is behind the words down there but the canvas, which is dark */
+  .dish-page--film .act::before { background: none; }
+}

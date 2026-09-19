@@ -52,6 +52,8 @@ coverage/
 # reference footage, not part of the site
 *.mp4
 *.mov
+# — except the clips the dish pages serve, which are site assets
+!/assets/*.mp4
 
 # reference photos dropped in the root — not site assets
 /*.jpg

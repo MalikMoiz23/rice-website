@@ -28,6 +28,10 @@
      tint   how much colour the grain has taken
      top    chicken, fried onion, coriander, kebab
 
+   A dish with a `footage` block is scrolled through its own video
+   instead, and the script below is only the fallback for a browser
+   that cannot play it.
+
    Biryani follows the six steps of the reference photograph
    exactly: wash it, boil it, make the salan, layer it, seal it
    for the dum, serve it. The other four borrow the same vessels
@@ -65,6 +69,15 @@ export const DISHES = [
     masala: 0x7e2d10,
     top: { chicken: 3, onion: 190, mint: 20, kebab: 0 },
     steam: 0.9,
+    /* Real footage of these same six steps, one shot each. The cuts are read
+       off the clip rather than guessed, and they are what step n is parked
+       in the middle of. Re-encoded with a keyframe every fourth frame, which
+       is the difference between scrubbing and stuttering. */
+    footage: {
+      wide: 'assets/biryani-wide.mp4',
+      small: 'assets/biryani-small.mp4',
+      cuts: [0, 1.5, 2.958, 4.458, 6.0, 7.375, 10.006],
+    },
     script: script([
       { v: 'colander', pour: 1, water: 1, heap: 0.72, dome: 0.12, swell: 0.08 },                  // washing
       { v: 'degchi', stove: 1, fire: 1, water: 1, boil: 1, heap: 0.5, dome: 0.08, swell: 0.62 },  // boiling
