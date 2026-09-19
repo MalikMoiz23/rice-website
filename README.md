@@ -56,7 +56,8 @@ ES modules, with Three.js pulled from a CDN.
 │   ├── biryani-wide.mp4  the scrubbed clip, desktop
 │   └── biryani-small.mp4 the same, for phones
 └── tools/
-    └── build-dishes.mjs generates the five cook-*.html pages
+    ├── build-dishes.mjs generates the five cook-*.html pages
+    └── serve.mjs         dev server: right MIME types, Range requests
 ```
 
 ## How the page-long animation works
@@ -187,12 +188,32 @@ ES modules and an import map mean `file://` will not work — browsers block mod
 requests from the filesystem. Serve the folder over HTTP:
 
 ```bash
-npx serve .
-# or
-python -m http.server 8000
+node tools/serve.mjs        # http://localhost:8137
 ```
 
-Then open <http://localhost:8000>.
+`npx serve .` and `python -m http.server` both work too. Whatever you use, it has
+to do two things, or the biryani page looks broken in a way that reports no error
+anywhere:
+
+- **send `.mp4` as `video/mp4`**, and
+- **answer Range requests with a 206.**
+
+A browser seeks by asking for a byte range. A server that hands the file over in
+one lump will let the clip load and then quietly refuse to seek in it, so
+`currentTime` is assigned, stays where it was, and the video sits on its first
+frame the whole way down the page. `js/scene-video.js` watches for exactly that
+and falls back to the modelled scene after a few seconds, so the page is never
+just dead — but the clip is what you wanted, so check the server first.
+
+To confirm a server is up to it:
+
+```bash
+curl -s -o /dev/null -w "%{content_type}\n" http://localhost:8137/assets/biryani-wide.mp4
+curl -s -r 0-99 -o /dev/null -w "%{http_code}\n" http://localhost:8137/assets/biryani-wide.mp4
+```
+
+That wants `video/mp4` and `206`. GitHub Pages, Netlify, Vercel and Cloudflare
+Pages all do both out of the box.
 
 ## Deploying to GitHub Pages
 

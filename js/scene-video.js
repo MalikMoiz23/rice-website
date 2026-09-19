@@ -45,6 +45,7 @@ export function initVideo(cuts, { onFail } = {}, el) {
   let failed = false;
   let want = marks[0];
   let shown = -1;
+  let stuck = 0;
   let frame = 0;
 
   video.muted = true;
@@ -58,11 +59,27 @@ export function initVideo(cuts, { onFail } = {}, el) {
     video.classList.add('is-ready');
   }, { once: true });
 
-  video.addEventListener('error', () => {
+  /* There are three ways this goes wrong, and only one of them raises an
+     error. The other two leave the page with nothing moving on it at all:
+
+       - the file never decodes, so there is never a first frame
+       - it decodes but will not seek. That is what a server which does not
+         answer Range requests gets you: currentTime is assigned, stays
+         where it was, and the clip sits on frame one for ever
+
+     The modelled scene is the better thing to be looking at in any of the
+     three, so all three hand over to it. */
+  const giveUp = (why) => {
+    if (failed) return;
     failed = true;
+    cancelAnimationFrame(frame);
     video.classList.remove('is-ready');
+    console.warn('cooking clip unusable (' + why + '); using the modelled scene');
     if (onFail) onFail();
-  }, { once: true });
+  };
+
+  video.addEventListener('error', () => giveUp('load failed'), { once: true });
+  setTimeout(() => { if (!ready) giveUp('never decoded'); }, 9000);
 
   /* Some browsers will not decode a frame for a video that has never been
      told to play, and seeking one silently does nothing. Asking it to play
@@ -78,10 +95,19 @@ export function initVideo(cuts, { onFail } = {}, el) {
   function paint() {
     frame = requestAnimationFrame(paint);
     if (!ready || failed || video.seeking) return;
+
     // no point seeking inside the frame that is already on screen
-    if (Math.abs(want - shown) < FRAME) return;
-    shown = want;
-    video.currentTime = want;
+    if (Math.abs(want - shown) >= FRAME) {
+      shown = want;
+      video.currentTime = want;
+    }
+
+    // and if it never arrives, the seeking is not going to start working
+    if (Math.abs(video.currentTime - want) > 0.4) {
+      if (++stuck > 180) giveUp('will not seek');
+    } else {
+      stuck = 0;
+    }
   }
   frame = requestAnimationFrame(paint);
 
