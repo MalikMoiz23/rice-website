@@ -3,13 +3,23 @@
 
      0  dry grain in the vessel, as it comes out of the bag
      1  washed and soaking, the grain swells
-     2  the pot: masala underneath, the rice piling over it
-     3  finished — full length, full colour, steam, garnish
+     2  the chicken curry goes in and the rice piles over it
+     3  finished — full length, colour in patches, fried onion,
+        mint, chicken sitting in it, steam coming off
 
-   Every grain is the real grade: raw length and width come from
-   grades.js, and the finished mound scales each grain by that
-   grade's actual cooked elongation. Biryani reads long and loose
-   on screen because Super Basmati really does grow 2.1 times.
+   Two things here are tied to real figures rather than picked to
+   look nice:
+
+   - every grain is the real grade. Raw length and width come from
+     grades.js, and the finished mound scales each grain by that
+     grade's actual cooked elongation, so biryani reads long and
+     loose because Super Basmati really does grow 2.1 times.
+
+   - a vessel is not a cylinder. VESSELS carries where the floor
+     is and how wide rice can lie on it, separately from where the
+     cooked surface sits and how wide the heap may be up there.
+     Sizing the heap from dishes.js alone put rice through the
+     side of the bowl and onto the table.
    ============================================================ */
 
 import * as THREE from 'three';
@@ -22,20 +32,24 @@ const TAU = Math.PI * 2;
 
 /* bottom-to-top lathe profiles, [radius, height].
 
-   A vessel is not a cylinder. `base`/`bed` are where dry rice lies on the
-   floor and how wide it can spread there; `fill`/`cap` are where the cooked
-   surface sits and how wide the heap may be at that height, which is higher
-   up and therefore wider. `view` lifts the camera so a deep pot is seen
-   into rather than across.
-
-   Without this the mound was sized from dishes.js alone, and a dome as wide
-   as the rim but sitting on the floor put rice straight through the wall. */
+   `base`/`bed` are where dry rice lies on the floor and how wide it spreads
+   there. `fill`/`cap` are where the cooked surface sits and how wide the heap
+   may be at that height, which is higher up and so wider. `view` lifts the
+   camera so a deep pot is seen into rather than across. */
 const VESSELS = {
-  platter: {
-    profile: [[0, 0.055], [1.48, 0.01], [1.62, 0.12], [1.71, 0.27], [1.66, 0.31]],
-    material: { color: 0xe7dfcd, roughness: 0.46, metalness: 0.05 },
-    bed: 1.3, base: 0.05, fill: 0.1, cap: 1.3,
+  /* the engraved copper thaal biryani is served out of */
+  copper: {
+    profile: [[0, 0.06], [1.4, 0.02], [1.58, 0.14], [1.74, 0.32], [1.84, 0.42], [1.77, 0.45]],
+    material: { color: 0x8a5a2f, roughness: 0.33, metalness: 0.88 },
+    bed: 1.24, base: 0.06, fill: 0.12, cap: 1.28,
     view: { lift: 1, look: 0.15 },
+  },
+  /* a plain white plate, which is what pulao turns up on */
+  plate: {
+    profile: [[0, 0.04], [1.28, 0], [1.48, 0.1], [1.64, 0.24], [1.71, 0.31]],
+    material: { color: 0xf3efe7, roughness: 0.3, metalness: 0.02 },
+    bed: 1.15, base: 0.04, fill: 0.1, cap: 1.2,
+    view: { lift: 1, look: 0.12 },
   },
   degh: {
     profile: [[0, 0], [0.92, 0], [1.2, 0.26], [1.32, 0.72], [1.28, 1.02], [1.39, 1.1]],
@@ -69,9 +83,9 @@ export function initDish(riceIndex, canvas) {
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const small = window.innerWidth < 760;
-  // small grains need numbers: a served mound is thousands, and at 1700 you
-  // could see the masala through the rice
   const COUNT = small ? 2200 : 5200;
+  const top = dish.top || {};
+  const many = (n) => (small ? Math.round((n || 0) * 0.5) : n || 0);
 
   const renderer = new THREE.WebGLRenderer({ canvas: el, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -91,7 +105,7 @@ export function initDish(riceIndex, canvas) {
 
   const vessel = VESSELS[dish.vessel];
   const pot = new THREE.Mesh(
-    new THREE.LatheGeometry(vessel.profile.map(([r, y]) => new THREE.Vector2(r, y)), 64),
+    new THREE.LatheGeometry(vessel.profile.map(([r, y]) => new THREE.Vector2(r, y)), 72),
     new THREE.MeshStandardMaterial({ ...vessel.material, side: THREE.DoubleSide })
   );
   pot.castShadow = true;
@@ -100,26 +114,25 @@ export function initDish(riceIndex, canvas) {
 
   const table = new THREE.Mesh(
     new THREE.CircleGeometry(6, 48),
-    new THREE.MeshStandardMaterial({ color: 0x2a1d10, roughness: 0.94 })
+    new THREE.MeshStandardMaterial({ color: 0x241809, roughness: 0.95 })
   );
   table.rotation.x = -Math.PI / 2;
   table.position.y = -0.002;
   table.receiveShadow = true;
   scene.add(table);
 
-  // what the vessel will actually take
   const moundR = Math.min(dish.cook.mound.r, vessel.cap);
   const moundH = dish.cook.mound.h;
-  const floor = vessel.fill;   // the cooked surface, part-way up the vessel
-  const bedY = vessel.base;    // the dry grain, down on the floor
+  const floor = vessel.fill; // the cooked surface, part-way up the vessel
+  const bedY = vessel.base;  // the dry grain, down on the floor
 
-  /* ──────────────────────────────── the masala layer underneath */
+  /* ──────────────────────────────── the curry layer underneath */
 
   let masala = null;
   if (dish.masala !== null) {
     masala = new THREE.Mesh(
       new THREE.CylinderGeometry(moundR * 0.95, moundR * 0.86, 0.16, 40),
-      new THREE.MeshStandardMaterial({ color: dish.masala, roughness: 0.72, transparent: true })
+      new THREE.MeshStandardMaterial({ color: dish.masala, roughness: 0.68, transparent: true })
     );
     masala.position.y = floor - 0.07;
     scene.add(masala);
@@ -139,10 +152,10 @@ export function initDish(riceIndex, canvas) {
 
   /* ─────────────────────────────────────────────────── the rice */
 
-  /* A cooked grain is about 15 mm against a platter around 350 mm across.
-     The vessel here is roughly 3.4 units wide, so a finished grain wants to
-     be about 0.15 long — and it has to be that size AFTER the elongation
-     below, which is why the raw size is divided by it. */
+  /* A cooked grain is about 15 mm against a platter around 350 mm across. The
+     vessel here is roughly 3.4 units wide, so a finished grain wants to be
+     about 0.15 long — and it has to be that AFTER the elongation below, which
+     is why the raw size is divided by it. */
   const cookedLength = 0.15;
   const halfRaw = cookedLength / 2 / dish.cook.grow;
 
@@ -176,14 +189,16 @@ export function initDish(riceIndex, canvas) {
     const ca = Math.random() * TAU;
     const cr = moundR * Math.sqrt(Math.random());
     const cap = moundH * (1 - (cr / moundR) ** 2);
+    const cx = Math.cos(ca) * cr;
+    const cz = Math.sin(ca) * cr;
 
     grains[i] = {
       dry: [Math.cos(ra) * rr, bedY + 0.01 + Math.random() * 0.07, Math.sin(ra) * rr],
-      done: [Math.cos(ca) * cr, floor + cap * (0.18 + 0.82 * Math.random()), Math.sin(ca) * cr],
+      done: [cx, floor + cap * (0.18 + 0.82 * Math.random()), cz],
       // tipped flat, then given a heading — a bed of rice lies down
       spin: [Math.PI / 2 + (Math.random() - 0.5) * 0.75, Math.random() * TAU, (Math.random() - 0.5) * 0.5],
       wobble: Math.random() * TAU,
-      shade: pickTint(dish.cook.mix),
+      shade: dish.cook.patchy ? patchAt(cx, cz) : pickTint(dish.cook.mix),
       jitter: 0.9 + Math.random() * 0.25,
     };
     rice.setColorAt(i, raw);
@@ -206,34 +221,70 @@ export function initDish(riceIndex, canvas) {
   water.position.y = bedY + 0.09;
   scene.add(water);
 
-  /* ───────────────────────────────────────────────────── garnish */
+  /* ═══════════════════════ what goes on and in the finished rice ══ */
 
-  let garnish = null;
-  const GARNISH = dish.garnish.length ? (small ? 40 : 90) : 0;
-  const bits = [];
+  const props = new THREE.Group(); // chicken and kebab, each scaled in place
+  scene.add(props);
+  const pieces = [];
 
-  if (GARNISH) {
-    const colors = dish.garnish.map((hex) => new THREE.Color(hex));
-    garnish = new THREE.InstancedMesh(
-      new THREE.SphereGeometry(0.026, 8, 6),
-      new THREE.MeshStandardMaterial({ roughness: 0.5 }),
-      GARNISH
-    );
-    garnish.castShadow = true;
-    scene.add(garnish);
-
-    for (let i = 0; i < GARNISH; i++) {
-      const a = Math.random() * TAU;
-      const r = moundR * 0.9 * Math.sqrt(Math.random());
-      const cap = moundH * (1 - (r / moundR) ** 2);
-      bits.push({
-        pos: [Math.cos(a) * r, floor + cap + 0.05, Math.sin(a) * r],
-        scale: 0.6 + Math.random() * 0.7,
-      });
-      garnish.setColorAt(i, colors[(Math.random() * colors.length) | 0]);
-    }
-    garnish.instanceColor.needsUpdate = true;
+  /* chicken — the thing the first version of this was missing */
+  const chickenCount = many(top.chicken);
+  for (let i = 0; i < chickenCount; i++) {
+    const stick = drumstick();
+    const a = (i / chickenCount) * TAU + 0.6;
+    const r = moundR * 0.5;
+    const cap = moundH * (1 - (r / moundR) ** 2);
+    // resting on the surface, tipped over, the way a drumstick lies
+    stick.position.set(Math.cos(a) * r, floor + cap + 0.04, Math.sin(a) * r);
+    stick.rotation.set(-1.28 + (Math.random() - 0.5) * 0.25, a + 1.1, (Math.random() - 0.5) * 0.35);
+    stick.userData.size = 1.35;
+    stick.scale.setScalar(0.001);
+    props.add(stick);
+    pieces.push(stick);
   }
+
+  /* shami kebab — flat, browned, sitting on the rice */
+  const kebabCount = many(top.kebab);
+  for (let i = 0; i < kebabCount; i++) {
+    const kebab = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.19, 0.185, 0.06, 20),
+      new THREE.MeshStandardMaterial({ color: 0x7a4a24, roughness: 0.78 })
+    );
+    const a = -2.5 + i * 1.25; // clear of the chicken, which sits at 0.6
+    const r = moundR * 0.56;
+    const cap = moundH * (1 - (r / moundR) ** 2);
+    kebab.position.set(Math.cos(a) * r, floor + cap + 0.03, Math.sin(a) * r);
+    kebab.rotation.set((Math.random() - 0.5) * 0.25, Math.random() * TAU, (Math.random() - 0.5) * 0.25);
+    kebab.castShadow = true;
+    kebab.scale.setScalar(0.001);
+    props.add(kebab);
+    pieces.push(kebab);
+  }
+
+  /* fried onion — curved slivers, not beads */
+  const onionGeo = new THREE.TorusGeometry(0.058, 0.0105, 4, 10, Math.PI * 0.9);
+  onionGeo.scale(1, 1, 0.34); // flattened, because fried onion is a shaving
+  const onion = scatter(
+    many(top.onion),
+    onionGeo,
+    [0xb0682a, 0x8d4c18, 0xc4813c],
+    moundR, moundH, floor, 0.035, true
+  );
+
+  /* mint — flat leaves */
+  const mintGeo = new THREE.SphereGeometry(0.05, 7, 5);
+  mintGeo.scale(1, 0.13, 0.62);
+  const mint = scatter(many(top.mint), mintGeo, [0x3f7f2c, 0x51923a], moundR, moundH, floor, 0.045, true);
+
+  /* pistachio and almond, for the kheer */
+  const nuts = scatter(
+    many(top.nuts),
+    new THREE.SphereGeometry(0.022, 7, 5),
+    [0x7fae3f, 0xe8d9a8, 0xc9455a],
+    moundR, moundH, floor, 0.03
+  );
+
+  [onion, mint, nuts].forEach((s) => s && scene.add(s.mesh));
 
   /* ─────────────────────────────────────────────────────── steam */
 
@@ -317,7 +368,7 @@ export function initDish(riceIndex, canvas) {
     if (stage > 3.05 && painted > 3.05) return;
     painted = stage;
 
-    // colour arrives late: rice does not take the masala until it is layered
+    // colour arrives late: rice does not take the curry until it is layered
     const t = smoothstep(1.7, 3, stage);
     for (let i = 0; i < COUNT; i++) {
       tint.lerpColors(raw, tints[grains[i].shade], t);
@@ -332,6 +383,7 @@ export function initDish(riceIndex, canvas) {
   const dummy = new THREE.Object3D();
   // Y after X, so the heading turns the laid-down grain rather than rolling it
   dummy.rotation.order = 'YXZ';
+  const face = new THREE.Object3D(); // steam billboards, kept separate
   let running = true;
   let pageVisible = true;
   let frame = 0;
@@ -344,7 +396,8 @@ export function initDish(riceIndex, canvas) {
     const rise = smoothstep(1.3, 3, s);
     const wet = smoothstep(0.5, 1.1, s) * (1 - smoothstep(1.5, 2.1, s));
     const layered = smoothstep(1.5, 2.4, s);
-    const done = smoothstep(2.5, 3, s);
+    const meatIn = smoothstep(1.7, 2.5, s);
+    const done = smoothstep(2.45, 3, s);
 
     /* the rice: swells, climbs into a mound, takes the colour */
     for (let i = 0; i < COUNT; i++) {
@@ -376,18 +429,14 @@ export function initDish(riceIndex, canvas) {
       milk.visible = layered > 0.01;
     }
 
-    if (garnish) {
-      garnish.visible = done > 0.02;
-      for (let i = 0; i < GARNISH; i++) {
-        const b = bits[i];
-        dummy.position.set(b.pos[0], b.pos[1], b.pos[2]);
-        dummy.rotation.set(0, 0, 0);
-        dummy.scale.setScalar(b.scale * done);
-        dummy.updateMatrix();
-        garnish.setMatrixAt(i, dummy.matrix);
-      }
-      garnish.instanceMatrix.needsUpdate = true;
-    }
+    /* the chicken goes in with the curry, a beat before the rice covers it */
+    props.visible = meatIn > 0.02;
+    if (props.visible) pieces.forEach((p) => p.scale.setScalar(meatIn * (p.userData.size || 1)));
+
+    /* onion, mint and nuts are strewn over the finished dish */
+    if (onion) onion.update(dummy, done);
+    if (mint) mint.update(dummy, done);
+    if (nuts) nuts.update(dummy, done);
 
     /* steam only once it is actually hot */
     steam.material.opacity = done * 0.42 * dish.steam;
@@ -397,20 +446,20 @@ export function initDish(riceIndex, canvas) {
         const p = puffs[i];
         p.t = (p.t + dt * p.speed) % 1;
         const lift = p.t * 1.5;
-        dummy.position.set(
+        face.position.set(
           Math.cos(p.a) * p.r * (1 + p.t * 0.7),
           floor + moundH + 0.22 + lift,
           Math.sin(p.a) * p.r * (1 + p.t * 0.7)
         );
-        dummy.quaternion.copy(camera.quaternion); // always face the lens
-        dummy.scale.setScalar(p.scale * (0.5 + p.t * 1.5) * Math.sin(p.t * Math.PI));
-        dummy.updateMatrix();
-        steam.setMatrixAt(i, dummy.matrix);
+        face.quaternion.copy(camera.quaternion); // always face the lens
+        face.scale.setScalar(p.scale * (0.5 + p.t * 1.5) * Math.sin(p.t * Math.PI));
+        face.updateMatrix();
+        steam.setMatrixAt(i, face.matrix);
       }
       steam.instanceMatrix.needsUpdate = true;
     }
 
-    /* camera walks the keyframes and drifts a little so it never sits still */
+    /* camera walks the keyframes and drifts so it never sits still */
     const i0 = Math.min(Math.floor(s), CAM.length - 1);
     const i1 = Math.min(i0 + 1, CAM.length - 1);
     const f = ease(s - i0);
@@ -468,6 +517,82 @@ export function initDish(riceIndex, canvas) {
   };
 }
 
+/* ------------------------------------------------------------ pieces */
+
+/** a drumstick: meat, bone, and the knob on the end of it */
+function drumstick() {
+  const g = new THREE.Group();
+
+  const meat = new THREE.Mesh(
+    new THREE.SphereGeometry(0.165, 18, 14),
+    new THREE.MeshStandardMaterial({ color: 0xc27c36, roughness: 0.52, metalness: 0.03 })
+  );
+  meat.scale.set(1, 1.3, 0.94);
+  meat.castShadow = true;
+  g.add(meat);
+
+  const boneMat = new THREE.MeshStandardMaterial({ color: 0xeee2cb, roughness: 0.62 });
+
+  const bone = new THREE.Mesh(new THREE.CylinderGeometry(0.027, 0.033, 0.25, 8), boneMat);
+  bone.position.y = 0.23;
+  bone.castShadow = true;
+  g.add(bone);
+
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.044, 10, 8), boneMat);
+  knob.position.y = 0.35;
+  g.add(knob);
+
+  return g;
+}
+
+/** instanced bits strewn over the surface of the mound */
+function scatter(count, geometry, palette, moundR, moundH, floor, lift, flat = false) {
+  if (!count) return null;
+
+  const colors = palette.map((hex) => new THREE.Color(hex));
+  const mesh = new THREE.InstancedMesh(
+    geometry,
+    new THREE.MeshStandardMaterial({ roughness: 0.62 }),
+    count
+  );
+  mesh.castShadow = true;
+  mesh.frustumCulled = false;
+
+  const bits = [];
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * TAU;
+    const r = moundR * 0.94 * Math.sqrt(Math.random());
+    const cap = moundH * (1 - (r / moundR) ** 2);
+    bits.push({
+      pos: [Math.cos(a) * r, floor + cap + lift * (0.4 + Math.random() * 0.8), Math.sin(a) * r],
+      // flat things keep their face to the sky and only vary their heading
+      rot: flat
+        ? [Math.PI / 2 + (Math.random() - 0.5) * 0.55, Math.random() * TAU, (Math.random() - 0.5) * 0.4]
+        : [(Math.random() - 0.5) * 1.5, Math.random() * TAU, (Math.random() - 0.5) * 1.5],
+      scale: 0.65 + Math.random() * 0.7,
+    });
+    mesh.setColorAt(i, colors[(Math.random() * colors.length) | 0]);
+  }
+  mesh.instanceColor.needsUpdate = true;
+
+  return {
+    mesh,
+    update(dummy, amount) {
+      mesh.visible = amount > 0.02;
+      if (!mesh.visible) return;
+      for (let i = 0; i < count; i++) {
+        const b = bits[i];
+        dummy.position.set(b.pos[0], b.pos[1], b.pos[2]);
+        dummy.rotation.set(b.rot[0], b.rot[1], b.rot[2]);
+        dummy.scale.setScalar(b.scale * amount);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
+      }
+      mesh.instanceMatrix.needsUpdate = true;
+    },
+  };
+}
+
 /* ------------------------------------------------------------ helpers */
 
 const mix = (a, b, t) => a + (b - a) * t;
@@ -487,6 +612,18 @@ function pickTint(weights) {
     if (r <= 0) return i;
   }
   return weights.length - 1;
+}
+
+/** Biryani is not evenly speckled: the colour goes in where it was poured, so
+    neighbouring grains share a shade. Low-frequency noise gives those patches. */
+function patchAt(x, z) {
+  const n =
+    Math.sin(x * 4.1 + 0.7) * Math.cos(z * 3.3 - 0.4) +
+    Math.sin((x + z) * 2.4) * 0.65 +
+    Math.cos((x - z) * 5.1) * 0.25;
+  if (n > 0.55) return 2;
+  if (n > -0.15) return 1;
+  return 0;
 }
 
 /* a warm kitchen rather than the green of the mill */

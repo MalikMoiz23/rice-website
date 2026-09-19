@@ -52,3 +52,8 @@ coverage/
 # reference footage, not part of the site
 *.mp4
 *.mov
+
+# reference photos dropped in the root — not site assets
+/*.jpg
+/*.jpeg
+/*.png
