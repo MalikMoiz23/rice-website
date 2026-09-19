@@ -248,18 +248,58 @@
 
 .dish-video.is-ready { opacity: 1; }
 
-/* The copy sits straight on the footage, which is busier and a good deal
-   lighter than the modelled scene, so it needs a darker scrim under it. It
-   is kept narrow and hard to the left: the point of using the footage is to
-   see the food, so only the column the words are in gets darkened. */
-.dish-page--film .act::before {
+/* The mill pages sit on a deep green. Food graded through a green scrim
+   goes grey — the saffron in a biryani turns khaki — and the colour of the
+   rice is the entire argument these pages are making. So a film page gets a
+   warm neutral ground instead, and the food is the only colour on it. */
+.dish-page {
+  --film-ground: 11 8 6;
+}
+
+/* The scrim over the mill sections is a deep green, which is right there
+   and wrong here: everything behind it on a dish page is food, and green
+   is the one cast that makes food look off. Same shape, warm instead. */
+.dish-page .act::before {
   background: radial-gradient(
-    58% 118% at 4% 50%,
-    rgb(8 14 5 / 0.95) 0%,
-    rgb(8 14 5 / 0.74) 42%,
-    rgb(8 14 5 / 0.24) 74%,
-    transparent 100%
+    96% 130% at 10% 50%,
+    rgb(18 13 9 / 0.94) 0%,
+    rgb(18 13 9 / 0.66) 34%,
+    rgb(18 13 9 / 0.24) 62%,
+    transparent 88%
   );
+}
+
+.dish-page--film .dish-canvas {
+  background:
+    radial-gradient(120% 92% at 72% 10%, #251b12 0%, transparent 58%),
+    radial-gradient(92% 72% at 6% 96%, #160f0a 0%, transparent 62%),
+    #0b0806;
+}
+
+/* The footage is brighter and busier than the modelled scene, so the hero
+   needs more under its words than the modelled pages do — same shape, just
+   further up, and warm rather than green so the plate keeps its colour. */
+.dish-page--film .dish-hero__wash {
+  background:
+    radial-gradient(78% 104% at 12% 58%, rgb(var(--film-ground) / 0.95) 0%, rgb(var(--film-ground) / 0.72) 38%, rgb(var(--film-ground) / 0.2) 66%, transparent 82%),
+    linear-gradient(0deg, rgb(var(--film-ground) / 0.8) 2%, rgb(var(--film-ground) / 0.24) 46%, transparent 72%);
+}
+
+@media (min-width: 761px) {
+  /* Centred and behind everything, which is where it belongs, but stood
+     back from the glass. object-fit: contain already stops the shot being
+     cropped; this is what makes it smaller inside the window as well, so a
+     close-up reads as a close-up of a pot rather than of the rice in it. */
+  .dish-page--film .dish-video {
+    transform: scale(0.82);
+  }
+}
+
+/* A wide monitor has room to stand back further still */
+@media (min-width: 1500px) {
+  .dish-page--film .dish-video {
+    transform: scale(0.76);
+  }
 }
 
 /* A phone is portrait and the footage is landscape, so covering the screen
