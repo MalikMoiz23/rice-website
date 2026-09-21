@@ -237,10 +237,10 @@
   z-index: 0;
   width: 100%;
   height: 100%;
-  /* The footage is shot close already. Filling a wide screen with it crops
-     the pot out of its own frame, so it is shown whole and let to sit in
-     the dark instead. The gradient on the canvas behind fills the edges. */
-  object-fit: contain;
+  /* Edge to edge, behind everything. A wide window crops the top and
+     bottom off the frame to do it — the price of a full bleed — so the
+     shots are composed with the pot centred and there is room to lose. */
+  object-fit: cover;
   pointer-events: none;
   opacity: 0;
   transition: opacity 420ms var(--ease-out);
@@ -285,22 +285,9 @@
     linear-gradient(0deg, rgb(var(--film-ground) / 0.8) 2%, rgb(var(--film-ground) / 0.24) 46%, transparent 72%);
 }
 
-@media (min-width: 761px) {
-  /* Centred and behind everything, which is where it belongs, but stood
-     back from the glass. object-fit: contain already stops the shot being
-     cropped; this is what makes it smaller inside the window as well, so a
-     close-up reads as a close-up of a pot rather than of the rice in it. */
-  .dish-page--film .dish-video {
-    transform: scale(0.82);
-  }
-}
-
-/* A wide monitor has room to stand back further still */
-@media (min-width: 1500px) {
-  .dish-page--film .dish-video {
-    transform: scale(0.76);
-  }
-}
+/* Nothing stands the clip back off the glass any more: it is the whole
+   background of the page, so the scrim under the copy is what has to keep
+   the words readable over it. */
 
 /* A phone is portrait and the footage is landscape, so covering the screen
    with it crops away everything either side of the middle — a shot of a pot
@@ -320,4 +307,24 @@
 
   /* nothing is behind the words down there but the canvas, which is dark */
   .dish-page--film .act::before { background: none; }
+}
+
+/* The header has no ground of its own until it sticks, which is fine over
+   the modelled scene — that is dark at the top. A photograph is not: the
+   first shot puts a white bowl of raita and a plate of lemon straight
+   behind the navigation. This gives it something to sit on from the start,
+   under the header itself but over the footage. */
+.dish-page--film::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 3;
+  height: 8rem;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--film-ground) / 0.86) 0%,
+    rgb(var(--film-ground) / 0.5) 46%,
+    transparent 100%
+  );
 }

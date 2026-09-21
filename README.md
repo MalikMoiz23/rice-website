@@ -110,13 +110,19 @@ Two things make a clip scrub rather than stutter, and both are easy to undo:
 
   ```bash
   ffmpeg -i source.mp4 -an \
-    -vf "scale=1024:-2:flags=lanczos" \
-    -c:v libx264 -profile:v high -pix_fmt yuv420p -preset slow -crf 26 \
+    -vf "crop=1124:720:0:0,scale=1120:-2:flags=lanczos" \
+    -c:v libx264 -profile:v high -pix_fmt yuv420p -preset slow -crf 25.5 \
     -g 4 -keyint_min 4 -sc_threshold 0 -movflags +faststart \
     assets/biryani-wide.mp4
   ```
 
-  Then the same again at `scale=640:-2` and `-crf 27` for
+  The crop takes the watermark off the right-hand edge; drop it if the clip
+does not carry one. The width is whatever the source has left after that,
+not a round number chosen for its own sake: the clip fills the window, so
+it is scaled up on most screens and wants to start as close to its final
+size as it can.
+
+Then the same again at `scale=640:-2` and `-crf 27` for
   `assets/biryani-small.mp4`. `scene-video.js` picks between them on viewport
   width before it sets `src`, because changing it afterwards throws away
   everything already buffered.
