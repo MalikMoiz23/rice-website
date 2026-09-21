@@ -291,6 +291,29 @@
 }
 
 .section-head { max-width: 62ch; }
+/* The section scrim is heaviest at its left edge, under the column the
+   copy normally sits in. Centred copy does not sit there: it sits in the
+   middle, over whatever the scene is doing, which on this page is a rice
+   grain the size of a window. This gives it its own ground to stand on. */
+.section-head--center {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-head--center::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -2.5rem -3rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    62% 62% at 50% 48%,
+    rgb(20 16 10 / 0.86) 0%,
+    rgb(20 16 10 / 0.6) 46%,
+    transparent 78%
+  );
+}
+
 .section-head--center {
   max-width: 58ch;
   margin-inline: auto;
@@ -796,5 +819,13 @@ main,
   :root { --scrim: rgb(13 24 9 / 0.56); }
   .section--dark { --scrim: rgb(8 16 5 / 0.66); }
   .section--husk { --scrim: rgb(24 38 14 / 0.54); }
+
+  /* the same crop bands, laid on harder: on a phone the copy runs the full
+     width of the scene instead of sitting in a column beside it */
+  .section--field  { --scrim: rgb(12 26 8 / 0.62); }
+  .section--ripe   { --scrim: rgb(25 27 9 / 0.64); }
+  .section--hull   { --scrim: rgb(31 21 9 / 0.70); }
+  .section--straw  { --scrim: rgb(34 27 13 / 0.66); }
+  .section--milled { --scrim: rgb(25 21 14 / 0.70); }
   .marquee { background: rgb(14 26 9 / 0.9); }
 }

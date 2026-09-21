@@ -319,16 +319,34 @@
   max-width: 58ch;
 }
 
+/* Light catches the top edge of anything sitting in it. A hairline of it
+   along the top of every panel, and a shadow under it, is the whole
+   difference between a card that lies on the scene and a hole cut out of
+   it. One rule, because they should all agree. */
+.product-card,
+.buyer,
+.quote,
+.calc,
+.form,
+.assure,
+.spec-grid {
+  box-shadow:
+    inset 0 1px 0 rgb(248 243 231 / 0.11),
+    0 20px 44px -26px rgb(0 0 0 / 0.85);
+}
+
 /* ----------------------------------------------------- quality spec */
 
+/* The strip carries the fill, not the cells: a gradient repeated in every
+   cell of a six-across grid comes out as stripes. */
 .spec {
   display: grid;
   gap: 0.35rem;
   padding: 1.8rem 1.4rem;
-  background: var(--surface);
+  background: var(--surface-flat);
   transition: background var(--t-mid) var(--ease);
 }
-.spec:hover { background: var(--surface-hi); }
+.spec:hover { background: rgb(44 40 22 / 0.92); }
 .spec b {
   font-family: var(--font-display);
   font-size: clamp(1.7rem, 1.4rem + 1vw, 2.3rem);
@@ -348,9 +366,12 @@
   margin-top: clamp(2rem, 4vw, 3rem);
   padding: clamp(1.75rem, 4vw, 2.75rem);
   border-radius: var(--r-xl);
+  /* It sits in the straw band, so it is straw and ripe gold rather than
+     the leaf green it used to be — the one green thing left in the
+     section, which is exactly what made it look pasted on. */
   background:
-    radial-gradient(90% 180% at 100% 0%, rgb(217 174 68 / 0.28) 0%, transparent 60%),
-    linear-gradient(120deg, var(--leaf-600), var(--leaf-900));
+    radial-gradient(90% 180% at 100% 0%, rgb(217 174 68 / 0.34) 0%, transparent 62%),
+    linear-gradient(120deg, #4a3a1c, #221a0c);
   color: var(--rice-050);
 }
 .assure__text {

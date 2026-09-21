@@ -39,8 +39,25 @@
      blurs it, so it stays sharp. Panels are dark and near-solid instead,
      which is what carries the text. */
   --scrim: rgb(13 24 9 / 0.38);
-  --surface: rgb(9 18 6 / 0.82);
-  --surface-hi: rgb(15 28 11 / 0.9);
+
+  /* A panel used to be one flat green-black, which read as a hole cut in
+     the scene rather than a thing lying on it. These are husk in shadow:
+     warm at the top where the light would catch, cooling into the dark. */
+  --surface:
+    linear-gradient(168deg,
+      rgb(46 41 25 / 0.80) 0%,
+      rgb(25 25 14 / 0.87) 46%,
+      rgb(13 16 9 / 0.92) 100%);
+  --surface-hi:
+    linear-gradient(168deg,
+      rgb(66 56 31 / 0.88) 0%,
+      rgb(35 33 18 / 0.92) 46%,
+      rgb(19 21 11 / 0.94) 100%);
+  /* for the places that tile a fill across cells, where a gradient stripes */
+  --surface-flat: rgb(27 26 15 / 0.88);
+
+  /* the section label's colour, which ripens down the page */
+  --eyebrow: var(--gold-300);
   --text: var(--rice-050);
   --text-soft: rgb(248 243 231 / 0.8);
   --text-mute: rgb(248 243 231 / 0.56);
@@ -96,6 +113,46 @@
 
 .section--husk {
   --scrim: rgb(24 38 14 / 0.36);
+}
+
+/* ------------------------------------------------- the crop, in order
+
+   The scene behind the page runs the length of a season: a green field at
+   the top, the grain in the air, the hull coming off, milled white rice,
+   the sack. The sections used to ignore all of that and sit on one green
+   scrim from top to bottom, so fourteen screens of scrolling looked like
+   one screen repeated.
+
+   Each band below takes its colour from the stage the scene is at when
+   you reach it, and its label ripens with it: green in the field, gold as
+   the crop turns, amber as the hull splits, straw at the mill, and the
+   pale warm neutral of clean rice by the time you are being asked to
+   order. Nothing is bright — these sit *under* the content — but the page
+   now travels somewhere. */
+
+.section--field {                     /* still standing in the crop */
+  --scrim: rgb(12 26 8 / 0.42);
+  --eyebrow: #abd08c;                 /* leaf-300 lifted: it is 12px, on dark */
+}
+
+.section--ripe {                      /* the crop turning, grain in the air */
+  --scrim: rgb(25 27 9 / 0.44);
+  --eyebrow: var(--gold-300);
+}
+
+.section--hull {                      /* the husk coming off the grain */
+  --scrim: rgb(31 21 9 / 0.54);
+  --eyebrow: var(--gold-400);
+}
+
+.section--straw {                     /* the mill: husk, dust, straw */
+  --scrim: rgb(34 27 13 / 0.46);
+  --eyebrow: #f0e2c4;                 /* husk-200 lifted, same reason */
+}
+
+.section--milled {                    /* clean white rice, ready to sell */
+  --scrim: rgb(25 21 14 / 0.54);
+  --eyebrow: var(--rice-050);
 }
 
 /* ------------------------------------------------------------ reset */
@@ -164,7 +221,7 @@ p { text-wrap: pretty; }
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold-300);
+  color: var(--eyebrow);
 }
 .eyebrow--light { color: var(--gold-300); }
 
